@@ -16,7 +16,7 @@ class Pieces
     private ?int $id = null;
 
     #[ORM\Column(length: 45)]
-    private ?string $lastName = null;
+    private ?string $name = null;
 
     #[ORM\Column]
     private ?int $quantity = null;
@@ -43,14 +43,14 @@ class Pieces
         return $this->id;
     }
 
-    public function getLastName(): ?string
+    public function getName(): ?string
     {
-        return $this->lastName;
+        return $this->name;
     }
 
-    public function setLastName(string $lastName): static
+    public function setName(string $name): static
     {
-        $this->lastName = $lastName;
+        $this->name = $name;
 
         return $this;
     }

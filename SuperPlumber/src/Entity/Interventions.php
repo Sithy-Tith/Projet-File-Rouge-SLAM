@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Status;
 use App\Repository\InterventionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,14 +23,17 @@ class Interventions
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(enumType: Status::class)]
+    private ?Status $status = null;
 
     #[ORM\Column]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
     private ?Employees $fkEmployee = null;
+
+    #[ORM\ManyToOne(inversedBy: 'interventions')]
+    private ?Clients $fkClient = null;
 
     /**
      * @var Collection<int, UsedPieces>
@@ -71,12 +75,12 @@ class Interventions
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?Status
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(Status $status): static
     {
         $this->status = $status;
 
@@ -103,6 +107,18 @@ class Interventions
     public function setFkEmployee(?Employees $fkEmployee): static
     {
         $this->fkEmployee = $fkEmployee;
+
+        return $this;
+    }
+
+    public function getFkClient(): ?Clients
+    {
+        return $this->fkClient;
+    }
+
+    public function setFkClient(?Clients $fkClient): static
+    {
+        $this->fkClient = $fkClient;
 
         return $this;
     }

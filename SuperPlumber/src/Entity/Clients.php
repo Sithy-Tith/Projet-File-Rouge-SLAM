@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -42,6 +44,17 @@ class Clients implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 200)]
     private ?string $address = null;
+
+    /**
+     * @var Collection<int, Interventions>
+     */
+    #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkClient')]
+    private Collection $interventions;
+
+    public function __construct()
+    {
+        $this->interventions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +175,36 @@ class Clients implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Interventions>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Interventions $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setFkClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Interventions $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getFkClient() === $this) {
+                $intervention->setFkClient(null);
+            }
+        }
 
         return $this;
     }

@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\AvailabilitiesRepository;
+use App\Repository\AvailibilitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AvailabilitiesRepository::class)]
-class Availabilities
+#[ORM\Entity(repositoryClass: AvailibilitiesRepository::class)]
+class Availibilities
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,12 +15,12 @@ class Availabilities
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $availability = null;
+    private ?int $availibility = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'availabilities')]
+    #[ORM\ManyToOne(inversedBy: 'availibilities')]
     private ?Employees $fkEmployee = null;
 
     public function getId(): ?int
@@ -28,14 +28,14 @@ class Availabilities
         return $this->id;
     }
 
-    public function getAvailability(): ?int
+    public function getAvailibility(): ?int
     {
-        return $this->availability;
+        return $this->availibility;
     }
 
-    public function setAvailability(int $availability): static
+    public function setAvailibility(int $availibility): static
     {
-        $this->availability = $availability;
+        $this->availibility = $availibility;
 
         return $this;
     }

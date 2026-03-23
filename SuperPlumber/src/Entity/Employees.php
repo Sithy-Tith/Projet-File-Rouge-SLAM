@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Position;
 use App\Repository\EmployeesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,8 +43,8 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $position = null;
+    #[ORM\Column(enumType: Position::class)]
+    private ?Position $position = null;
 
     /**
      * @var Collection<int, Interventions>
@@ -52,15 +53,15 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $interventions;
 
     /**
-     * @var Collection<int, Availabilities>
+     * @var Collection<int, Availibilities>
      */
-    #[ORM\OneToMany(targetEntity: Availabilities::class, mappedBy: 'fkEmployee')]
-    private Collection $availabilities;
+    #[ORM\OneToMany(targetEntity: Availibilities::class, mappedBy: 'fkEmployee')]
+    private Collection $availibilities;
 
     public function __construct()
     {
         $this->interventions = new ArrayCollection();
-        $this->availabilities = new ArrayCollection();
+        $this->availibilities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,12 +175,12 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPosition(): Position
+    public function getPosition(): ?Position
     {
         return $this->position;
     }
 
-    public function setPosition(string $position): static
+    public function setPosition(Position $position): static
     {
         $this->position = $position;
 
@@ -217,29 +218,29 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Availabilities>
+     * @return Collection<int, Availibilities>
      */
-    public function getAvailabilities(): Collection
+    public function getAvailibilities(): Collection
     {
-        return $this->availabilities;
+        return $this->availibilities;
     }
 
-    public function addAvailability(Availabilities $availability): static
+    public function addAvailibility(Availibilities $availibility): static
     {
-        if (!$this->availabilities->contains($availability)) {
-            $this->availabilities->add($availability);
-            $availability->setFkEmployee($this);
+        if (!$this->availibilities->contains($availibility)) {
+            $this->availibilities->add($availibility);
+            $availibility->setFkEmployee($this);
         }
 
         return $this;
     }
 
-    public function removeAvailability(Availabilities $availability): static
+    public function removeAvailibility(Availibilities $availibility): static
     {
-        if ($this->availabilities->removeElement($availability)) {
+        if ($this->availibilities->removeElement($availibility)) {
             // set the owning side to null (unless already changed)
-            if ($availability->getFkEmployee() === $this) {
-                $availability->setFkEmployee(null);
+            if ($availibility->getFkEmployee() === $this) {
+                $availibility->setFkEmployee(null);
             }
         }
 
