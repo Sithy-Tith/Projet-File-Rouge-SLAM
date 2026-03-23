@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Enum;
+
+
+enum Position: string
+{
+    case ADMINISTRATOR = 'Administrator';
+    case PLUMBER = 'Plumber;
+}
+
+enum Status: string
+{
+    case ONGOING = 'On going';
+    case COMPLETED = 'Completed';
+    case TOPLAN = 'To plan';
+    case PLANNED = 'Planned';
+    case CANCELED = 'Canceled';
+}
