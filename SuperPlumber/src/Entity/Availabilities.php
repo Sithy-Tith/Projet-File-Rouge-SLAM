@@ -28,12 +28,12 @@ class Availabilities
         return $this->id;
     }
 
-    public function getavailability(): ?int
+    public function getAvailability(): ?int
     {
         return $this->availability;
     }
 
-    public function setavailability(int $availability): static
+    public function setAvailability(int $availability): static
     {
         $this->availability = $availability;
 
