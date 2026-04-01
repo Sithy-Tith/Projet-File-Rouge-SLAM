@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UsedPieces index{% endblock %}
+
+{% block body %}
+    <h1>UsedPieces index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>IsConsumable</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for used_piece in used_pieces %}
+            <tr>
+                <td>{{ used_piece.id }}</td>
+                <td>{{ used_piece.isConsumable ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_used_pieces_show', {'id': used_piece.id}) }}">show</a>
+                    <a href="{{ path('app_used_pieces_edit', {'id': used_piece.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_used_pieces_new') }}">Create new</a>
+{% endblock %}

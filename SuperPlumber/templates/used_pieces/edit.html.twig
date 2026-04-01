@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit UsedPieces{% endblock %}
+
+{% block body %}
+    <h1>Edit UsedPieces</h1>
+
+    {{ include('used_pieces/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_used_pieces_index') }}">back to list</a>
+
+    {{ include('used_pieces/_delete_form.html.twig') }}
+{% endblock %}
