@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<title>Employees</title>
+
+{% block body %}
+    <h1>Employees</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ employee.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ employee.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ employee.password }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ employee.lastName }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ employee.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ employee.phone }}</td>
+            </tr>
+            <tr>
+                <th>Position</th>
+                <td>{{ employee.position }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employees_index') }}">back to list</a>
+
+    <a href="{{ path('app_employees_edit', {'id': employee.id}) }}">edit</a>
+
+    {{ include('employees/_delete_form.html.twig') }}
+{% endblock %}
