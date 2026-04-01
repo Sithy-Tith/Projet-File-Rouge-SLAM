@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Availibilities;
+use App\Entity\availabilities;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Availibilities>
+ * @extends ServiceEntityRepository<availabilities>
  */
-class AvailibilitiesRepository extends ServiceEntityRepository
+class availabilitiesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Availibilities::class);
+        parent::__construct($registry, availabilities::class);
     }
 
     //    /**
-    //     * @return Availibilities[] Returns an array of Availibilities objects
+    //     * @return availabilities[] Returns an array of availabilities objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class AvailibilitiesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Availibilities
+    //    public function findOneBySomeField($value): ?availabilities
     //    {
     //        return $this->createQueryBuilder('a')
     //            ->andWhere('a.exampleField = :val')

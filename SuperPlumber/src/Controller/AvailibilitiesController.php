@@ -2,80 +2,80 @@
 
 namespace App\Controller;
 
-use App\Entity\Availibilities;
-use App\Form\AvailibilitiesType;
-use App\Repository\AvailibilitiesRepository;
+use App\Entity\availabilities;
+use App\Form\availabilitiesType;
+use App\Repository\availabilitiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/availibilities')]
-final class AvailibilitiesController extends AbstractController
+#[Route('/availabilities')]
+final class availabilitiesController extends AbstractController
 {
-    #[Route(name: 'app_availibilities_index', methods: ['GET'])]
-    public function index(AvailibilitiesRepository $availibilitiesRepository): Response
+    #[Route(name: 'app_availabilities_index', methods: ['GET'])]
+    public function index(availabilitiesRepository $availabilitiesRepository): Response
     {
-        return $this->render('availibilities/index.html.twig', [
-            'availibilities' => $availibilitiesRepository->findAll(),
+        return $this->render('availabilities/index.html.twig', [
+            'availabilities' => $availabilitiesRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_availibilities_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_availabilities_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $availibility = new Availibilities();
-        $form = $this->createForm(AvailibilitiesType::class, $availibility);
+        $availability = new availabilities();
+        $form = $this->createForm(availabilitiesType::class, $availability);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($availibility);
+            $entityManager->persist($availability);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_availibilities_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_availabilities_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('availibilities/new.html.twig', [
-            'availibility' => $availibility,
+        return $this->render('availabilities/new.html.twig', [
+            'availability' => $availability,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_availibilities_show', methods: ['GET'])]
-    public function show(Availibilities $availibility): Response
+    #[Route('/{id}', name: 'app_availabilities_show', methods: ['GET'])]
+    public function show(availabilities $availability): Response
     {
-        return $this->render('availibilities/show.html.twig', [
-            'availibility' => $availibility,
+        return $this->render('availabilities/show.html.twig', [
+            'availability' => $availability,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_availibilities_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Availibilities $availibility, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_availabilities_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, availabilities $availability, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AvailibilitiesType::class, $availibility);
+        $form = $this->createForm(availabilitiesType::class, $availability);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_availibilities_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_availabilities_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('availibilities/edit.html.twig', [
-            'availibility' => $availibility,
+        return $this->render('availabilities/edit.html.twig', [
+            'availability' => $availability,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_availibilities_delete', methods: ['POST'])]
-    public function delete(Request $request, Availibilities $availibility, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_availabilities_delete', methods: ['POST'])]
+    public function delete(Request $request, availabilities $availability, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$availibility->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($availibility);
+        if ($this->isCsrfTokenValid('delete'.$availability->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($availability);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_availibilities_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_availabilities_index', [], Response::HTTP_SEE_OTHER);
     }
 }

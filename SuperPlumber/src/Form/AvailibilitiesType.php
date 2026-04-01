@@ -2,19 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Availibilities;
+use App\Entity\availabilities;
 use App\Entity\Employees;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AvailibilitiesType extends AbstractType
+class availabilitiesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('availibility')
+            ->add('availability')
             ->add('date')
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
@@ -26,7 +26,7 @@ class AvailibilitiesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Availibilities::class,
+            'data_class' => availabilities::class,
         ]);
     }
 }

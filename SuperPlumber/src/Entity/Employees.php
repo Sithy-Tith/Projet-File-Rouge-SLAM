@@ -53,15 +53,15 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $interventions;
 
     /**
-     * @var Collection<int, Availibilities>
+     * @var Collection<int, availabilities>
      */
-    #[ORM\OneToMany(targetEntity: Availibilities::class, mappedBy: 'fkEmployee')]
-    private Collection $availibilities;
+    #[ORM\OneToMany(targetEntity: availabilities::class, mappedBy: 'fkEmployee')]
+    private Collection $availabilities;
 
     public function __construct()
     {
         $this->interventions = new ArrayCollection();
-        $this->availibilities = new ArrayCollection();
+        $this->availabilities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,29 +218,29 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Availibilities>
+     * @return Collection<int, availabilities>
      */
-    public function getAvailibilities(): Collection
+    public function getavailabilities(): Collection
     {
-        return $this->availibilities;
+        return $this->availabilities;
     }
 
-    public function addAvailibility(Availibilities $availibility): static
+    public function addavailability(availabilities $availability): static
     {
-        if (!$this->availibilities->contains($availibility)) {
-            $this->availibilities->add($availibility);
-            $availibility->setFkEmployee($this);
+        if (!$this->availabilities->contains($availability)) {
+            $this->availabilities->add($availability);
+            $availability->setFkEmployee($this);
         }
 
         return $this;
     }
 
-    public function removeAvailibility(Availibilities $availibility): static
+    public function removeavailability(availabilities $availability): static
     {
-        if ($this->availibilities->removeElement($availibility)) {
+        if ($this->availabilities->removeElement($availability)) {
             // set the owning side to null (unless already changed)
-            if ($availibility->getFkEmployee() === $this) {
-                $availibility->setFkEmployee(null);
+            if ($availability->getFkEmployee() === $this) {
+                $availability->setFkEmployee(null);
             }
         }
 
