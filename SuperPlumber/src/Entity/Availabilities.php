@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Employees;
+
 use App\Repository\AvailabilitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
