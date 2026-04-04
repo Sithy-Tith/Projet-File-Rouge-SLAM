@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employees index{% endblock %}
+
+{% block body %}
+    <h1>Employees index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>LastName</th>
+                <th>FirstName</th>
+                <th>Phone</th>
+                <th>Position</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
+                <td>{{ employee.password }}</td>
+                <td>{{ employee.lastName }}</td>
+                <td>{{ employee.firstName }}</td>
+                <td>{{ employee.phone }}</td>
+                <td>{{ employee.position }}</td>
+                <td>
+                    <a href="{{ path('app_employees_show', {'id': employee.id}) }}">show</a>
+                    <a href="{{ path('app_employees_edit', {'id': employee.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employees_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Availabilities{% endblock %}
+
+{% block body %}
+    <h1>Create new Availabilities</h1>
+
+    {{ include('availabilities/_form.html.twig') }}
+
+    <a href="{{ path('app_availabilities_index') }}">back to list</a>
+{% endblock %}
