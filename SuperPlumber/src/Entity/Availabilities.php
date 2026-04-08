@@ -20,12 +20,7 @@ class Availabilities
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
 
-<<<<<<< HEAD
-    #[ORM\ManyToOne(inversedBy: 'availabilities')]
-    #[ORM\JoinColumn(nullable: false)]
-=======
     #[ORM\ManyToOne(inversedBy: 'Availabilities')]
->>>>>>> origin/sithy
     private ?Employees $fkEmployee = null;
 
     public function getId(): ?int

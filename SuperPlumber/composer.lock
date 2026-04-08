@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "15006208ccd2a1f54b0b0cde9c3efb65",
-=======
     "content-hash": "df30e4baf8123675198dabba2909dd11",
->>>>>>> origin/sithy
     "packages": [
         {
             "name": "composer/semver",
@@ -7726,8 +7722,6 @@
             "time": "2025-12-03T16:05:42+00:00"
         },
         {
-<<<<<<< HEAD
-=======
             "name": "fakerphp/faker",
             "version": "v1.24.1",
             "source": {
@@ -7791,7 +7785,6 @@
             "time": "2024-11-21T13:46:39+00:00"
         },
         {
->>>>>>> origin/sithy
             "name": "myclabs/deep-copy",
             "version": "1.13.4",
             "source": {
