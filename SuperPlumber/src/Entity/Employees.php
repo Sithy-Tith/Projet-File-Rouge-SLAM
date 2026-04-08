@@ -53,9 +53,9 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $interventions;
 
     /**
-     * @var Collection<int, Availabilities>
+     * @var Collection<int, availabilities>
      */
-    #[ORM\OneToMany(targetEntity: Availabilities::class, mappedBy: 'fkEmployee', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: availabilities::class, mappedBy: 'fkEmployee')]
     private Collection $availabilities;
 
     public function __construct()
@@ -217,17 +217,15 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
     /**
-     * @return Collection<int, Availabilities>
+     * @return Collection<int, availabilities>
      */
-    public function getAvailabilities(): Collection
+    public function getavailabilities(): Collection
     {
         return $this->availabilities;
     }
 
-    public function addAvailability(Availabilities $availability): static
+    public function addavailability(availabilities $availability): static
     {
         if (!$this->availabilities->contains($availability)) {
             $this->availabilities->add($availability);
@@ -237,7 +235,7 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeAvailability(Availabilities $availability): static
+    public function removeavailability(availabilities $availability): static
     {
         if ($this->availabilities->removeElement($availability)) {
             // set the owning side to null (unless already changed)

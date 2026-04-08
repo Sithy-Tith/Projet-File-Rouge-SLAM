@@ -2,99 +2,104 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Clients;
 use App\Entity\Availabilities;
-use App\Entity\Clients ;
 use App\Entity\Employees;
 use App\Entity\Interventions;
 use App\Entity\Pieces;
 use App\Entity\UsedPieces;
 use App\Enum\Position;
 use App\Enum\Status;
-
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $hasher;
+
+    // Pour le hashage
+    public function __construct(UserPasswordHasherInterface $hasher)
+    {
+        $this->hasher = $hasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
 
-        //Employees
-        $employees=[];
-        for ($i=0; $i<10; $i++){
-            $employee = new Employees();
-            $employee->setEmail($faker->email());
-            $employee->setPassword($faker->password());
-            $employee->setLastName($faker->lastName());
-            $employee->setFirstName($faker->firstName());
-            $employee->setPhone($faker->phoneNumber());
-            //Attribue une position aléatoire parmi celles présentes dans l'Enum Positions
-            $employee->setPosition($faker->randomElement(Position::cases()));
-            //On stocke les employees créés poir les utiliser dans Availability et Intervention comme FK
-            $employees[] = $employee;
-            $manager->persist($employee);
-        }
+        $piecesTypes = ['Pipe', 'Elbow', 'Coupling', 'Reducer', 'Valve', 'Gasket', 'Robinet']; //Pieces types pour la plomberie pour test
+        $employeesList=[];
+        $clientsList=[];
+        $interventionsList=[];
+        $piecesList=[];
+        for ($i = 0; $i < 10; $i++) {
 
-        // Availabilities
-        for ($i=0; $i<10; $i++){
-            $availability = new Availabilities();
-            $availability->setAvailability(mt_rand(0,8));
-            $availability->setDate($faker->dateTimeThisYear());
-            $availability->setFkEmployee($faker->randomElement($employees)); //fkEmployee doit être un objet Employees entier, pas juste un int
+            $clients = new Clients();
+            $clients->setEmail($faker->unique()->email);
+            $clients->setAddress($faker->address);
+            $clients->setFirstName($faker->firstName);
+            $clients->setLastName($faker->lastName);
+            $clients->setPhone($faker->phoneNumber);
 
-            $manager->persist($availability);
-        }
+            $passwordClient = $this->hasher->hashPassword($clients, 'password123');
+            $clients->setPassword($passwordClient);
+            $clientsList[]=$clients;
 
-        // Clients
-        $clients = []; //On stocke les clients pour les attribuer en tant que FK
-        for ($i=0; $i<10 ; $i++){
-            $client = new Clients();
-            $client->setEmail($faker->email());
-            $client->setPassword($faker->password());
-            $client->setLastName($faker->lastName());
-            $client->setFirstName($faker->firstName());
-            $client->setPhone($faker->phoneNumber());
-            $client->setAddress($faker->address());
+            $employees = new Employees();
+            $employees->setLastName($faker->lastName);
+            $employees->setFirstName($faker->firstName);
+            $employees->setPhone($faker->phoneNumber);
+            $employees->setPosition($faker->randomElement(Position::cases()));
+            $employees->setEmail($faker->unique()->email);
 
-            $clients[] = $client;
-            $manager->persist($client);
-        }
+            $passwordEmployee = $this->hasher->hashPassword($employees, 'employee123');
+            $employees->setPassword($passwordEmployee);
+            $employeesList[]=$employees;
 
-        //Interventions
-        $interventions=[];
-        for ($i=0 ; $i<10;$i++){
-            $intervention = new Interventions();
-            $intervention->setDate($faker->dateTimeThisYear());
-            $intervention->setDescription($faker->paragraph());
-            //Attribue un statut au hasard parmi ceux existants dans l'enum Status
-            $intervention->setStatus($faker->randomElement(Status::cases())) ;
-            $intervention->setDuration(mt_rand(1,5));
-            if ($intervention->getStatus()!==Status::TO_PLAN){
-                $intervention->setFkEmployee($faker->randomElement($employees));
+            $interventions = new Interventions();
+            $interventions->setDate($faker->dateTime);
+            $interventions->setDescription($faker->text);
+            $interventions->setStatus($faker->randomElement(Status::cases()));
+            $interventions->setDuration(mt_rand(1, 7));
+            if ($interventions->getStatus()!==Status::TO_PLAN){
+                $interventions->setFkEmployee($faker->randomElement($employeesList));
             }
-            $intervention->setFkClient($faker->randomElement($clients));
-
-            $interventions[] = $intervention;
-            $manager->persist($intervention);
-        }
+            $interventions->setFkClient($faker->randomElement($clientsList));
+            $interventionsList[]=$interventions;
 
 
-        //Pieces
-        //On stocke les pieces créées pour les réutiliser en tant que FK
-        $pieces=[];
-        for ($i = 0; $i<10 ; $i++){
-            $piece = new Pieces();
-            $piece->setName($faker->word());
-            $piece->setQuantity(mt_rand(10, 100));
-            $piece->setAlertTreshold(mt_rand(3, 10));
-            $piece->setSupplier("Fournisseur n°".$i);
+            $pieces = new Pieces();
+            $pieces->setName($faker->randomElement($piecesTypes));
+            $pieces->setQuantity(mt_rand(0, 100));
+            $pieces->setAlertTreshold(mt_rand(1, 10));
+            $pieces->setSupplier($faker->company);
+            $piecesList[]=$pieces;
 
-            $pieces[]=$piece;
-            $manager->persist($piece);
+            $usedPieces = new UsedPieces();
+            $usedPieces->setIsConsumable($faker->boolean());
+            $usedPieces->addFkPiece($faker->randomElement($piecesList));
+            $usedPieces->addFkIntervention($faker->randomElement($interventionsList));
+
+            $availability = new Availabilities();
+            $availability->setAvailability(mt_rand(0,7));
+            $availability->setDate($faker->dateTimeThisYear());
+            $availability->setFkEmployee($faker->randomElement($employeesList));
+
+
+            $manager->persist($clients);
+            $manager->persist($employees);
+            $manager->persist($interventions);
+            $manager->persist($pieces);
+            $manager->persist($usedPieces);
+             $manager->persist($availability);
         }
 
         $manager->flush();
     }
 }
+
+
+
