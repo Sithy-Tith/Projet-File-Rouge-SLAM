@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Employees;
+
 use App\Repository\AvailabilitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,12 +22,7 @@ class Availabilities
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
 
-<<<<<<< HEAD
-    #[ORM\ManyToOne(inversedBy: 'availabilities')]
-    #[ORM\JoinColumn(nullable: false)]
-=======
     #[ORM\ManyToOne(inversedBy: 'Availabilities')]
->>>>>>> origin/sithy
     private ?Employees $fkEmployee = null;
 
     public function getId(): ?int

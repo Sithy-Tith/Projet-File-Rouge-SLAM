@@ -2,30 +2,8 @@
 
 namespace App\DataFixtures;
 
-<<<<<<< HEAD
-use App\Entity\Pieces;
-
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-
-class AppFixtures extends Fixture
-{
-    public function load(ObjectManager $manager): void
-    {
-        for ($i = 0; $i<10 ; $i++){
-            $piece = new Pieces();
-            $piece->setName("Tuyau ".$i."mm");
-            $piece->setQuantity(mt_rand(10, 100));
-            $piece->setAlertTreshold(mt_rand(3, 10));
-            $piece->setSupplier("Fournisseur n°".$i);
-
-            $manager->persist($piece);
-        }
-
-
-
-=======
 use App\Entity\Clients;
+use App\Entity\Availabilities;
 use App\Entity\Employees;
 use App\Entity\Interventions;
 use App\Entity\Pieces;
@@ -53,7 +31,10 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $piecesTypes = ['Pipe', 'Elbow', 'Coupling', 'Reducer', 'Valve', 'Gasket', 'Robinet']; //Pieces types pour la plomberie pour test
-
+        $employeesList=[];
+        $clientsList=[];
+        $interventionsList=[];
+        $piecesList=[];
         for ($i = 0; $i < 10; $i++) {
 
             $clients = new Clients();
@@ -65,6 +46,7 @@ class AppFixtures extends Fixture
 
             $passwordClient = $this->hasher->hashPassword($clients, 'password123');
             $clients->setPassword($passwordClient);
+            $clientsList[]=$clients;
 
             $employees = new Employees();
             $employees->setLastName($faker->lastName);
@@ -75,30 +57,49 @@ class AppFixtures extends Fixture
 
             $passwordEmployee = $this->hasher->hashPassword($employees, 'employee123');
             $employees->setPassword($passwordEmployee);
+            $employeesList[]=$employees;
 
             $interventions = new Interventions();
             $interventions->setDate($faker->dateTime);
             $interventions->setDescription($faker->text);
             $interventions->setStatus($faker->randomElement(Status::cases()));
             $interventions->setDuration(mt_rand(1, 7));
+            if ($interventions->getStatus()!==Status::TO_PLAN){
+                $interventions->setFkEmployee($faker->randomElement($employeesList));
+            }
+            $interventions->setFkClient($faker->randomElement($clientsList));
+            $interventionsList[]=$interventions;
+
 
             $pieces = new Pieces();
             $pieces->setName($faker->randomElement($piecesTypes));
             $pieces->setQuantity(mt_rand(0, 100));
             $pieces->setAlertTreshold(mt_rand(1, 10));
             $pieces->setSupplier($faker->company);
+            $piecesList[]=$pieces;
 
             $usedPieces = new UsedPieces();
             $usedPieces->setIsConsumable($faker->boolean());
+            $usedPieces->addFkPiece($faker->randomElement($piecesList));
+            $usedPieces->addFkIntervention($faker->randomElement($interventionsList));
+
+            $availability = new Availabilities();
+            $availability->setAvailability(mt_rand(0,7));
+            $availability->setDate($faker->dateTimeThisYear());
+            $availability->setFkEmployee($faker->randomElement($employeesList));
+
 
             $manager->persist($clients);
             $manager->persist($employees);
             $manager->persist($interventions);
             $manager->persist($pieces);
             $manager->persist($usedPieces);
+             $manager->persist($availability);
         }
 
->>>>>>> origin/sithy
         $manager->flush();
     }
 }
+
+
+
