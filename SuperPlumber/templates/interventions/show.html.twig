@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 {% extends 'base.html.twig' %}
 
 {% block title %}Interventions{% endblock %}
-=======
-<!DOCTYPE html>
-
-<title>Interventions</title>
->>>>>>> origin/sithy
 
 {% block body %}
     <h1>Interventions</h1>
@@ -27,7 +21,7 @@
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ intervention.status }}</td>
+                <td>{{ intervention.status.value }}</td>
             </tr>
             <tr>
                 <th>Duration</th>

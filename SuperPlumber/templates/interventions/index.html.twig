@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 {% extends 'base.html.twig' %}
 
 {% block title %}Interventions index{% endblock %}
-=======
-<!DOCTYPE html>
-
-<title>Interventions index</title>
->>>>>>> origin/sithy
 
 {% block body %}
     <h1>Interventions index</h1>
@@ -28,7 +22,7 @@
                 <td>{{ intervention.id }}</td>
                 <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ intervention.description }}</td>
-                <td>{{ intervention.status }}</td>
+                <td>{{ intervention.status.value }}</td>
                 <td>{{ intervention.duration }}</td>
                 <td>
                     <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\Position;
+use App\Entity\Availabilities;
 use App\Repository\EmployeesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
