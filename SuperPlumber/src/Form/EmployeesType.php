@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\CallbackTransformer; #Pour la transformation en string
 
 class EmployeesType extends AbstractType
 {
@@ -19,18 +20,29 @@ class EmployeesType extends AbstractType
             ->add('lastName')
             ->add('firstName')
             ->add('phone')
-            ->add('position')
+            #->add('position')
         ;
         $builder->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Plombier'=> 'ROLE_PLUMBER',
-                    'Administrateur' => 'ROLE_ADMIN'
-                ],
-                'expanded' => true,
-                'multiple' => true,
-                'label' => 'Attribuer les rôles'
-            ]);
+            'choices' => [
+                'Utilisateur' => 'ROLE_USER',
+                'Plombier' => 'ROLE_PLUMBER',
+                'Administrateur' => 'ROLE_ADMIN'
+            ],
+            'expanded' => false,
+            'multiple' => false,
+            'label' => 'Role'
+        ]);
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesArray) {
+                    // Transforme l'array en string pour l'affichage dans la liste
+                    return count($rolesArray) ? $rolesArray[0] : null;
+                },
+                function ($rolesString) {
+                    // Transforme le string sélectionné en array pour l'enregistrement
+                    return [$rolesString];
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void
