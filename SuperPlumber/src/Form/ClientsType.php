@@ -13,7 +13,7 @@ class ClientsType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
+            #->add('roles') A GARDER
             ->add('password')
             ->add('lastName')
             ->add('firstName')
