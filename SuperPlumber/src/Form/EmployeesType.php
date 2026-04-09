@@ -20,7 +20,7 @@ class EmployeesType extends AbstractType
             ->add('lastName')
             ->add('firstName')
             ->add('phone')
-            #->add('position')
+            ->add('position')
         ;
         $builder->add('roles', ChoiceType::class, [
             'choices' => [
@@ -30,17 +30,15 @@ class EmployeesType extends AbstractType
             ],
             'expanded' => false,
             'multiple' => false,
-            'label' => 'Role'
+            'label' => 'Rôle'
         ]);
         $builder->get('roles')
             ->addModelTransformer(new CallbackTransformer(
                 function ($rolesArray) {
-                    // Transforme l'array en string pour l'affichage dans la liste
-                    return count($rolesArray) ? $rolesArray[0] : null;
+                    return count($rolesArray) ? $rolesArray[0] : null; // on vérifie s'il y a au moins un rôle. Si oui, on extrait le premier élément
                 },
                 function ($rolesString) {
-                    // Transforme le string sélectionné en array pour l'enregistrement
-                    return [$rolesString];
+                    return [$rolesString]; // enregistrement vers base de données
                 }
             ));
     }
