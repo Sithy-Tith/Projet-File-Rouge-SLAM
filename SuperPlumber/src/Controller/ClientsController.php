@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/clients')]
+#[IsGranted('ROLE_ADMIN')]
 final class ClientsController extends AbstractController
 {
     #[Route(name: 'app_clients_index', methods: ['GET'])]
@@ -26,7 +27,7 @@ final class ClientsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $client = new Clients();
-        $form = $this->createForm(ClientsType::class, $client);
+        $form = $this->createForm(ClientsType::class, $client, ['is_new' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +54,7 @@ final class ClientsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_clients_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ClientsType::class, $client);
+        $form = $this->createForm(ClientsType::class, $client, ['is_new' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

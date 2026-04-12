@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Clients;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,7 +15,7 @@ class ClientsType extends AbstractType
         $builder
             ->add('email')
             #->add('roles') A GARDER
-            ->add('password')
+            ->add('plainPassword', PasswordType::class, ['mapped' => false])
             ->add('lastName')
             ->add('firstName')
             ->add('phone')
