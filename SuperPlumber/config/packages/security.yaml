@@ -50,6 +50,7 @@ security:
         - { path: ^/employees, roles: ROLE_EMPLOYEE }
         - { path: ^/clients,   roles: ROLE_ADMIN }
         - { path: ^/,          roles: ROLE_USER }
+        - { path: ^/plumber,   roles: ROLE_PLUMBER}
 
 when@test:
     security:
