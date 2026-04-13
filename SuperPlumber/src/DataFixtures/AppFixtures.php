@@ -10,7 +10,6 @@ use App\Entity\Pieces;
 use App\Entity\UsedPieces;
 use App\Enum\Position;
 use App\Enum\Status;
-use App\Enum\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -37,7 +36,9 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->hasher->hashPassword($admin, 'admin123'));
         $manager->persist($admin);
 
+        // -------------------------------------------------------
         // un plombier fixe aussi
+        // -------------------------------------------------------
         $plumber = new Employees();
         $plumber->setEmail('plombier@test.com');
         $plumber->setFirstName('Jean');
@@ -47,12 +48,15 @@ class AppFixtures extends Fixture
         $plumber->setPassword($this->hasher->hashPassword($plumber, 'plombier123'));
         $manager->persist($plumber);
 
-        // un client fixe aussi
+        // -------------------------------------------------------
+        // Un client fixe
+        // -------------------------------------------------------
         $client = new Clients();
         $client->setEmail('client@test.com');
-        $client->setFirstName('Bernard');
-        $client->setLastName('Arnaud');
-        $client->setPhone('0622222222');
+        $client->setAddress($faker->address);
+        $client->setFirstName('client');
+        $client->setLastName('pigeon');
+        $client->setPhone(0622222222);
         $client->setPassword($this->hasher->hashPassword($client, 'client123'));
         $manager->persist($client);
 
@@ -108,7 +112,6 @@ class AppFixtures extends Fixture
             $intervention = new Interventions();
             $intervention->setDate($faker->dateTime);
             $intervention->setDescription($faker->text);
-            $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
             $intervention->setDuration(mt_rand(1, 7));
             $intervention->setFkClient($faker->randomElement($clientsList));
@@ -130,13 +133,20 @@ class AppFixtures extends Fixture
             $usedPiece->setIsConsumable($faker->boolean());
             $usedPiece->setFkPiece($faker->randomElement($piecesList));
             $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
-            $usedPiece->setQuantity(mt_rand(1, 3));
+            $usedPiece->setQuantity(mt_rand(1,3));
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
             $availability->setAvailability(mt_rand(0, 7));
             $availability->setDate($faker->dateTimeThisYear());
             $availability->setFkEmployee($faker->randomElement($employeesList));
+
+
+            $manager->persist($client);
+            $manager->persist($employee);
+            $manager->persist($intervention);
+            $manager->persist($piece);
+            $manager->persist($usedPiece);
             $manager->persist($availability);
         }
 
