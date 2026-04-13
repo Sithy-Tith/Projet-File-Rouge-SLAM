@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Interventions;
 use App\Enum\Status;
+use App\Enum\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,16 @@ final class ClientDashboardController extends AbstractController
             $description = $request->request->get('description');
 
             if (!empty($titre)) {
+                // Mapping des valeurs du formulaire aux valeurs de l'enum Type
+                $typeMapping = [
+                    'fuite' => Type::FUITE,
+                    'debouchage' => Type::DEBOUCHAGE,
+                    'chauffe_eau' => Type::REPARATION,
+                    'installation' => Type::INSTALLATION,
+                ];
+
                 $intervention = new Interventions();
-                #$intervention->setType($type);
+                $intervention->setType($typeMapping[$titre]);
                 $intervention->setDescription($description);
 
                 $intervention->setStatus(Status::TO_PLAN);

@@ -52,7 +52,6 @@
 		<tbody>
 			{% for intervention in interventions %}
 				<tr>
-					<td>{{ intervention.id }}</td>
           <td>{{ intervention.type.value }}</td>
 					<td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ intervention.description }}</td>
