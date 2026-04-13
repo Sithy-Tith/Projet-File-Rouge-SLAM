@@ -18,8 +18,8 @@ class ClientsType extends AbstractType
             ->add('plainPassword', PasswordType::class, ['mapped' => false])
             ->add('lastName')
             ->add('firstName')
-            ->add('phone')
-            ->add('address')
+            #->add('phone')
+            #->add('address')
         ;
     }
 

@@ -32,7 +32,7 @@ final class EmployeesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $plainPassword = $form->get('plainPassword')->getData();
+            $plainPassword = $form->get('password')->getData();
             $employee->setPassword($hasher->hashPassword($employee, $plainPassword));
 
             $entityManager->persist($employee);

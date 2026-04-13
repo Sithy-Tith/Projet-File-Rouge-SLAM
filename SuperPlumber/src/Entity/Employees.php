@@ -31,7 +31,7 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 45)]
+    #[ORM\Column(length: 45, nullable:true)]
     private ?string $phone = null;
 
     #[ORM\Column(enumType: Position::class)]

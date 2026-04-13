@@ -14,15 +14,16 @@ class EmployeesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
-            ->add('plainPassword', PasswordType::class, [
+            ->add('position')
+            ->add('password', PasswordType::class, [
                 'mapped'   => false,
                 'required' => $options['is_new'],
             ])
-            ->add('lastName')
-            ->add('firstName')
-            ->add('phone')
-            ->add('position')
+            #->add('phone')
+
         ;
     }
 

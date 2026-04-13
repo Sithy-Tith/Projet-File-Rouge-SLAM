@@ -32,21 +32,22 @@ class Clients implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45)]
     private ?string $firstName = null;
 
-    /*
+
     #[ORM\Column(length: 45, nullable: true)]
     private ?string $phone = null;
-    */
-
-    #[ORM\Column(length: 45)]
-    private ?string $phone = null;
 
     /*
-    #[ORM\Column(length: 200, nullable: true)]
-    private ?string $address = null;
+    #[ORM\Column(length: 45)]
+    private ?string $phone = null;
     */
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $address = null;
+
+    /*
     #[ORM\Column(length: 200)]
     private ?string $address = null;
+    */
 
     #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkClient')]
     private Collection $interventions;
