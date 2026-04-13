@@ -117,14 +117,21 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
             $usedPiece = new UsedPieces();
             $usedPiece->setIsConsumable($faker->boolean());
-            $usedPiece->addFkPiece($faker->randomElement($piecesList));
-            $usedPiece->addFkIntervention($faker->randomElement($interventionsList));
+            $usedPiece->setFkPiece($faker->randomElement($piecesList));
+            $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
             $availability->setAvailability(mt_rand(0, 7));
             $availability->setDate($faker->dateTimeThisYear());
             $availability->setFkEmployee($faker->randomElement($employeesList));
+
+
+            $manager->persist($client);
+            $manager->persist($employee);
+            $manager->persist($intervention);
+            $manager->persist($piece);
+            $manager->persist($usedPiece);
             $manager->persist($availability);
         }
 

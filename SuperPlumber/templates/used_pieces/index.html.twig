@@ -10,6 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>IsConsumable</th>
+                <th>Quantity</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ used_piece.id }}</td>
                 <td>{{ used_piece.isConsumable ? 'Yes' : 'No' }}</td>
+                <td>{{ used_piece.quantity }}</td>
                 <td>
                     <a href="{{ path('app_used_pieces_show', {'id': used_piece.id}) }}">show</a>
                     <a href="{{ path('app_used_pieces_edit', {'id': used_piece.id}) }}">edit</a>
@@ -25,7 +27,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
