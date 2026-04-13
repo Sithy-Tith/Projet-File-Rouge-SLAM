@@ -29,7 +29,7 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 success_handler: App\Security\LoginSuccessHandler
-                switch_user: true #permettre à l'admin de switch de rôle pour test, en ajoutant le paramètre _switch_user à l'URL (vue de contrôle à développer)
+                #switch_user: true ----- permettre à l'admin de switch de rôle pour test, en ajoutant le paramètre _switch_user à l'URL (vue de contrôle à développer) -----
             logout:
                 path: app_logout
                 target: app_login
