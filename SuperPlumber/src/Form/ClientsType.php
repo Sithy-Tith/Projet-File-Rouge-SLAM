@@ -13,11 +13,14 @@ class ClientsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             #->add('roles') A GARDER
-            ->add('plainPassword', PasswordType::class, ['mapped' => false])
-            ->add('lastName')
-            ->add('firstName')
+            ->add('password', PasswordType::class, [
+                'mapped'   => false,
+                'required' => $options['is_new'],
+            ])
             #->add('phone')
             #->add('address')
         ;
@@ -27,6 +30,7 @@ class ClientsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Clients::class,
+            'is_new'     => true,
         ]);
     }
 }
