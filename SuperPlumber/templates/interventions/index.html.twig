@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Type</th>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Status</th>
@@ -20,6 +21,7 @@
         {% for intervention in interventions %}
             <tr>
                 <td>{{ intervention.id }}</td>
+                <td>{{ intervention.type }}</td>
                 <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ intervention.description }}</td>
                 <td>{{ intervention.status.value }}</td>
@@ -27,6 +29,7 @@
                 <td>
                     <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
                     <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
+                    <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
                 </td>
             </tr>
         {% else %}

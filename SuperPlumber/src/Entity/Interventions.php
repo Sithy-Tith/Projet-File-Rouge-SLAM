@@ -42,7 +42,7 @@ class Interventions
     /**
      * @var Collection<int, UsedPieces>
      */
-    #[ORM\ManyToMany(targetEntity: UsedPieces::class, mappedBy: 'fkIntervention')]
+    #[ORM\OneToMany(targetEntity: UsedPieces::class, mappedBy: 'fkIntervention', orphanRemoval: true)]
     private Collection $usedPieces;
 
     public function __construct()
@@ -150,7 +150,7 @@ class Interventions
     {
         if (!$this->usedPieces->contains($usedPiece)) {
             $this->usedPieces->add($usedPiece);
-            $usedPiece->addFkIntervention($this);
+            $usedPiece->setFkIntervention($this);
         }
 
         return $this;
@@ -159,7 +159,10 @@ class Interventions
     public function removeUsedPiece(UsedPieces $usedPiece): static
     {
         if ($this->usedPieces->removeElement($usedPiece)) {
-            $usedPiece->removeFkIntervention($this);
+            // set the owning side to null (unless already changed)
+            if ($usedPiece->getFkIntervention() === $this) {
+                $usedPiece->setFkIntervention(null);
+            }
         }
 
         return $this;

@@ -17,6 +17,7 @@ class InterventionsType extends AbstractType
     {
         $builder
             ->add('date')
+            ->add('type')
             ->add('description')
             ->add('status')
             ->add('duration')

@@ -23,7 +23,7 @@ final class ClientDashboardController extends AbstractController
 
             if (!empty($titre)) {
                 $intervention = new Interventions();
-                #$intervention->setTitre($titre);
+                #$intervention->setType($type);
                 $intervention->setDescription($description);
 
                 $intervention->setStatus(Status::TO_PLAN);

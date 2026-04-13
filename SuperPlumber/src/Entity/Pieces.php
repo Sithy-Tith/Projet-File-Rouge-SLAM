@@ -30,7 +30,7 @@ class Pieces
     /**
      * @var Collection<int, UsedPieces>
      */
-    #[ORM\ManyToMany(targetEntity: UsedPieces::class, mappedBy: 'fkPiece')]
+    #[ORM\OneToMany(targetEntity: UsedPieces::class, mappedBy: 'fkPiece')]
     private Collection $usedPieces;
 
     public function __construct()
@@ -103,7 +103,7 @@ class Pieces
     {
         if (!$this->usedPieces->contains($usedPiece)) {
             $this->usedPieces->add($usedPiece);
-            $usedPiece->addFkPiece($this);
+            $usedPiece->setFkPiece($this);
         }
 
         return $this;
@@ -112,7 +112,10 @@ class Pieces
     public function removeUsedPiece(UsedPieces $usedPiece): static
     {
         if ($this->usedPieces->removeElement($usedPiece)) {
-            $usedPiece->removeFkPiece($this);
+            // set the owning side to null (unless already changed)
+            if ($usedPiece->getFkPiece() === $this) {
+                $usedPiece->setFkPiece(null);
+            }
         }
 
         return $this;
