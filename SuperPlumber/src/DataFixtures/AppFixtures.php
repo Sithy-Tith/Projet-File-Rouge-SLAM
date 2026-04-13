@@ -36,7 +36,9 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->hasher->hashPassword($admin, 'admin123'));
         $manager->persist($admin);
 
+        // -------------------------------------------------------
         // un plombier fixe aussi
+        // -------------------------------------------------------
         $plumber = new Employees();
         $plumber->setEmail('plombier@test.com');
         $plumber->setFirstName('Jean');
@@ -45,6 +47,18 @@ class AppFixtures extends Fixture
         $plumber->setPosition(Position::PLUMBER);
         $plumber->setPassword($this->hasher->hashPassword($plumber, 'plombier123'));
         $manager->persist($plumber);
+
+        // -------------------------------------------------------
+        // Un client fixe
+        // -------------------------------------------------------
+        $client = new Clients();
+        $client->setEmail('client@test.com');
+        $client->setAddress($faker->address);
+        $client->setFirstName('client');
+        $client->setLastName('pigeon');
+        $client->setPhone(0622222222);
+        $client->setPassword($this->hasher->hashPassword($client, 'client123'));
+        $manager->persist($client);
 
         // -------------------------------------------------------
         // création des clients et employés aléatoires
@@ -119,6 +133,7 @@ class AppFixtures extends Fixture
             $usedPiece->setIsConsumable($faker->boolean());
             $usedPiece->setFkPiece($faker->randomElement($piecesList));
             $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
+            $usedPiece->setQuantity(mt_rand(1,3));
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
