@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\Status;
+use App\Enum\Type;
 use App\Repository\InterventionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,6 +18,9 @@ class Interventions
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', enumType: Type::class, nullable:true)]
+    private Type $type;
+
     #[ORM\Column]
     private ?\DateTime $date = null;
 
@@ -26,7 +30,7 @@ class Interventions
     #[ORM\Column(enumType: Status::class)]
     private ?Status $status = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
@@ -51,9 +55,20 @@ class Interventions
         return $this->id;
     }
 
+
     public function getDate(): ?\DateTime
     {
         return $this->date;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(): ?Type
+    {
+        return $this->type;
     }
 
     public function setDate(\DateTime $date): static
