@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         $manager->persist($plumber);
 
         // un client fixe aussi
-        $client = new Employees();
+        $client = new Clients();
         $client->setEmail('client@test.com');
         $client->setFirstName('Bernard');
         $client->setLastName('Arnaud');

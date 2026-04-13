@@ -34,7 +34,7 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45, nullable:true)]
     private ?string $phone = null;
 
-    #[ORM\Column(enumType: Position::class)]
+    #[ORM\Column(type: 'string', enumType: Position::class)]
     private ?Position $position = null;
 
     #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkEmployee')]
