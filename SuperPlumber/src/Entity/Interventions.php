@@ -18,7 +18,7 @@ class Interventions
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', enumType: Type::class, nullable:true)]
+    #[ORM\Column(type: 'string', enumType: Type::class)]
     private Type $type;
 
     #[ORM\Column]

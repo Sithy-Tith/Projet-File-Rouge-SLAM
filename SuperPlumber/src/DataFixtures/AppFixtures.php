@@ -10,6 +10,7 @@ use App\Entity\Pieces;
 use App\Entity\UsedPieces;
 use App\Enum\Position;
 use App\Enum\Status;
+use App\Enum\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -107,6 +108,7 @@ class AppFixtures extends Fixture
             $intervention = new Interventions();
             $intervention->setDate($faker->dateTime);
             $intervention->setDescription($faker->text);
+            $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
             $intervention->setDuration(mt_rand(1, 7));
             $intervention->setFkClient($faker->randomElement($clientsList));
