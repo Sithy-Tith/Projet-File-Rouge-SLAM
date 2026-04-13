@@ -27,6 +27,10 @@
                 <th>Duration</th>
                 <td>{{ intervention.duration }}</td>
             </tr>
+            <tr>
+                <th>Action</th>
+                <td><a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a></td>
+            </tr>
         </tbody>
     </table>
 

@@ -27,6 +27,7 @@
                 <td>
                     <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
                     <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
+                    <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
                 </td>
             </tr>
         {% else %}

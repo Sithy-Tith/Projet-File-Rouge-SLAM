@@ -37,51 +37,54 @@ class AppFixtures extends Fixture
         $piecesList=[];
         for ($i = 0; $i < 10; $i++) {
 
-            $clients = new Clients();
-            $clients->setEmail($faker->unique()->email);
-            $clients->setAddress($faker->address);
-            $clients->setFirstName($faker->firstName);
-            $clients->setLastName($faker->lastName);
-            $clients->setPhone($faker->phoneNumber);
+            $client = new Clients();
+            $client->setEmail($faker->unique()->email);
+            $client->setAddress($faker->address);
+            $client->setFirstName($faker->firstName);
+            $client->setLastName($faker->lastName);
+            $client->setPhone($faker->phoneNumber);
 
-            $passwordClient = $this->hasher->hashPassword($clients, 'password123');
-            $clients->setPassword($passwordClient);
-            $clientsList[]=$clients;
+            $passwordClient = $this->hasher->hashPassword($client, 'password123');
+            $client->setPassword($passwordClient);
+            $clientsList[]=$client;
 
-            $employees = new Employees();
-            $employees->setLastName($faker->lastName);
-            $employees->setFirstName($faker->firstName);
-            $employees->setPhone($faker->phoneNumber);
-            $employees->setPosition($faker->randomElement(Position::cases()));
-            $employees->setEmail($faker->unique()->email);
+            $employee = new Employees();
+            $employee->setLastName($faker->lastName);
+            $employee->setFirstName($faker->firstName);
+            $employee->setPhone($faker->phoneNumber);
+            $employee->setPosition($faker->randomElement(Position::cases()));
+            $employee->setEmail($faker->unique()->email);
 
-            $passwordEmployee = $this->hasher->hashPassword($employees, 'employee123');
-            $employees->setPassword($passwordEmployee);
-            $employeesList[]=$employees;
+            $passwordEmployee = $this->hasher->hashPassword($employee, 'employee123');
+            $employee->setPassword($passwordEmployee);
+            $employeesList[]=$employee;
 
-            $interventions = new Interventions();
-            $interventions->setDate($faker->dateTime);
-            $interventions->setDescription($faker->text);
-            $interventions->setStatus($faker->randomElement(Status::cases()));
-            $interventions->setDuration(mt_rand(1, 7));
-            if ($interventions->getStatus()!==Status::TO_PLAN){
-                $interventions->setFkEmployee($faker->randomElement($employeesList));
+            $intervention = new Interventions();
+            $intervention->setDate($faker->dateTime);
+            $intervention->setDescription($faker->text);
+            $intervention->setStatus($faker->randomElement(Status::cases()));
+            $intervention->setDuration(mt_rand(1, 7));
+            if ($intervention->getStatus()!==Status::TO_PLAN){
+                $intervention->setFkEmployee($faker->randomElement($employeesList));
             }
-            $interventions->setFkClient($faker->randomElement($clientsList));
-            $interventionsList[]=$interventions;
+            $intervention->setFkClient($faker->randomElement($clientsList));
+            $interventionsList[]=$intervention;
 
 
-            $pieces = new Pieces();
-            $pieces->setName($faker->randomElement($piecesTypes));
-            $pieces->setQuantity(mt_rand(0, 100));
-            $pieces->setAlertTreshold(mt_rand(1, 10));
-            $pieces->setSupplier($faker->company);
-            $piecesList[]=$pieces;
+            $piece = new Pieces();
+            $piece->setName($faker->randomElement($piecesTypes));
+            $piece->setQuantity(mt_rand(0, 100));
+            $piece->setAlertTreshold(mt_rand(1, 10));
+            $piece->setSupplier($faker->company);
+            $piecesList[]=$piece;
 
-            $usedPieces = new UsedPieces();
-            $usedPieces->setIsConsumable($faker->boolean());
-            $usedPieces->addFkPiece($faker->randomElement($piecesList));
-            $usedPieces->addFkIntervention($faker->randomElement($interventionsList));
+
+            $usedPiece = new UsedPieces();
+            $usedPiece->setIsConsumable($faker->boolean());
+            $usedPiece->setQuantity(mt_rand(1,8));
+            $usedPiece->setFkPiece($faker->randomElement($piecesList));
+            $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
+
 
             $availability = new Availabilities();
             $availability->setAvailability(mt_rand(0,7));
@@ -89,12 +92,12 @@ class AppFixtures extends Fixture
             $availability->setFkEmployee($faker->randomElement($employeesList));
 
 
-            $manager->persist($clients);
-            $manager->persist($employees);
-            $manager->persist($interventions);
-            $manager->persist($pieces);
-            $manager->persist($usedPieces);
-             $manager->persist($availability);
+            $manager->persist($client);
+            $manager->persist($employee);
+            $manager->persist($intervention);
+            $manager->persist($piece);
+            $manager->persist($usedPiece);
+            $manager->persist($availability);
         }
 
         $manager->flush();

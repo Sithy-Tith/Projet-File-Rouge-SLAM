@@ -16,15 +16,14 @@ class UsedPiecesType extends AbstractType
     {
         $builder
             ->add('isConsumable')
+            ->add('quantity')
             ->add('fkIntervention', EntityType::class, [
                 'class' => Interventions::class,
                 'choice_label' => 'id',
-                'multiple' => true,
             ])
             ->add('fkPiece', EntityType::class, [
                 'class' => Pieces::class,
                 'choice_label' => 'id',
-                'multiple' => true,
             ])
         ;
     }
