@@ -19,7 +19,7 @@ class Interventions
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', enumType: Type::class)]
-    private Type $type;
+    private ?Type $type;
 
     #[ORM\Column]
     private ?\DateTime $date = null;
@@ -61,14 +61,16 @@ class Interventions
         return $this->date;
     }
 
-    public function getType(): ?Type
+    public function getType(): Type
     {
         return $this->type;
     }
 
-    public function setType(): ?Type
+    public function setType(Type $type): static
     {
-        return $this->type;
+        $this->type = $type;
+
+        return $this;
     }
 
     public function setDate(\DateTime $date): static
