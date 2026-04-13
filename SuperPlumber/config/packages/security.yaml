@@ -47,10 +47,13 @@ security:
         - { path: ^/login,     roles: PUBLIC_ACCESS }
         - { path: ^/register,  roles: PUBLIC_ACCESS }
         - { path: ^/admin,     roles: ROLE_ADMIN }
-        - { path: ^/employees, roles: ROLE_EMPLOYEE }
-        - { path: ^/clients,   roles: ROLE_ADMIN }
-        - { path: ^/,          roles: ROLE_USER }
-        - { path: ^/plumber,   roles: ROLE_PLUMBER}
+        - { path: ^/plumber,   roles: ROLE_PLUMBER }
+        - { path: ^/client,    roles: ROLE_CLIENT }
+        - { path: ^/interventions, roles: ROLE_ADMIN }
+        - { path: ^/employees, roles: ROLE_ADMIN }
+        - { path: ^/pieces, roles: ROLE_ADMIN }
+        - { path: ^/usedpieces, roles: ROLE_PLUMBER } # usedpieces à faire à part de interventions
+
 
 when@test:
     security:

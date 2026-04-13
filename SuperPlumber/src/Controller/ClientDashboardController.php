@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
-#[IsGranted('ROLE_USER')]
 final class ClientDashboardController extends AbstractController
 {
     #[Route('/client/dashboard', name: 'app_client_dashboard', methods: ['GET', 'POST'])]
