@@ -1,41 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pieces index{% endblock %}
+{% block title %}Inventaire des pièces{% endblock %}
 
 {% block body %}
-    <h1>Pieces index</h1>
+    <h1>Inventaire des pièces</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>AlertTreshold</th>
-                <th>Supplier</th>
-                <th>actions</th>
+                <th>Id (à enlever ?)</th>
+                <th>Nom</th>
+                <th>Fournisseur</th>
+                <th>Quantité</th>
+                <th>Seuil d'alerte</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for piece in pieces %}
-            <tr>
-                <td>{{ piece.id }}</td>
-                <td>{{ piece.name }}</td>
-                <td>{{ piece.quantity }}</td>
-                <td>{{ piece.alertTreshold }}</td>
-                <td>{{ piece.supplier }}</td>
-                <td>
-                    <a href="{{ path('app_pieces_show', {'id': piece.id}) }}">show</a>
-                    <a href="{{ path('app_pieces_edit', {'id': piece.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+        <!--    Affichage en top des pièces avec alerte de stock    -->
+        {% for piece in alertePieces %}
+            {% include "pieces/_rows.html.twig" with { piece: piece, alerte: true } %}
         {% endfor %}
-        </tbody>
+        <!--    Affichage des autres pièces    -->
+        {% for piece in normalPieces %}
+            {% include "pieces/_rows.html.twig" with { piece: piece, alerte: false } %}
+        {% endfor %}
+        <t/body>
     </table>
 
-    <a href="{{ path('app_pieces_new') }}">Create new</a>
+    <a href="{{ path('app_pieces_new') }}">Nouvelle pièce</a>
 {% endblock %}
