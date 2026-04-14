@@ -15,11 +15,9 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PiecesController extends AbstractController
 {
     #[Route(name: 'app_pieces_index', methods: ['GET'])]
-    public function index(PiecesRepository $piecesRepository): Response
+    public function index(): Response
     {
-        return $this->render('pieces/index.html.twig', [
-            'pieces' => $piecesRepository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_pieces_inventory');
     }
 
     #[Route('/new', name: 'app_pieces_new', methods: ['GET', 'POST'])]
