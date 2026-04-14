@@ -6,6 +6,7 @@ use App\Entity\Pieces;
 use App\Form\PiecesType;
 use App\Repository\PiecesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,4 +79,34 @@ final class PiecesController extends AbstractController
 
         return $this->redirectToRoute('app_pieces_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+//  --------   Méthodes personnalisées  ----------------
+
+// Affiche l'inventaire de toutes les pièces avec leurs stock
+
+#[Route('/inventaire/' , name: 'app_pieces_inventory', methods: ['GET'])]
+    public function inventory(PiecesRepository $piecesRepository, Boolean $edition=False): Response
+    {
+        $pieces = $piecesRepository->findAll();
+        foreach($pieces as $piece){
+            // Si la pièce possède un stock inférieur à son seuil d'alerte
+            if ($piece->getQuantity()<=$piece->getAlertTreshold()){
+                $alertPieces[]=$piece;
+            }else{
+                $normalPieces[]=$piece;
+            }
+        }
+        return $this->render('pieces/index.html.twig', [
+            'alertePieces' => $alertPieces,
+            'normalPieces' => $normalPieces,
+            'edition' => $edition
+        ]);
+    }
+
+
+
+
+
 }
