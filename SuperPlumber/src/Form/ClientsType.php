@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Clients;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,13 +13,16 @@ class ClientsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             #->add('roles') A GARDER
-            ->add('password')
-            ->add('lastName')
-            ->add('firstName')
-            ->add('phone')
-            ->add('address')
+            ->add('password', PasswordType::class, [
+                'mapped'   => false,
+                'required' => $options['is_new'],
+            ])
+            #->add('phone')
+            #->add('address')
         ;
     }
 
@@ -26,6 +30,7 @@ class ClientsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Clients::class,
+            'is_new'     => true,
         ]);
     }
 }

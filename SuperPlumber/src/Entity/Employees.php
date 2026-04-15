@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Enum\Position;
-use App\Entity\Availabilities;
 use App\Repository\EmployeesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,15 +22,6 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
-    private array $roles = [];
-
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -41,27 +31,21 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 45)]
+    #[ORM\Column(length: 45, nullable:true)]
     private ?string $phone = null;
 
-    #[ORM\Column(enumType: Position::class)]
+    #[ORM\Column(type: 'string', enumType: Position::class)]
     private ?Position $position = null;
 
-    /**
-     * @var Collection<int, Interventions>
-     */
     #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkEmployee')]
     private Collection $interventions;
 
-    /**
-     * @var Collection<int, availabilities>
-     */
-    #[ORM\OneToMany(targetEntity: availabilities::class, mappedBy: 'fkEmployee')]
+    #[ORM\OneToMany(targetEntity: Availabilities::class, mappedBy: 'fkEmployee')]
     private Collection $availabilities;
 
     public function __construct()
     {
-        $this->interventions = new ArrayCollection();
+        $this->interventions  = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
     }
 
@@ -78,45 +62,23 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    public function getRoles(): array //getRoles modifié pour qu'il soit géré selon la position
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return match($this->position) {
+            Position::ADMINISTRATOR => ['ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_USER'],
+            Position::PLUMBER       => ['ROLE_PLUMBER', 'ROLE_EMPLOYEE', 'ROLE_USER'],
+            default                 => ['ROLE_EMPLOYEE', 'ROLE_USER'],
+        };
     }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -125,18 +87,18 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
+    public function eraseCredentials(): void
+    {
+        // Pas de données sensibles temporaires à effacer
+    }
+
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
         return $data;
     }
 
@@ -148,7 +110,6 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
-
         return $this;
     }
 
@@ -160,7 +121,6 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
@@ -172,7 +132,6 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
-
         return $this;
     }
 
@@ -184,13 +143,9 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPosition(Position $position): static
     {
         $this->position = $position;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Interventions>
-     */
     public function getInterventions(): Collection
     {
         return $this->interventions;
@@ -202,49 +157,40 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
             $this->interventions->add($intervention);
             $intervention->setFkEmployee($this);
         }
-
         return $this;
     }
 
     public function removeIntervention(Interventions $intervention): static
     {
         if ($this->interventions->removeElement($intervention)) {
-            // set the owning side to null (unless already changed)
             if ($intervention->getFkEmployee() === $this) {
                 $intervention->setFkEmployee(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, availabilities>
-     */
-    public function getavailabilities(): Collection
+    public function getAvailabilities(): Collection
     {
         return $this->availabilities;
     }
 
-    public function addavailability(availabilities $availability): static
+    public function addAvailability(Availabilities $availability): static
     {
         if (!$this->availabilities->contains($availability)) {
             $this->availabilities->add($availability);
             $availability->setFkEmployee($this);
         }
-
         return $this;
     }
 
-    public function removeavailability(availabilities $availability): static
+    public function removeAvailability(Availabilities $availability): static
     {
         if ($this->availabilities->removeElement($availability)) {
-            // set the owning side to null (unless already changed)
             if ($availability->getFkEmployee() === $this) {
                 $availability->setFkEmployee(null);
             }
         }
-
         return $this;
     }
 }
