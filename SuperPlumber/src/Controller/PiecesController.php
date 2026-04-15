@@ -84,8 +84,11 @@ final class PiecesController extends AbstractController
 // Affiche l'inventaire de toutes les pièces avec leurs stock
 
 #[Route('/inventaire' , name: 'app_pieces_inventory', methods: ['GET'])]
-    public function inventory(PiecesRepository $piecesRepository, bool $edition= false): Response
+    public function inventory(PiecesRepository $piecesRepository, Request $request): Response
     {
+        // Vérifie si le paramètre 'edition' a été passé en url
+        $edition=$request->query->getBoolean('edition',false);
+
         $pieces = $piecesRepository->findAll();
         foreach($pieces as $piece){
             // Si la pièce possède un stock inférieur à son seuil d'alerte
@@ -101,6 +104,35 @@ final class PiecesController extends AbstractController
             'edition' => $edition
         ]);
     }
+
+    // Récupère le formulaire de mise à jour du stock
+    #[Route(name: 'app_pieces_inventory_form_submitted', methods: ['GET','POST'])]
+    public function inventoryFormSubmitted(
+        PiecesRepository $piecesRepository,
+        EntityManagerInterface $entityManager) : Response
+    {
+        $changes=$_POST;
+        foreach($changes as $key=>$value){
+            if($value==''){
+                continue;
+            }
+            // Chaque Input du form est de type "[attribut]_{idPiece}"
+            // On vient récupérer l'attribut et l'id avec explode('_')
+            list($attribut,$idPiece)=explode('_',$key);
+            switch ($attribut) {
+                case 'quantity':
+                    $piece=$piecesRepository->findOneBy(['id'=>$idPiece])->setQuantity((int)$value);
+                    break;
+                default:
+                    break;
+            }
+            $entityManager->persist($piece);
+        }
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_pieces_inventory');
+    }
+
 
 
 

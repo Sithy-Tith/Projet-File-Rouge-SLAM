@@ -14,7 +14,7 @@
         <td>{{ piece.name }}</td>
         <td>{{ piece.supplier }}</td>
         <td>{{ piece.quantity }}</td>
-
+        <td {{edition ? '':'hidden'}}><input type='number' min='0' name='quantity_{{piece.id}}' value="{{piece.quantity}}"></td>
         <td>{{ piece.alertTreshold }}</td>
         <td>
             <a href="{{ path('app_pieces_show', {'id': piece.id}) }}">show</a>
