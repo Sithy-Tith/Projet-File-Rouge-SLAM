@@ -31,12 +31,12 @@
 
         <!--    Affichage en top des pièces avec alerte de stock    -->
         {% for piece in alertePieces %}
-            {% include "pieces/_rows.html.twig" with { piece: piece, alerte: true, edition : edition } %}
+            {% include "pieces/_rows.html.twig" with { alerte: true } %}
         {% endfor %}
 
         <!--    Affichage des autres pièces    -->
         {% for piece in normalPieces %}
-            {% include "pieces/_rows.html.twig" with { piece: piece, alerte: false, edition : edition } %}
+            {% include "pieces/_rows.html.twig" with { alerte: false} %}
         {% endfor %}
         <t/body>
     </table>
