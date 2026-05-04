@@ -90,6 +90,8 @@ final class PiecesController extends AbstractController
         $edition=$request->query->getBoolean('edition',false);
 
         $pieces = $piecesRepository->findAll();
+        $alertPieces=[];
+        $normalPieces=[];
         foreach($pieces as $piece){
             // Si la pièce possède un stock inférieur à son seuil d'alerte
             if ($piece->getQuantity()<= $piece->getAlertTreshold()){
