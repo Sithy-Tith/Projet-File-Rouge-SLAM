@@ -33,6 +33,22 @@ class EmployeesRepository extends ServiceEntityRepository implements PasswordUpg
         $this->getEntityManager()->flush();
     }
 
+     // Retourne un array d'employés qui ont une colonne contenant la chaîne $term
+    public function searchByTerm(?string $term): array
+    {
+
+        return $this->createQueryBuilder('e')   // On crée une requête préparée avee l'alias 'e' pour l'entité 'employés'
+            ->andWhere('e.email LIKE :term
+                            OR e.lastName LIKE :term
+                            OR e.firstName LIKE :term
+                            OR e.phone LIKE :term
+                            OR e.position Like :term')   // Recherche multi-colonne qui sont comme le placeholder 'term'
+            ->setParameter('term', '%' . $term . '%')  //  Définition du placeholder comme étant %$term% => qui contient la chaîne $term
+            ->getQuery()
+            ->getResult()   // Retourne le résultat (array de clients)
+        ;
+    }
+
     //    /**
     //     * @return Employees[] Returns an array of Employees objects
     //     */

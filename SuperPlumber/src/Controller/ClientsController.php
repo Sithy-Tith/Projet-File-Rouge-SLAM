@@ -31,7 +31,8 @@ final class ClientsController extends AbstractController
 
         return $this->render('clients/index.html.twig', [
             'clients' => $clients,
-            'isSearch' => $isSearch ?? false
+            'isSearch' => $isSearch ?? false,
+            'term' => $search,
         ]);
     }
 

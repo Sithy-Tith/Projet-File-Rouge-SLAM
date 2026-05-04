@@ -16,10 +16,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EmployeesController extends AbstractController
 {
     #[Route(name: 'app_employees_index', methods: ['GET'])]
-    public function index(EmployeesRepository $employeesRepository): Response
+    public function index(EmployeesRepository $employeesRepository, Request $request): Response
     {
+         // Récuperer le terme de la recheche dans l'url
+        $search = $request->query->get('search');
+
+        // Si du texte a été tapé dans la barre de recherche, on n'affiche que ceux correspondant à la recherche
+        if ($search) {
+            $employees = $employeesRepository->searchByTerm($search);
+            $isSearch = true;
+        } else {
+            $employees = $employeesRepository->findAll();
+        }
+
+
         return $this->render('employees/index.html.twig', [
-            'employees' => $employeesRepository->findAll(),
+            'employees' => $employees,
+            'isSearch' => $isSearch ?? false,
+            'term' => $search,
         ]);
     }
 
