@@ -1,17 +1,63 @@
 {# Header included dans le base.html.twig #}
 
-<header class="bg-custom text-white">
-    <nav class="navbar d-flex align-items-center">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_employees_index' )}}" style="height: 10vh;">
-                <img src="{{asset('images/logo-mario.png')}}" alt="Logo mario SuperPlumber">
-                <img src="{{asset('images/Superplumber_titre.png')}}" alt="Titre SuperPlumber">
-            </a>
+
+<nav class="navbar navbar-expand-sm bg-custom navbar-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="{{asset('images/logo-mario.png')}}" alt="Logo mario SuperPlumber" class="d-inline-block align-top"
+                height="30">
+        </a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar-menu">
+            <ul class="navbar-nav">
+                <li class="navbar-item">
+                    <a href="#" class="nav-link active">
+                        Accueil
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{path('app_employees_index')}}" class="nav-link">
+                        Employés
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{path('app_interventions_index')}}" class="nav-link">
+                        Interventions
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{path('app_pieces_index')}}" class="nav-link">
+                        Inventaire
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{path('app_clients_index')}}" class="nav-link">
+                        Clients
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{path('app_availabilities_index')}}" class="nav-link">
+                        Plannings
+                    </a>
+                </li>
+            </ul>
         </div>
+        <a class="navbar-brand" href="#">
+            <img src="{{asset('images/Superplumber_titre.png')}}" alt="Titre SuperPlumber"
+                class="d-inline-block align-top" height="30">
+        </a>
+        <a href="/logout" class="nav-link">
+            <img src="{{asset('icons/box-arrow-right.svg')}}" alt="Déconnexion">
+        </a>
 
-    </nav>
-
-
-
-
-</header>
+        {% if is_granted('ROLE_EMPLOYEE') %}
+            <a href="{{path('app_employees_show',{ id : app.user.id})}}" class="nav-link">
+        {% elseif is_granted('ROLE_CLIENT') %}
+            <a href="{{path('app_clients_show',{ id : app.user.id})}}" class="nav-link">
+        {% endif %}
+                <img src="{{asset('icons/person-circle.svg')}}" alt="Mon Compte">
+        </a>
+    </div>
+</nav>
