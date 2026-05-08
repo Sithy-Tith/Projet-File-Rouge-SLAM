@@ -7,6 +7,7 @@ use App\Form\EmployeesType;
 use App\Repository\EmployeesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,6 +59,17 @@ final class EmployeesController extends AbstractController
         return $this->render('employees/new.html.twig', [
             'employee' => $employee,
             'form' => $form,
+        ]);
+    }
+
+
+    #Page du profil d'un employé, accessible que par lui
+    #[Route('/profil', name: 'app_employees_profile')]
+    public function profile(Security $security): Response
+    {
+        $employee=$security->getUser();
+        return $this->render('employees/show.html.twig', [
+            'employee' => $employee,
         ]);
     }
 

@@ -10,13 +10,19 @@
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Liens de navigation -->
         <div class="navbar-collapse collapse" id="navbar-menu">
             <ul class="navbar-nav">
+
+                <!-- Accueil -->
                 <li class="navbar-item">
                     <a href="#" class="nav-link active">
                         Accueil
                     </a>
                 </li>
+
+                <!-- Employés -->
                 {% if can_access_path("/employees") %}
                     <li class="navbar-item">
                         <a href="{{path('app_employees_index')}}" class="nav-link">
@@ -24,6 +30,8 @@
                         </a>
                     </li>
                 {% endif %}
+
+                <!-- Interventions -->
                 {% if can_access_path("/interventions") %}
                     <li class="navbar-item">
                         <a href="{{path('app_interventions_index')}}" class="nav-link">
@@ -31,6 +39,8 @@
                         </a>
                     </li>
                 {% endif %}
+
+                <!-- Inventaire -->
                 {% if can_access_path("/pieces") %}
                     <li class="navbar-item">
                         <a href="{{path('app_pieces_index')}}" class="nav-link">
@@ -38,6 +48,8 @@
                         </a>
                     </li>
                 {% endif %}
+
+                <!-- Clients -->
                 {% if can_access_path("/clients") %}
                     <li class="navbar-item">
                         <a href="{{path('app_clients_index')}}" class="nav-link">
@@ -45,6 +57,8 @@
                         </a>
                     </li>
                 {% endif %}
+
+                <!-- Plannings -->
                 {% if can_access_path("/availabilities") %}
                     <li class="navbar-item">
                         <a href="{{path('app_availabilities_index')}}" class="nav-link">
@@ -52,22 +66,34 @@
                         </a>
                     </li>
                 {% endif %}
+
             </ul>
         </div>
+
+        <!-- Logo SuperPlumber -->
         <a class="navbar-brand" href="#">
             <img src="{{asset('images/Superplumber_titre.png')}}" alt="Titre SuperPlumber"
                 class="d-inline-block align-top" height="30">
         </a>
-        <a href="/logout" class="nav-link">
-            <img src="{{asset('icons/box-arrow-right.svg')}}" alt="Déconnexion">
-        </a>
 
-        {% if is_granted('ROLE_EMPLOYEE') %}
-        <a href="{{path('app_employees_show',{ id : app.user.id})}}" class="nav-link">
-            {% elseif is_granted('ROLE_CLIENT') %}
-            <a href="{{path('app_clients_show',{ id : app.user.id})}}" class="nav-link">
-                {% endif %}
-                <img src="{{asset('icons/person-circle.svg')}}" alt="Mon Compte">
+        <!-- Vérifier si l'utilisateur est connecté -->
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+            <!-- Bouton 'Se déconnecter'-->
+            <a href="/logout" class="nav-link">
+                <img src="{{asset('icons/box-arrow-right.svg')}}" class="d-inline-block mx-2" alt="Déconnexion">
             </a>
+
+            <!-- Bouton 'Mon compte' -->
+            {% if is_granted('ROLE_EMPLOYEE') %}
+                <a href="{{path('app_employees_profile')}}" class="nav-link">
+            {% elseif is_granted('ROLE_CLIENT') %}
+                <a href="{{path('app_clients_profile')}}" class="nav-link">
+            {% endif %}
+                <img src="{{asset('icons/person-circle.svg')}}" class=" mx-2" alt="Mon Compte">
+            </a>
+
+        {% endif %}
+
     </div>
 </nav>

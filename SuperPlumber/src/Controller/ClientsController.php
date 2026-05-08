@@ -6,6 +6,7 @@ use App\Entity\Clients;
 use App\Form\ClientsType;
 use App\Repository\ClientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,6 +60,17 @@ final class ClientsController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #Page du profil d'un client, accessible que par lui
+    #[Route('/profil', name: 'app_clients_profile')]
+    public function profile(Security $security): Response
+    {
+        $client=$security->getUser();
+        return $this->render('clients/show.html.twig', [
+            'client' => $client,
+        ]);
+    }
+
 
     #[Route('/{id}', name: 'app_clients_show', methods: ['GET'])]
     public function show(Clients $client): Response
