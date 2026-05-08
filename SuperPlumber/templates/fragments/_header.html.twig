@@ -17,31 +17,41 @@
                         Accueil
                     </a>
                 </li>
-                <li class="navbar-item">
-                    <a href="{{path('app_employees_index')}}" class="nav-link">
-                        Employés
-                    </a>
-                </li>
-                <li class="navbar-item">
-                    <a href="{{path('app_interventions_index')}}" class="nav-link">
-                        Interventions
-                    </a>
-                </li>
-                <li class="navbar-item">
-                    <a href="{{path('app_pieces_index')}}" class="nav-link">
-                        Inventaire
-                    </a>
-                </li>
-                <li class="navbar-item">
-                    <a href="{{path('app_clients_index')}}" class="nav-link">
-                        Clients
-                    </a>
-                </li>
-                <li class="navbar-item">
-                    <a href="{{path('app_availabilities_index')}}" class="nav-link">
-                        Plannings
-                    </a>
-                </li>
+                {% if can_access_path("/employees") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_employees_index')}}" class="nav-link">
+                            Employés
+                        </a>
+                    </li>
+                {% endif %}
+                {% if can_access_path("/interventions") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_interventions_index')}}" class="nav-link">
+                            Interventions
+                        </a>
+                    </li>
+                {% endif %}
+                {% if can_access_path("/pieces") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_pieces_index')}}" class="nav-link">
+                            Inventaire
+                        </a>
+                    </li>
+                {% endif %}
+                {% if can_access_path("/clients") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_clients_index')}}" class="nav-link">
+                            Clients
+                        </a>
+                    </li>
+                {% endif %}
+                {% if can_access_path("/availabilities") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_availabilities_index')}}" class="nav-link">
+                            Plannings
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <a class="navbar-brand" href="#">
@@ -53,11 +63,11 @@
         </a>
 
         {% if is_granted('ROLE_EMPLOYEE') %}
-            <a href="{{path('app_employees_show',{ id : app.user.id})}}" class="nav-link">
-        {% elseif is_granted('ROLE_CLIENT') %}
+        <a href="{{path('app_employees_show',{ id : app.user.id})}}" class="nav-link">
+            {% elseif is_granted('ROLE_CLIENT') %}
             <a href="{{path('app_clients_show',{ id : app.user.id})}}" class="nav-link">
-        {% endif %}
+                {% endif %}
                 <img src="{{asset('icons/person-circle.svg')}}" alt="Mon Compte">
-        </a>
+            </a>
     </div>
 </nav>
