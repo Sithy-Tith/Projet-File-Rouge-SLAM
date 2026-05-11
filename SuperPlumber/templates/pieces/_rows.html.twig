@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block header %}{% endblock %}
+
+{% block title %}Inventaire des pièces{% endblock %}
+
+{% block body %}
+
+    {% if alerte %}
+        <tr class="table-danger">
+    {% else %}
+        <tr class="table-info">
+    {% endif %}
+        <td>{{ piece.id }}</td>
+        <td>{{ piece.name }}</td>
+        <td>{{ piece.supplier }}</td>
+        <td>{{ piece.quantity }}</td>
+        <td {{edition ? '':'hidden'}}>
+            <input type='number' min='0' name='quantity_{{piece.id}}' value="{{piece.quantity}}" class="qty-input">
+        </td>
+        <td>{{ piece.alertTreshold }}</td>
+        <td>
+            <a href="{{ path('app_pieces_show', {'id': piece.id}) }}">show</a>
+            <a href="{{ path('app_pieces_edit', {'id': piece.id}) }}">edit</a>
+        </td>
+    </tr>
+
+{% endblock %}

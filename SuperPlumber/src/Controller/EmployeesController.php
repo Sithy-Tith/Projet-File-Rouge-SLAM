@@ -7,6 +7,7 @@ use App\Form\EmployeesType;
 use App\Repository\EmployeesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EmployeesController extends AbstractController
 {
     #[Route(name: 'app_employees_index', methods: ['GET'])]
-    public function index(EmployeesRepository $employeesRepository): Response
+    public function index(EmployeesRepository $employeesRepository, Request $request): Response
     {
+         // Récuperer le terme de la recheche dans l'url
+        $search = $request->query->get('search');
+
+        // Si du texte a été tapé dans la barre de recherche, on n'affiche que ceux correspondant à la recherche
+        if ($search) {
+            $employees = $employeesRepository->searchByTerm($search);
+            $isSearch = true;
+        } else {
+            $employees = $employeesRepository->findAll();
+        }
+
+
         return $this->render('employees/index.html.twig', [
-            'employees' => $employeesRepository->findAll(),
+            'employees' => $employees,
+            'isSearch' => $isSearch ?? false,
+            'term' => $search,
         ]);
     }
 
@@ -44,6 +59,17 @@ final class EmployeesController extends AbstractController
         return $this->render('employees/new.html.twig', [
             'employee' => $employee,
             'form' => $form,
+        ]);
+    }
+
+
+    #Page du profil d'un employé, accessible que par lui
+    #[Route('/profil', name: 'app_employees_profile')]
+    public function profile(Security $security): Response
+    {
+        $employee=$security->getUser();
+        return $this->render('employees/show.html.twig', [
+            'employee' => $employee,
         ]);
     }
 

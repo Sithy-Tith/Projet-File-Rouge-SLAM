@@ -6,6 +6,7 @@ use App\Entity\Clients;
 use App\Form\ClientsType;
 use App\Repository\ClientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,23 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ClientsController extends AbstractController
 {
     #[Route(name: 'app_clients_index', methods: ['GET'])]
-    public function index(ClientsRepository $clientsRepository): Response
+    public function index(ClientsRepository $clientsRepository, Request $request): Response
     {
+        // Récuperer le terme de la recheche dans l'url
+        $search = $request->query->get('search');
+
+        // Si du texte a été tapé dans la barre de recherche, on n'affiche que ceux correspondant à la recherche
+        if ($search) {
+            $clients = $clientsRepository->searchByTerm($search);
+            $isSearch = true;
+        } else {
+            $clients = $clientsRepository->findAll();
+        }
+
         return $this->render('clients/index.html.twig', [
-            'clients' => $clientsRepository->findAll(),
+            'clients' => $clients,
+            'isSearch' => $isSearch ?? false,
+            'term' => $search,
         ]);
     }
 
@@ -46,6 +60,17 @@ final class ClientsController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #Page du profil d'un client, accessible que par lui
+    #[Route('/profil', name: 'app_clients_profile')]
+    public function profile(Security $security): Response
+    {
+        $client=$security->getUser();
+        return $this->render('clients/show.html.twig', [
+            'client' => $client,
+        ]);
+    }
+
 
     #[Route('/{id}', name: 'app_clients_show', methods: ['GET'])]
     public function show(Clients $client): Response
@@ -76,7 +101,7 @@ final class ClientsController extends AbstractController
     #[Route('/{id}', name: 'app_clients_delete', methods: ['POST'])]
     public function delete(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($client);
             $entityManager->flush();
         }

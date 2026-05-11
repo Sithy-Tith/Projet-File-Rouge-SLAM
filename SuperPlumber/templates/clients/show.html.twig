@@ -5,39 +5,23 @@
 {% block body %}
     <h1>Clients</h1>
 
-    <table class="table">
+    <table class="table table-striped mt-5">
+        <thead class="table-dark">
+            <tr>
+                <th>NOM</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Adresse</th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ client.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ client.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ client.roles ? client.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ client.password }}</td>
-            </tr>
-            <tr>
-                <th>LastName</th>
-                <td>{{ client.lastName }}</td>
-            </tr>
-            <tr>
-                <th>FirstName</th>
-                <td>{{ client.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ client.phone }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ client.address }}</td>
+                <td>{{client.lastName | upper }}</td>
+                <td>{{client.firstName | title}}</td>
+                <td>{{client.phone}}</td>
+                <td>{{client.email}}</td>
+                <td>{{client.address}}</td>
             </tr>
         </tbody>
     </table>

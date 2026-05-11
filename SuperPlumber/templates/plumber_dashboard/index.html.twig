@@ -1,15 +1,21 @@
-<h1>Tableau de bord</h1>
+{% extends "base.html.twig" %}
 
-<p>Bienvenue,
-	<strong>{{ app.user.firstName }}</strong>
-	!</p>
-{% if app.user %}
-	<div class="mb-3">
-		Vous êtes connecté en tant que :
-		<strong>{{ app.user.userIdentifier }}</strong>,
+{% block body %}
+    <h1>Tableau de bord</h1>
+
+    <p>Bienvenue,
+        <strong>{{ app.user.firstName }}</strong>
+        !
+    </p>
+    {% if app.user %}
+    <div class="mb-3">
+        Vous êtes connecté en tant que :
+        <strong>{{ app.user.userIdentifier }}</strong>,
         <p>
         </p>
-		<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal"><a href="{{ logout_path() }}">Logout</a>
-		</button>
-	</div>
-{% endif %}
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal"><a
+                href="{{ logout_path() }}">Logout</a>
+        </button>
+    </div>
+    {% endif %}
+{% endblock body %}

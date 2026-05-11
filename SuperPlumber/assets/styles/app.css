@@ -1,3 +1,8 @@
 body {
-    background-color: orangered;
+    background-color: white;
 }
+
+.bg-custom{
+    background-color: #E75A10;
+}
+
