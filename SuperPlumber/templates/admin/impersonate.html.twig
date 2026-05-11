@@ -1,0 +1,16 @@
+#{% extends 'base.html.twig' %}
+<h1>Impersonation panel</h1>
+
+{% for user in users %}
+
+    <div>
+        {{ user.email }}
+
+        <a href="{{ path('app_client_dashboard', {
+            '_switch_user': user.email
+        }) }}">
+            Impersonate
+        </a>
+    </div>
+
+{% endfor %}
