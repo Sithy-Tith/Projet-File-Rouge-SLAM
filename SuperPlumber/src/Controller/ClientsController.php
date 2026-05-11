@@ -65,7 +65,7 @@ final class ClientsController extends AbstractController
     #[Route('/profil', name: 'app_clients_profile')]
     public function profile(Security $security): Response
     {
-        $client=$security->getUser();
+        $client = $security->getUser();
         return $this->render('clients/show.html.twig', [
             'client' => $client,
         ]);
@@ -107,5 +107,17 @@ final class ClientsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_clients_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/admin/impersonate', name: 'admin_impersonate')]
+    public function impersonate(EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $users = $em->getRepository(Clients::class)->findAll();
+
+        return $this->render('admin/impersonate.html.twig', [
+            'users' => $users
+        ]);
     }
 }

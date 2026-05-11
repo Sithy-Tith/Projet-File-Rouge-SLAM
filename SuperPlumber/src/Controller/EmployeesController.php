@@ -19,7 +19,7 @@ final class EmployeesController extends AbstractController
     #[Route(name: 'app_employees_index', methods: ['GET'])]
     public function index(EmployeesRepository $employeesRepository, Request $request): Response
     {
-         // Récuperer le terme de la recheche dans l'url
+        // Récuperer le terme de la recheche dans l'url
         $search = $request->query->get('search');
 
         // Si du texte a été tapé dans la barre de recherche, on n'affiche que ceux correspondant à la recherche
@@ -67,7 +67,7 @@ final class EmployeesController extends AbstractController
     #[Route('/profil', name: 'app_employees_profile')]
     public function profile(Security $security): Response
     {
-        $employee=$security->getUser();
+        $employee = $security->getUser();
         return $this->render('employees/show.html.twig', [
             'employee' => $employee,
         ]);
@@ -102,11 +102,23 @@ final class EmployeesController extends AbstractController
     #[Route('/{id}', name: 'app_employees_delete', methods: ['POST'])]
     public function delete(Request $request, Employees $employee, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'. $employee->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $employee->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($employee);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_employees_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/admin/impersonate', name: 'admin_impersonate')]
+    public function impersonate(EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $users = $em->getRepository(Employees::class)->findAll();
+
+        return $this->render('admin/impersonate.html.twig', [
+            'users' => $users
+        ]);
     }
 }
