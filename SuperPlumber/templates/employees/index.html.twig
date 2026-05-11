@@ -50,7 +50,7 @@
                     <a href="{{ path('app_employees_show', {'id': employee.id}) }}">show</a>
                     <a href="{{ path('app_employees_edit', {'id': employee.id}) }}">edit</a>
                 {% if is_granted("ROLE_ADMIN") %}
-                    <a href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">Impersonate</a>
+                    <a href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">switch</a>
                 {% endif %}
                 </td>
             </tr>

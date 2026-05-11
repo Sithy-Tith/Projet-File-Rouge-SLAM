@@ -52,7 +52,7 @@
                         <a href="{{ path('app_clients_show', {'id': client.id}) }}">show</a>
                         <a href="{{ path('app_clients_edit', {'id': client.id}) }}">edit</a>
                         {% if is_granted("ROLE_ADMIN")%}
-                            <a href="{{ path('app_client_dashboard', { '_switch_user': client.email }) }}">Impersonate</a>
+                            <a href="{{ path('app_client_dashboard', { '_switch_user': client.email }) }}">switch</a>
                         {% endif %}
                     </td>
                 </tr>
