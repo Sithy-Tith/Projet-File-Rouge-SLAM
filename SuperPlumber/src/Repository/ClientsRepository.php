@@ -33,19 +33,32 @@ class ClientsRepository extends ServiceEntityRepository implements PasswordUpgra
         $this->getEntityManager()->flush();
     }
 
+    // Retourne un array de clients qui ont une colonne contenant la chaîne $term
+    public function searchByTerm(?string $term): array
+    {
+
+        return $this->createQueryBuilder('c')   // On crée une requête préparée avec l'alias 'c' pour l'entité 'clients'
+            ->andWhere('c.email LIKE :term    
+                            OR c.lastName LIKE :term
+                            OR c.firstName LIKE :term
+                            OR c.phone LIKE :term
+                            OR c.address LIKE :term')   // Recherche multi-colonne qui sont comme le placeholder 'term'
+            ->setParameter('term', '%' . $term . '%')  //  Définition du placeholder comme étant %$term% => qui contient la chaîne $term
+            ->getQuery()
+            ->getResult()   // Retourne le résultat (array de clients)
+        ;
+    }
+
+
+
+
+
     //    /**
     //     * @return Clients[] Returns an array of Clients objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
+    //        
     //    }
 
     //    public function findOneBySomeField($value): ?Clients

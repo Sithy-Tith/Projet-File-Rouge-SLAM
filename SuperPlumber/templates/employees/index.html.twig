@@ -5,6 +5,22 @@
 {% block body %}
     <h1>Employees index</h1>
 
+    <form action="{{path('app_employees_index')}}" method="get">
+        <div class="row col-3 mt-5">
+            <div class="input-group">
+                <input type="text"
+                    class="form-control"
+                    name="search"
+                    placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un message par défaut sinon#}
+                <button class="btn btn-primary" type="submit">Rechercher</button>
+            </div>
+        </div>
+    </form>
+
+    {% if isSearch %}
+        <a href="{{path('app_employees_index')}}" class="btn btn-secondary my-3"> Retour à la liste</a>
+    {% endif %}
+
     <table class="table">
         <thead>
             <tr>

@@ -47,15 +47,25 @@ security:
         ROLE_ADMIN: [ROLE_EMPLOYEE, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
+<<<<<<< HEAD
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/plumber, roles: ROLE_PLUMBER }
         - { path: ^/client, roles: ROLE_CLIENT }
+=======
+        - { path: ^/login,     roles: PUBLIC_ACCESS }
+        - { path: ^/register,  roles: PUBLIC_ACCESS }
+        - { path: ^/admin,     roles: ROLE_ADMIN }
+        - { path: ^/plumber,   roles: [ROLE_PLUMBER, ROLE_ADMIN] }
+        - { path: ^/clients/profil,     roles: ROLE_CLIENT }
+        - { path: ^/clients,    roles: [ROLE_ADMIN] }
+>>>>>>> main
         - { path: ^/interventions, roles: ROLE_ADMIN }
+        - { path: ^/employees/profil, roles: ROLE_EMPLOYEE }
         - { path: ^/employees, roles: ROLE_ADMIN }
         - { path: ^/pieces, roles: ROLE_ADMIN }
-        - { path: ^/usedpieces, roles: ROLE_PLUMBER } # usedpieces à faire à part de interventions
+        - { path: ^/usedpieces, roles: [ROLE_PLUMBER, ROLE_ADMIN] } # usedpieces à faire à part de interventions
 
 when@test:
     security:

@@ -19,5 +19,9 @@ services:
     App\:
         resource: '../src/'
 
+    # Customs services :
+
+    Symfony\Component\Security\Http\AccessMapInterface: '@security.access_map'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
