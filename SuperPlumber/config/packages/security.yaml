@@ -51,7 +51,7 @@ security:
         - { path: ^/plumber,   roles: [ROLE_PLUMBER, ROLE_ADMIN] }
         - { path: ^/clients/profil,     roles: ROLE_CLIENT }
         - { path: ^/clients,    roles: [ROLE_ADMIN] }
-        - { path: ^/interventions, roles: ROLE_ADMIN }
+        - { path: ^/interventions, roles: [ROLE_PLUMBER, ROLE_ADMIN]  }
         - { path: ^/employees/profil, roles: ROLE_EMPLOYEE }
         - { path: ^/employees, roles: ROLE_ADMIN }
         - { path: ^/pieces, roles: ROLE_ADMIN }

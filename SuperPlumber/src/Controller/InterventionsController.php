@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Clients;
 use App\Entity\Interventions;
+use App\Form\ClientsType;
 use App\Form\InterventionsType;
+use App\Repository\ClientsRepository;
 use App\Repository\InterventionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,9 +26,18 @@ final class InterventionsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_interventions_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, ClientsRepository $clientsRepository): Response
     {
         $intervention = new Interventions();
+        $clientId = $request->query->get('client');
+        // Si un client est passé dans l'URL
+        if ($clientId) {
+            $client = $clientsRepository->find($clientId);
+            if ($client) {
+                $intervention->setFkClient($client);
+            }
+        }
+
         $form = $this->createForm(InterventionsType::class, $intervention);
         $form->handleRequest($request);
 
@@ -36,9 +48,16 @@ final class InterventionsController extends AbstractController
             return $this->redirectToRoute('app_interventions_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $formIntervention = $this->createForm(InterventionsType::class, $intervention);
+        $formClient = $this->createForm(ClientsType::class, new Clients(), [
+            'origin' => 'intervention' // Permet de rediriger une création de client depuis intervention directement sur ce controller
+        ]);
+
+
         return $this->render('interventions/new.html.twig', [
             'intervention' => $intervention,
-            'form' => $form,
+            'formIntervention' => $formIntervention->createView(),
+            'formClient' => $formClient->createView(),
         ]);
     }
 

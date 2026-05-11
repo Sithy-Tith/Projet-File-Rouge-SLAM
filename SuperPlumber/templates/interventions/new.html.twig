@@ -3,9 +3,76 @@
 {% block title %}New Interventions{% endblock %}
 
 {% block body %}
-    <h1>Create new Interventions</h1>
-
-    {{ include('interventions/_form.html.twig') }}
-
-    <a href="{{ path('app_interventions_index') }}">back to list</a>
+<div id="form-intervention">
+    <h1>Créer une nouovelle intervention</h1>
+    {{ form_start(formIntervention) }}
+    {{ form_widget(formIntervention) }}
+    <button type="submit" class="btn btn-primary m-3">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_end(formIntervention) }}
+    <a href="{{ path('app_interventions_index') }}" class="btn btn-secondary mx-3">Retour à la liste</a>
+</div>
+<div id="form-client" style="display: none;">
+    <h1>Créer un nouveau client</h1>
+    {{ form_start(formClient, {
+        action: path('app_clients_new'),
+        method: 'POST'
+    }) }}
+    {{ form_widget(formClient) }}
+    <button type="submit" class="btn btn-primary m-3">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_end(formClient) }}
+    <a href="{{ path('app_interventions_new') }} " class="btn btn-secondary m-3">Retour à la création d'une intervention</a>
+</div>
 {% endblock %}
+
+{% block javascripts %}
+<script>
+    // Ajout de l'option --Créer un nouveau client --
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.querySelector('#interventions_fkClient');
+
+        // On ajoute une option à la fin
+        const opt = document.createElement('option');
+        opt.value = 'new';
+        opt.textContent = '-- Créer un nouveau client --';
+        select.appendChild(opt);
+    });
+
+    // Affiche soit le form intervention, soit celui du client
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.querySelector('#interventions_fkClient');
+        const formIntervention = document.querySelector('#form-intervention');
+        const formClient = document.querySelector('#form-client');
+
+        select.addEventListener('change', function () {
+            if (this.value === 'new') {
+                formIntervention.style.display = 'none';
+                formClient.style.display = 'block';
+            }
+        });
+    });
+
+     // N'affiche pas les champs 'Date' et 'Employé' si le statut est à 'TO_PLAN' ou Null
+     document.addEventListener('DOMContentLoaded', function () {
+    const status = document.querySelector('#interventions_status');
+    const dateField = document.querySelector('#interventions_date').parentElement;
+    const employeField = document.querySelector('#interventions_fkEmployee').parentElement;
+
+    function toggleFields() {
+        if (status.value === 'to_plan' || status.value === '') {
+            dateField.style.display = 'none';
+            employeField.style.display = 'none';
+        } else {
+            dateField.style.display = '';
+            employeField.style.display = '';
+        }
+    }
+
+    // Exécuter au chargement
+    toggleFields();
+
+    // Exécuter quand on change le statut
+    status.addEventListener('change', toggleFields);
+});
+
+</script>
+{% endblock javascripts %}
