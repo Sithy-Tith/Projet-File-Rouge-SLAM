@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Employees;
+use App\Entity\Clients;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ final class AdminController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $users = $em->getRepository(Employees::class)->findAll();
+        $users = $em->getRepository(Clients::class)->findAll();
 
         return $this->render('admin/impersonate.html.twig', [
             'users' => $users
