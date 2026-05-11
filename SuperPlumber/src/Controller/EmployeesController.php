@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/employees')]
+#[Route('/admin/employees')]
 final class EmployeesController extends AbstractController
 {
     #[Route(name: 'app_employees_index', methods: ['GET'])]
