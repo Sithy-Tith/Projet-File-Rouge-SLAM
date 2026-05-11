@@ -1,15 +1,27 @@
-<h1>Impersonation panel</h1>
+{% extends 'base.html.twig' %}
 
-{% for user in users %}
+{% block body %}
+	<h1><strong>Accès refusé</strong></h1>
+	<h2>Vous êtes connecté en tant qu'admin sur une page dédié aux clients. Choisissez le compte auquel vous voulez vous connecter :</h2>
 
-    <div>
-        {{ user.email }}
-
-        <a href="{{ path('app_client_dashboard', {
-            '_switch_user': user.email
-        }) }}">
-            Impersonate
-        </a>
-    </div>
-
-{% endfor %}
+    <p></p>
+	<h2><strong>Liste des clients</strong></h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>Prénom</th>
+				<th>Nom</th>
+			</tr>
+		</thead>
+		{% for user in users %}
+			<tr>
+				<td>{{ user.email }}</td>
+				<td>{{ user.firstname }}</td>
+				<td>{{ user.lastname }}</td>
+				<td>
+					<a href="{{ path('app_client_dashboard', { '_switch_user': user.email }) }}">Impersonate</a>
+				</td>
+			</tr>
+		{% endfor %}
+	{% endblock %}
