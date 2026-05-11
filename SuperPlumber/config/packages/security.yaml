@@ -1,7 +1,7 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
@@ -29,7 +29,8 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 success_handler: App\Security\LoginSuccessHandler
-                #switch_user: true ----- permettre à l'admin de switch de rôle pour test, en ajoutant le paramètre _switch_user à l'URL (vue de contrôle à développer) -----
+
+            switch_user: true #----- permettre à l'admin de switch de rôle pour test, qui va ajouter le paramètre _switch_user à l'URL et prendre l'addresse mail de l'user
             logout:
                 path: app_logout
                 target: app_login
@@ -39,22 +40,21 @@ security:
                 # target: app_any_route
 
     role_hierarchy:
-        ROLE_CLIENT:   ROLE_USER
+        ROLE_CLIENT: ROLE_USER
         ROLE_EMPLOYEE: ROLE_USER
-        ROLE_PLUMBER:  ROLE_EMPLOYEE
-        ROLE_ADMIN:    [ROLE_EMPLOYEE, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_PLUMBER: ROLE_EMPLOYEE
+        ROLE_ADMIN: [ROLE_EMPLOYEE, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
-        - { path: ^/login,     roles: PUBLIC_ACCESS }
-        - { path: ^/register,  roles: PUBLIC_ACCESS }
-        - { path: ^/admin,     roles: ROLE_ADMIN }
-        - { path: ^/plumber,   roles: ROLE_PLUMBER }
-        - { path: ^/client,    roles: ROLE_CLIENT }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/plumber, roles: ROLE_PLUMBER }
+        - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/interventions, roles: ROLE_ADMIN }
         - { path: ^/employees, roles: ROLE_ADMIN }
         - { path: ^/pieces, roles: ROLE_ADMIN }
         - { path: ^/usedpieces, roles: ROLE_PLUMBER } # usedpieces à faire à part de interventions
-
 
 when@test:
     security:
