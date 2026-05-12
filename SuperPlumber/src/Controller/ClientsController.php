@@ -109,6 +109,7 @@ final class ClientsController extends AbstractController
         return $this->redirectToRoute('app_clients_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    # Méthode permettant à l'admin d'avoir la liste des clients qu'il peut switch'
     #[Route('/admin/impersonate', name: 'admin_impersonate')]
     public function impersonate(EntityManagerInterface $em): Response
     {
