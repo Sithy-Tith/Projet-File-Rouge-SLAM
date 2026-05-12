@@ -31,6 +31,15 @@
                     </li>
                 {% endif %}
 
+                <!-- Clients -->
+                {% if can_access_path("/admin/clients") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_clients_index')}}" class="nav-link">
+                            Clients
+                        </a>
+                    </li>
+                {% endif %}
+
                 <!-- Interventions -->
                 {% if can_access_path("/interventions") %}
                     <li class="navbar-item">
@@ -45,15 +54,6 @@
                     <li class="navbar-item">
                         <a href="{{path('app_pieces_index')}}" class="nav-link">
                             Inventaire
-                        </a>
-                    </li>
-                {% endif %}
-
-                <!-- Clients -->
-                {% if can_access_path("/clients") %}
-                    <li class="navbar-item">
-                        <a href="{{path('app_clients_index')}}" class="nav-link">
-                            Clients
                         </a>
                     </li>
                 {% endif %}

@@ -49,6 +49,7 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/clients/profil, roles: ROLE_CLIENT }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/plumber, roles: ROLE_PLUMBER }
         - { path: ^/client, roles: ROLE_CLIENT }
