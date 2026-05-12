@@ -31,7 +31,7 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 45)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 45, nullable:true)]
+    #[ORM\Column(length: 45, nullable: true)]
     private ?string $phone = null;
 
     #[ORM\Column(type: 'string', enumType: Position::class)]
@@ -72,7 +72,7 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array //getRoles modifié pour qu'il soit géré selon la position
     {
-        return match($this->position) {
+        return match ($this->position) {
             Position::ADMINISTRATOR => ['ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_USER'],
             Position::PLUMBER       => ['ROLE_PLUMBER', 'ROLE_EMPLOYEE', 'ROLE_USER'],
             default                 => ['ROLE_EMPLOYEE', 'ROLE_USER'],
@@ -192,5 +192,17 @@ class Employees implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
         return $this;
+    }
+
+    // -----------  Custom methods  -------------------
+
+    // Return fullname on this syntax : "DUPONT Jean-Paul"
+    public function getFullName(): String
+    {
+
+        $lastName = strtoupper($this->lastName);            // DUPONT
+        $firstName = ucwords(strtolower($this->firstName)); // Jean-Paul
+
+        return $lastName . ' ' . $firstName;
     }
 }
