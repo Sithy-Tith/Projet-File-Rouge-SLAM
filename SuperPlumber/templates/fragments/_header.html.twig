@@ -40,11 +40,20 @@
                     </li>
                 {% endif %}
 
-                <!-- Interventions -->
+                <!-- Interventions (pour les employés) -->
                 {% if can_access_path("/interventions") %}
                     <li class="navbar-item">
                         <a href="{{path('app_interventions_index')}}" class="nav-link">
                             Interventions
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Interventions (pour les clients) -->
+                {% if can_access_path("/client") %}
+                    <li class="navbar-item">
+                        <a href="{{path('app_client_interventions')}}" class="nav-link">
+                            Mes Interventions
                         </a>
                     </li>
                 {% endif %}

@@ -11,9 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
+#[Route('/client')]
 final class ClientDashboardController extends AbstractController
 {
-    #[Route('/client/dashboard', name: 'app_client_dashboard', methods: ['GET', 'POST'])]
+    #[Route('/dashboard', name: 'app_client_dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         if ($request->isMethod('POST')) {
@@ -53,6 +54,19 @@ final class ClientDashboardController extends AbstractController
         );
 
         return $this->render('client_dashboard/index.html.twig', [
+            'interventions' => $mesInterventions
+        ]);
+    }
+
+    #[Route('/interventions', name: 'app_client_interventions', methods: ['GET', 'POST'])]
+    public function list_interventions(Request $request, EntityManagerInterface $em): Response
+    {
+        $mesInterventions = $em->getRepository(Interventions::class)->findBy(
+            ['fkClient' => $this->getUser()],
+            ['date' => 'DESC']
+        );
+
+        return $this->render('client_dashboard/interventions_list.html.twig',[
             'interventions' => $mesInterventions
         ]);
     }
