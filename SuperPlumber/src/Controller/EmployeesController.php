@@ -110,6 +110,7 @@ final class EmployeesController extends AbstractController
         return $this->redirectToRoute('app_employees_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    # Méthode permettant à l'admin d'avoir la liste des employés pour switch
     #[Route('/admin/impersonate', name: 'admin_impersonate')]
     public function impersonate(EntityManagerInterface $em): Response
     {
