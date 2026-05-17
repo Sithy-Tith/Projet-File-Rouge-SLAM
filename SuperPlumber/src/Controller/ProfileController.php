@@ -2,26 +2,31 @@
 
 namespace App\Controller;
 
-use App\Entity\Employees;
-use App\Form\EmployeesType;
-use App\Repository\EmployeesRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/profile)]
-final class ProfileController extends AbstractController
+class ProfileController extends AbstractController
 {
-    #[Route('/employee', name: 'app_employees_profile')]
-    public function profile(Security $security): Response
+    #[Route('/profil/client', name: 'app_clients_profile')]
+    #[IsGranted('ROLE_CLIENT')]
+    public function client(Security $security): Response
     {
-        $employee = $security->getUser();
-        return $this->render('employees/show.html.twig', [
-            'employee' => $employee,
+        $user = $security->getUser();
+        return $this->render('clients/show.html.twig', [
+            'client' => $user,
         ]);
     }
-  }
+
+    #[Route('/profil/employee', name: 'app_employee_profile')]
+    #[IsGranted('ROLE_EMPLOYEE')]
+    public function employee(Security $security): Response
+    {
+        $user = $security->getUser();
+        return $this->render('employees/show.html.twig', [
+            'employee' => $user,
+        ]);
+    }
+}
