@@ -61,17 +61,6 @@ final class ClientsController extends AbstractController
         ]);
     }
 
-    #Page du profil d'un client, accessible que par lui
-    #[Route('/profil', name: 'app_clients_profile')]
-    public function profile(Security $security): Response
-    {
-        $client = $security->getUser();
-        return $this->render('clients/show.html.twig', [
-            'client' => $client,
-        ]);
-    }
-
-
     #[Route('/{id}', name: 'app_clients_show', methods: ['GET'])]
     public function show(Clients $client): Response
     {

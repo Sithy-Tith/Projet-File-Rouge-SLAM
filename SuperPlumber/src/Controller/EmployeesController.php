@@ -62,17 +62,6 @@ final class EmployeesController extends AbstractController
         ]);
     }
 
-
-    #Page du profil d'un employé, accessible que par lui
-    #[Route('/profil', name: 'app_employees_profile')]
-    public function profile(Security $security): Response
-    {
-        $employee = $security->getUser();
-        return $this->render('employees/show.html.twig', [
-            'employee' => $employee,
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_employees_show', methods: ['GET'])]
     public function show(Employees $employee): Response
     {
