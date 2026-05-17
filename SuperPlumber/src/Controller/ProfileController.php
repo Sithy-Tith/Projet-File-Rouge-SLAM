@@ -20,7 +20,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profil/employee', name: 'app_employee_profile')]
+    #[Route('/profil/employee', name: 'app_employees_profile')]
     #[IsGranted('ROLE_EMPLOYEE')]
     public function employee(Security $security): Response
     {
