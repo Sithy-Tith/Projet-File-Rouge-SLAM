@@ -17,9 +17,28 @@
 
 				<!-- Accueil -->
 				<li class="navbar-item">
-					<a href="#" class="nav-link active">
-						Accueil
-					</a>
+					{% if is_granted('ROLE_CLIENT') %}
+						<a href="{{path('app_client_dashboard')}}" class="nav-link">
+							Accueil
+						</a>
+					{% endif %}
+					{#}
+																				{% if is_granted('ROLE_EMPLOYEE') %}
+																					<a href="{{path('app_employee_dashboard')}}" class="nav-link">
+																						Accueil
+																					</a>
+																				{% endif %}
+																				{#}
+					{% if is_granted('ROLE_PLUMBER') %}
+						<a href="{{path('app_plumber_dashboard')}}" class="nav-link">
+							Accueil
+						</a>
+					{% endif %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<a href="{{path('app_employees_index')}}" class="nav-link">
+							Accueil
+						</a>
+					{% endif %}
 				</li>
 
 				<!-- Employés -->
@@ -78,25 +97,25 @@
 		<!-- Vérifier si l'utilisateur est connecté -->
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-			<!-- Bouton 'Retour admin'-->
-			{% if is_granted("IS_IMPERSONATOR") %}
-				<a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" class="nav-link">
-				<img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2" alt="Retour admin">
+			<!-- Bouton 'Mon compte' -->
+			{% if is_granted('ROLE_EMPLOYEE') %}
+				<a href="{{path('app_employees_profile')}}" title= "Informations du compte" class="nav-link">
+				{% elseif is_granted('ROLE_CLIENT') %}
+					<a href="{{path('app_clients_profile')}}" title= "Informations du compte" class="nav-link">
+					{% endif %}
+					<img src="{{asset('icons/person-circle.svg')}}" title= "Informations du compte" class=" mx-2" alt="Mon Compte">
+				</a>
 			{% endif %}
 
-				<!-- Bouton 'Se déconnecter'-->
-				<a href="/logout" class="nav-link">
-					<img src="{{asset('icons/box-arrow-right.svg')}}" class="d-inline-block mx-2" alt="Déconnexion">
-				</a>
+			<!-- Bouton 'Se déconnecter'-->
+			<a href="/logout" class="nav-link">
+				<img src="{{asset('icons/box-arrow-right.svg')}}" title= "Se déconnecter" class="d-inline-block mx-2" alt="Déconnexion">
+			</a>
 
-				<!-- Bouton 'Mon compte' -->
-				{% if is_granted('ROLE_EMPLOYEE') %}
-					<a href="{{path('app_employees_profile')}}" class="nav-link">
-					{% elseif is_granted('ROLE_CLIENT') %}
-						<a href="{{path('app_clients_profile')}}" class="nav-link">
-						{% endif %}
-						<img src="{{asset('icons/person-circle.svg')}}" class=" mx-2" alt="Mon Compte">
-					</a>
+			<!-- Bouton 'Retour admin'-->
+			{% if is_granted("IS_IMPERSONATOR") %}
+				<a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin" class="nav-link">
+					<img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2" alt="Retour admin">
 				{% endif %}
 
 			</div>
