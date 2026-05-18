@@ -48,12 +48,12 @@ security:
 
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/availabilities, roles: ROLE_ADMIN }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/plumber, roles: ROLE_PLUMBER }
         - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/interventions, roles: ROLE_ADMIN }
-        - { path: ^/employees/profil, roles: ROLE_EMPLOYEE }
         - { path: ^/employees, roles: ROLE_ADMIN }
         - { path: ^/pieces, roles: ROLE_ADMIN }
         - { path: ^/usedpieces, roles: [ROLE_PLUMBER, ROLE_ADMIN] } # usedpieces à faire à part de interventions

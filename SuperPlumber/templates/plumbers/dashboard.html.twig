@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h1>Tableau de bord</h1>
+
+	<p>Bienvenue,
+		<strong>{{ app.user.firstName }}</strong>
+		!
+	</p>
+	{% if is_granted("IS_IMPERSONATOR")%}
+		Vous êtes connecté en tant qu'<strong>admin</strong>
+		sur le compte
+		<strong>{{ app.user.userIdentifier }}</strong>
+	{% else %}
+		{% if app.user %}
+			<div class="mb-3">
+				Vous êtes connecté en tant que :
+				<strong>{{ app.user.userIdentifier }}</strong>,
+				<p></p>
+				<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+					<a href="{{ logout_path() }}">Logout</a>
+				</button>
+				{% if is_granted("IS_IMPERSONATOR")%}
+					<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+						<a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}">return to admin</a>
+					</button>
+				{% endif %}
+			</div>
+		{% endif %}
+	{% endif %}
+{% endblock body %}

@@ -6,7 +6,6 @@ use App\Entity\Clients;
 use App\Form\ClientsType;
 use App\Repository\ClientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,17 +65,6 @@ final class ClientsController extends AbstractController
         ]);
     }
 
-    #Page du profil d'un client, accessible que par lui
-    #[Route('/profil', name: 'app_clients_profile')]
-    public function profile(Security $security): Response
-    {
-        $client = $security->getUser();
-        return $this->render('clients/show.html.twig', [
-            'client' => $client,
-        ]);
-    }
-
-
     #[Route('/{id}', name: 'app_clients_show', methods: ['GET'])]
     public function show(Clients $client): Response
     {
@@ -114,6 +102,7 @@ final class ClientsController extends AbstractController
         return $this->redirectToRoute('app_clients_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    # Méthode permettant à l'admin d'avoir la liste des clients qu'il peut switch'
     #[Route('/admin/impersonate', name: 'admin_impersonate')]
     public function impersonate(EntityManagerInterface $em): Response
     {

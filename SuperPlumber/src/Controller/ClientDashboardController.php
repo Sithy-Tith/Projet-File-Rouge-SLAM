@@ -52,7 +52,7 @@ final class ClientDashboardController extends AbstractController
             ['date' => 'DESC']
         );
 
-        return $this->render('client_dashboard/index.html.twig', [
+        return $this->render('clients/dashboard.html.twig', [
             'interventions' => $mesInterventions
         ]);
     }
