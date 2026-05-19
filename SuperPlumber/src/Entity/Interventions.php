@@ -21,7 +21,7 @@ class Interventions
     #[ORM\Column(type: 'string', enumType: Type::class)]
     private ?Type $type;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTime $date = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -73,7 +73,7 @@ class Interventions
         return $this;
     }
 
-    public function setDate(\DateTime $date): static
+    public function setDate(?\DateTime $date): static
     {
         $this->date = $date;
 
