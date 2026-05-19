@@ -12,7 +12,7 @@ final class PlumberDashboardController extends AbstractController
     #[Route('/plumber/dashboard', name: 'app_plumber_dashboard')]
     public function index(): Response
     {
-        return $this->render('plumber_dashboard/index.html.twig', [
+        return $this->render('plumbers/dashboard.html.twig', [
             'controller_name' => 'PlumberDashboardController',
         ]);
     }

@@ -1,34 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Clients{% endblock %}
+{% block title %}Clients
+{% endblock %}
 
 {% block body %}
-    <h1>Clients</h1>
+	<h1>Clients</h1>
 
-    <table class="table table-striped mt-5">
-        <thead class="table-dark">
-            <tr>
-                <th>NOM</th>
-                <th>Prénom</th>
-                <th>Téléphone</th>
-                <th>Email</th>
-                <th>Adresse</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{client.lastName | upper }}</td>
-                <td>{{client.firstName | title}}</td>
-                <td>{{client.phone}}</td>
-                <td>{{client.email}}</td>
-                <td>{{client.address}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_clients_index') }}">back to list</a>
-
-    <a href="{{ path('app_clients_edit', {'id': client.id}) }}">edit</a>
-
-    {{ include('clients/_delete_form.html.twig') }}
+	<table class="table table-striped mt-5">
+		<thead class="table-dark">
+			<tr>
+				<th>NOM</th>
+				<th>Prénom</th>
+				<th>Téléphone</th>
+				<th>Email</th>
+				<th>Adresse</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{client.lastName | upper }}</td>
+				<td>{{client.firstName | title}}</td>
+				<td>{{client.phone}}</td>
+				<td>{{client.email}}</td>
+				<td>{{client.address}}</td>
+			</tr>
+		</tbody>
+	</table>
+	{% if is_granted("ROLE_ADMIN")%}
+		<a href="{{ path('app_clients_index') }}">back to list</a>
+		<a href="{{ path('app_clients_edit', {'id': client.id}) }}">edit</a>
+		{{ include('clients/_delete_form.html.twig') }}
+	{% endif %}
 {% endblock %}
