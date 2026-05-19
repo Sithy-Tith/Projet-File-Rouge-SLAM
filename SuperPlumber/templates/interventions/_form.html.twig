@@ -1,4 +1,18 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_widget(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.querySelector('#interventions_fkClient');
+
+        // On ajoute une option à la fin
+        const opt = document.createElement('option');
+        opt.value = 'new';
+        opt.textContent = '-- Créer un nouveau client --';
+        select.appendChild(opt);
+    });
+</script>
+
+
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

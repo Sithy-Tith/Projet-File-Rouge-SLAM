@@ -173,4 +173,16 @@ class Clients implements UserInterface, PasswordAuthenticatedUserInterface
         }
         return $this;
     }
+
+    // -----------  Custom methods  -------------------
+
+    // Return fullname on this syntax : "DUPONT Jean-Paul"
+    public function getFullName(): String
+    {
+
+        $lastName = strtoupper($this->lastName);            // DUPONT
+        $firstName = ucwords(strtolower($this->firstName)); // Jean-Paul
+
+        return $lastName . ' ' . $firstName;
+    }
 }

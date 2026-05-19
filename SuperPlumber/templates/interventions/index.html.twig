@@ -5,6 +5,9 @@
 {% block body %}
     <h1>Interventions index</h1>
 
+
+    <a href="{{ path('app_interventions_new') }}" class="btn btn-primary m-3">Nouvelle intervention</a>
+
     <table class="table">
         <thead>
             <tr>
@@ -40,5 +43,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_interventions_new') }}">Create new</a>
 {% endblock %}
