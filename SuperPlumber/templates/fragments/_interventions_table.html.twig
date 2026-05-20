@@ -1,2 +1,19 @@
 {# Squelette du tableau des interventions, utilisé et customisé
 pour les clients, plombiers et admins #}
+
+<div class="container mt-4">
+
+    <div class="row">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+
+                    {% block table_headers %}
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Quantité</th>
+                            <th>Est consommé</th>
+                        </tr>
+                    </thead>
+                    {% endblock table_headers %}
