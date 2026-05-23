@@ -3,31 +3,6 @@
 {% block title %}Hello PlumberInterventionsController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%;
-        font: 18px/1.5 sans-serif;
-    }
+{% include "/fragments/_interventions_table.html.twig" %}
 
-    .example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-    }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at
-            <code>C:/Users/ilanv/Programmation/Projet-File-Rouge-SLAM/Projet-File-Rouge-SLAM/SuperPlumber/src/Controller/PlumberInterventionsController.php</code>
-        </li>
-        <li>Your template at
-            <code>C:/Users/ilanv/Programmation/Projet-File-Rouge-SLAM/Projet-File-Rouge-SLAM/SuperPlumber/templates/plumber_interventions/index.html.twig</code>
-        </li>
-    </ul>
-</div>
 {% endblock %}

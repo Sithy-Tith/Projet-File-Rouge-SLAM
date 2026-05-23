@@ -8,12 +8,34 @@ pour les clients, plombiers et admins #}
             <div class="card-body p-0">
                 <table class="table table-striped mb-0">
 
+                    {# Colonnes communes à tous les rôles #}
                     {% block table_headers %}
                     <thead class="table-dark">
                         <tr>
-                            <th>Nom</th>
-                            <th>Quantité</th>
-                            <th>Est consommé</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Durée estimée</th>
                         </tr>
                     </thead>
                     {% endblock table_headers %}
+
+                    <tbody>
+                        {% for intervention in interventions %}
+                        <tr>
+                            {% block table_columns %}
+                            <td> {{ intervention.date|date('d/m/Y H:i') }} </td>
+                            <td> {{ intervention.status.value }} </td>
+                            <td> {{ intervention.type.value }} </td>
+                            <td> {{ intervention.description }} </td>
+                            <td> {{ intervention.duration }} </td>
+                            {% endblock table_columns %}
+
+                            {% block table_actions %}
+                            {# Liste des actions disponibles, à écrire dans chaque template suivant le rôle #}
+                            {% endblock table_actions %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
