@@ -30,32 +30,36 @@ sur le compte
 {% endif %}
 {% endif %}
 
-<div class="card mt-4">
-    <div class="card-body">
-        <h3 class="card-title">Nouvelle demande manuelle</h3>
-        <form method="POST">
-            <div class="mb-3">
-                <label for="titre" class="form-label">Type d'intervention</label>
-                <select name="titre_intervention" id="titre" class="form-select" required>
-                    <option value="" selected disabled>Choisissez un type...</option>
-                    <option value="fuite">Fuite d'eau</option>
-                    <option value="debouchage">Débouchage canalisation</option>
-                    <option value="chauffe_eau">Réparation Chauffe-eau</option>
-                    <option value="installation">Installation robinetterie</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="desc" class="form-label">Description</label>
-                <textarea name="description" id="desc" class="form-control"></textarea>
-            </div>
-            <p></p>
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </form>
+<div class="card m-2">
+    <div class="card m-4">
+        <div class="card-body">
+            <h3 class="card-title">Nouvelle demande manuelle</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="titre" class="form-label">Type d'intervention</label>
+                    <select name="titre_intervention" id="titre" class="form-select" required>
+                        <option value="" selected disabled>Choisissez un type...</option>
+                        <option value="fuite">Fuite d'eau</option>
+                        <option value="debouchage">Débouchage canalisation</option>
+                        <option value="chauffe_eau">Réparation Chauffe-eau</option>
+                        <option value="installation">Installation robinetterie</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <textarea name="description" id="desc" class="form-control"></textarea>
+                </div>
+                <p></p>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+        </div>
     </div>
 
     <!-- Liste des interventions en cours -->
-    <div>
-        {% include "clients/_interventions_client.html.twig" %}
+    <div class="card m-4">
+        <div class="card-body">
+            {% include "clients/_interventions_client.html.twig" %}
+        </div>
     </div>
 
 </div>
