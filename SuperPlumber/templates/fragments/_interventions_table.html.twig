@@ -9,32 +9,42 @@ pour les clients, plombiers et admins #}
                 <table class="table table-striped mb-0">
 
                     {# Colonnes communes à tous les rôles #}
-                    {% block table_headers %}
                     <thead class="table-dark">
                         <tr>
+                            {% block table_headers_common %}
                             <th>Date</th>
                             <th>Statut</th>
                             <th>Type</th>
                             <th>Description</th>
-                            <th>Durée estimée</th>
+                            {% endblock %}
+
+                            {% block table_headers_custom %}
+                            {# Colonnes propres à chaque rôle #}
+                            {% endblock table_headers_custom %}
+
+                            {% block table_headers_after %}
+                            <th>Actions</th>
+                            {% endblock table_headers_after %}
                         </tr>
                     </thead>
-                    {% endblock table_headers %}
 
                     <tbody>
                         {% for intervention in interventions %}
                         <tr>
-                            {% block table_columns %}
+                            {% block table_columns_common %}
                             <td> {{ intervention.date|date('d/m/Y H:i') }} </td>
                             <td> {{ intervention.status.value }} </td>
                             <td> {{ intervention.type.value }} </td>
                             <td> {{ intervention.description }} </td>
-                            <td> {{ intervention.duration }} </td>
-                            {% endblock table_columns %}
+                            {% endblock %}
 
-                            {% block table_actions %}
+                            {% block table_columns_custom %}
+                            {# contenu de colonne custom suivant chaque rôle#}
+                            {% endblock %}
+
+                            {% block table_columns_after %}
                             {# Liste des actions disponibles, à écrire dans chaque template suivant le rôle #}
-                            {% endblock table_actions %}
+                            {% endblock %}
                         </tr>
                         {% endfor %}
                     </tbody>
