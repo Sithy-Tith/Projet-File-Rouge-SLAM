@@ -51,6 +51,8 @@
                 {% endif %}
 
                 <!-- Interventions -->
+
+                <!-- Pour les admins -->
                 {% if can_access_path("/interventions") %}
                 <li class="navbar-item">
                     <a href="{{path('app_interventions_index')}}" class="nav-link">
@@ -58,6 +60,18 @@
                     </a>
                 </li>
                 {% endif %}
+
+                <!-- Pour les plombiers -->
+                {% if can_access_path("/plumber") %}
+                <li class="navbar-item">
+                    <a href="{{path('app_plumber_interventions')}}" class="nav-link">
+                        Mes interventions
+                    </a>
+                </li>
+                {% endif %}
+
+                <!-- Pour les clients -->
+                <!-- A completer -->
 
                 <!-- Inventaire -->
                 {% if can_access_path("/pieces") %}
