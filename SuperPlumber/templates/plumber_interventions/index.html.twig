@@ -13,6 +13,7 @@
 {% block table_headers_custom %}
 {{ parent() }}
 <th>Durée estimée</th>
+<th>Client</th>
 {% endblock %}
 
 {% block table_headers_after %}
@@ -27,6 +28,7 @@
 {% block table_columns_custom %}
 {{ parent() }}
 <td> {{ intervention.duration }} heures</td>
+<td> {{ intervention.fkClient.getFullName }} </td>
 {% endblock %}
 
 {% block table_columns_after %}
