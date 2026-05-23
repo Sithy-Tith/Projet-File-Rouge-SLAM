@@ -1,0 +1,36 @@
+{# Liste les interventions liées au client #}
+
+{% block body %}
+
+<strong>
+    <h3>Liste des interventions</h3>
+</strong>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type d'intervention</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for intervention in interventions %}
+        <tr>
+            <td>{{ intervention.type.value }}</td>
+            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ intervention.description }}</td>
+            <td>{{ intervention.status.value }}</td>
+            <td>{{ intervention.duration }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock body %}

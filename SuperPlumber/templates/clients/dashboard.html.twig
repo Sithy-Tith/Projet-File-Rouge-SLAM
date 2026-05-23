@@ -1,86 +1,61 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Tableau de bord</h1>
+<h1>Tableau de bord</h1>
 
-	<p>Bienvenue,
-		<strong>{{ app.user.firstName }}</strong>
-		!
-	</p>
-	{% if is_granted("IS_IMPERSONATOR")%}
-		Vous êtes connecté en tant qu'<strong>admin</strong>
-		sur le compte
-		<strong>{{ app.user.userIdentifier }}</strong>
-	{% else %}
-		{% if app.user %}
-			<div class="mb-3">
-				Vous êtes connecté en tant que :
-				<strong>{{ app.user.userIdentifier }}</strong>,
-				<p></p>
-				<p></p>
-				<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-					<a href="{{ logout_path() }}">Logout</a>
-				</button>
-				{% if is_granted("IS_IMPERSONATOR")%}
-					<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-						<a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}">return to admin</a>
-					</button>
-				{% endif %}
-			</div>
-		{% endif %}
-	{% endif %}
+<p>Bienvenue,
+    <strong>{{ app.user.firstName }}</strong>
+    !
+</p>
+{% if is_granted("IS_IMPERSONATOR")%}
+Vous êtes connecté en tant qu'<strong>admin</strong>
+sur le compte
+<strong>{{ app.user.userIdentifier }}</strong>
+{% else %}
+{% if app.user %}
+<div class="mb-3">
+    Vous êtes connecté en tant que :
+    <strong>{{ app.user.userIdentifier }}</strong>,
+    <p></p>
+    <p></p>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+        <a href="{{ logout_path() }}">Logout</a>
+    </button>
+    {% if is_granted("IS_IMPERSONATOR")%}
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
+        <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}">return to admin</a>
+    </button>
+    {% endif %}
+</div>
+{% endif %}
+{% endif %}
 
-	<div class="card mt-4">
-		<div class="card-body">
-			<h3 class="card-title">Nouvelle demande manuelle</h3>
-			<form method="POST">
-				<div class="mb-3">
-					<label for="titre" class="form-label">Type d'intervention</label>
-					<select name="titre_intervention" id="titre" class="form-select" required>
-						<option value="" selected disabled>Choisissez un type...</option>
-						<option value="fuite">Fuite d'eau</option>
-						<option value="debouchage">Débouchage canalisation</option>
-						<option value="chauffe_eau">Réparation Chauffe-eau</option>
-						<option value="installation">Installation robinetterie</option>
-					</select>
-				</div>
-				<div class="mb-3">
-					<label for="desc" class="form-label">Description</label>
-					<textarea name="description" id="desc" class="form-control"></textarea>
-				</div>
-				<p></p>
-				<button type="submit" class="btn btn-primary">Envoyer</button>
-			</form>
-		</div>
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="card-title">Nouvelle demande manuelle</h3>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="titre" class="form-label">Type d'intervention</label>
+                <select name="titre_intervention" id="titre" class="form-select" required>
+                    <option value="" selected disabled>Choisissez un type...</option>
+                    <option value="fuite">Fuite d'eau</option>
+                    <option value="debouchage">Débouchage canalisation</option>
+                    <option value="chauffe_eau">Réparation Chauffe-eau</option>
+                    <option value="installation">Installation robinetterie</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="desc" class="form-label">Description</label>
+                <textarea name="description" id="desc" class="form-control"></textarea>
+            </div>
+            <p></p>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+    </div>
 
-		<strong>
-			<h3>Liste des interventions</h3>
-		</strong>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Type d'intervention</th>
-					<th>Date</th>
-					<th>Description</th>
-					<th>Status</th>
-					<th>Duration</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for intervention in interventions %}
-					<tr>
-						<td>{{ intervention.type.value }}</td>
-						<td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
-						<td>{{ intervention.description }}</td>
-						<td>{{ intervention.status.value }}</td>
-						<td>{{ intervention.duration }}</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="6">no records found</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+    <div>
+        {% include "fragments/_interventions_client.html.twig" %}
+    </div>
 
-	{% endblock body %}
+</div>
+{% endblock body %}
