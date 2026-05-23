@@ -16,7 +16,7 @@ final class PlumberInterventionsController extends AbstractController
     {
         $myInterventions = $em->getRepository(Interventions::class)->findBy(
             ['fkEmployee' => $this->getUser()],
-            ['date' => 'DESC'],
+            ['date' => 'ASC'],
         );
         return $this->render('plumber_interventions/index.html.twig', [
             // 'controller_name' => 'PlumberInterventionsController', (on garde ça peut être utile)
