@@ -5,32 +5,47 @@
 <strong>
     <h3>Liste des interventions</h3>
 </strong>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Type d'intervention</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Duration</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for intervention in interventions %}
-        <tr>
-            <td>{{ intervention.type.value }}</td>
-            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ intervention.description }}</td>
-            <td>{{ intervention.status.value }}</td>
-            <td>{{ intervention.duration }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="6">no records found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
+{% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
+{% block table_headers_common %}
+{{ parent() }}
+{% endblock %}
+
+{% block table_headers_custom %}
+{{ parent() }}
+<th>Durée estimée</th>
+<th>Plombier</th>
+{% endblock %}
+
+{% block table_headers_after %}
+{{ parent() }}
+{% endblock %}
+
+
+{% block table_columns_common %}
+{{ parent() }}
+{% endblock %}
+
+{% block table_columns_custom %}
+{{ parent() }}
+<td> {{ intervention.duration }} heures</td>
+<td> {{ intervention.fkEmployee.getFullName }} </td>
+{% endblock %}
+
+{% block table_columns_after %}
+{{ parent() }}
+<td>
+    {# Avoir les bons paths avec les bons droits avant de décommenter pour ajouter ces actions :
+    <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
+    <a href="{{ path('app_interventions_cancel', {'id': intervention.id}) }}" class="btn btn-info m-1">Annuler</a>
+    #}
+    <div class="card">
+        <p>[NOTES] Voir _interventions_client/index.html pour plus d'actions</p>
+        <p>Actions pertinentes : 'Annuler' et 'Détails'</p>
+        <p>Créer view + path valide pour ces actions</p>
+    </div>
+</td>
+{% endblock %}
+{% endembed %}
 
 {% endblock body %}
