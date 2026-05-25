@@ -3,44 +3,44 @@
 {% block title %}Interventions index{% endblock %}
 
 {% block body %}
-    <h1>Interventions index</h1>
+<h1>Interventions index</h1>
 
 
-    <a href="{{ path('app_interventions_new') }}" class="btn btn-primary m-3">Nouvelle intervention</a>
+<a href="{{ path('app_interventions_new') }}" class="btn btn-primary m-3">Nouvelle intervention</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Duration</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Duration</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for intervention in interventions %}
-            <tr>
-                <td>{{ intervention.id }}</td>
-                <td>{{ intervention.type.value }}</td>
-                <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ intervention.description }}</td>
-                <td>{{ intervention.status.value }}</td>
-                <td>{{ intervention.duration }}</td>
-                <td>
-                    <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
-                    <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
-                    <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ intervention.id }}</td>
+            <td>{{ intervention.type.value }}</td>
+            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ intervention.description }}</td>
+            <td>{{ intervention.status.label()|trans }}</td>
+            <td>{{ intervention.duration }}</td>
+            <td>
+                <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
+                <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
+                <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+        <tr>
+            <td colspan="6">no records found</td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
 {% endblock %}
