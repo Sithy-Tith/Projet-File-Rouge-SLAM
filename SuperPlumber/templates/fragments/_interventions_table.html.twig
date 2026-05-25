@@ -33,7 +33,7 @@ pour les clients, plombiers et admins #}
                         <tr>
                             {% block table_columns_common %}
                             <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : 'À planifier' }}</td>
-                            <td> {{ intervention.status.value }} </td>
+                            <td> {{ intervention.status.label()|trans }} </td>
                             <td> {{ intervention.type.value }} </td>
                             <td> {{ intervention.description }} </td>
                             {% endblock %}

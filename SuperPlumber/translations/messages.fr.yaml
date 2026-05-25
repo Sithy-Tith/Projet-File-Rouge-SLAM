@@ -1,0 +1,9 @@
+# Fichier de traduction pour la langue française.
+# Il va associer des clés d'un texte à afficher (par exemple status.to_plan) à une traduction
+
+status:
+    to_plan: "À planifier"
+    planned: "Planifié"
+    ongoing: "En cours"
+    finished: "Terminé"
+    canceled: "Annulé"
