@@ -1,66 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Employees index{% endblock %}
+{% block title %}Employés{% endblock %}
 
 {% block body %}
-    <h1>Employees index</h1>
+<div class="m-3">
+    <h1>Liste des employés</h1>
+</div>
 
-    <form action="{{path('app_employees_index')}}" method="get">
-        <div class="row col-3 mt-5">
-            <div class="input-group">
-                <input type="text"
-                    class="form-control"
-                    name="search"
-                    placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un message par défaut sinon#}
-                <button class="btn btn-primary" type="submit">Rechercher</button>
+<form action="{{path('app_employees_index')}}" method="get">
+    <div class="row col-3 m-2">
+        <div class="input-group">
+            <input type="text" class="form-control" name="search"
+                placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un message
+            par défaut sinon#}
+            <button class="btn btn-primary" type="submit">Rechercher</button>
+        </div>
+    </div>
+</form>
+
+{% if isSearch %}
+<a href="{{path('app_employees_index')}}" class="btn btn-secondary m-2 mx-3"> Retour à la liste</a>
+{% endif %}
+
+{# Bootsrap à améliorer #}
+<div class="row">
+    <div class="col-11 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Poste</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td>{{ employee.getFullName() }}</td>
+                            <td>{{ employee.position.value }}</td>
+                            <td>{{ employee.email }}</td>
+                            <td>{{ employee.phone }}</td>
+                            <td>
+                                <a class="btn btn-primary" {{ path('app_employees_show', {'id': employee.id})
+                                    }}">Détails</a>
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_employees_edit', {'id': employee.id}) }}">Modifier</a>
+                                {% if is_granted("ROLE_ADMIN") %}
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">Switch</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>Aucun employé enregistré</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-    </form>
+    </div>
+</div>
 
-    {% if isSearch %}
-        <a href="{{path('app_employees_index')}}" class="btn btn-secondary my-3"> Retour à la liste</a>
-    {% endif %}
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>LastName</th>
-                <th>FirstName</th>
-                <th>Phone</th>
-                <th>Position</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for employee in employees %}
-            <tr>
-                <td>{{ employee.id }}</td>
-                <td>{{ employee.email }}</td>
-                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
-                <td>{{ employee.password }}</td>
-                <td>{{ employee.lastName }}</td>
-                <td>{{ employee.firstName }}</td>
-                <td>{{ employee.phone }}</td>
-                <td>{{ employee.position.value }}</td>
-                <td>
-                    <a href="{{ path('app_employees_show', {'id': employee.id}) }}">show</a>
-                    <a href="{{ path('app_employees_edit', {'id': employee.id}) }}">edit</a>
-                {% if is_granted("ROLE_ADMIN") %}
-                    <a href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">switch</a>
-                {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_employees_new') }}">Create new</a>
 {% endblock %}
