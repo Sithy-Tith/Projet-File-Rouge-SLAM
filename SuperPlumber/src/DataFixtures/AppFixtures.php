@@ -139,8 +139,10 @@ class AppFixtures extends Fixture
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
-            $availability->setAvailability(mt_rand(0, 7));
-            $availability->setDate($faker->dateTimeThisYear());
+            $start = $faker->dateTimeThisYear();
+            $end = (clone $start)->modify('+2 hours');
+            $availability->setStart($start);
+            $availability->setEnd($end);
             $availability->setFkEmployee($faker->randomElement($employeesList));
 
 
