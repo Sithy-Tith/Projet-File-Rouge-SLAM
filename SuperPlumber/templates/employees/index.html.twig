@@ -45,13 +45,14 @@
                             <td>{{ employee.email }}</td>
                             <td>{{ employee.phone }}</td>
                             <td>
-                                <a class="btn btn-primary" {{ path('app_employees_show', {'id': employee.id})
-                                    }}">Détails</a>
-                                <a class="btn btn-primary"
-                                    href="{{ path('app_employees_edit', {'id': employee.id}) }}">Modifier</a>
+                                <a class="btn btn-primary" href="{{ path('app_employees_show', {'id': employee.id})}}">
+                                    Détails</a>
+                                <a class="btn btn-primary" href="{{ path('app_employees_edit', {'id': employee.id}) }}">
+                                    Modifier</a>
                                 {% if is_granted("ROLE_ADMIN") %}
                                 <a class="btn btn-primary"
-                                    href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">Switch</a>
+                                    href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">
+                                    Switch</a>
                                 {% endif %}
                             </td>
                         </tr>

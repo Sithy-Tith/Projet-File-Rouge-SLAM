@@ -1,50 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Employees{% endblock %}
+{% block title %}Employé{% endblock %}
 
 {% block body %}
-    <h1>Employees</h1>
+<h1>{{ employee.getFullName() }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ employee.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ employee.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ employee.password }}</td>
-            </tr>
-            <tr>
-                <th>LastName</th>
-                <td>{{ employee.lastName }}</td>
-            </tr>
-            <tr>
-                <th>FirstName</th>
-                <td>{{ employee.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ employee.phone }}</td>
-            </tr>
-            <tr>
-                <th>Position</th>
-                <td>{{ employee.position.value }}</td>
-            </tr>
-        </tbody>
-    </table>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>NOM Prénom</th>
+            <td>{{ employee.getFullName() }}</td>
+        </tr>
+        <tr>
+            <th>Poste</th>
+            <td>{{ employee.position.value }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ employee.email }}</td>
+        </tr>
+        <tr>
+            <th>Téléphone</th>
+            <td>{{ employee.phone }}</td>
+        </tr>
+    </tbody>
+</table>
 
-    <a href="{{ path('app_employees_index') }}">back to list</a>
+<a href="{{ path('app_employees_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_employees_edit', {'id': employee.id}) }}">edit</a>
+<a href="{{ path('app_employees__edit', {'id': employee.id}) }}">edit</a>
 
-    {{ include('employees/_delete_form.html.twig') }}
+{{ include('employees/_delete_form.html.twig') }}
 {% endblock %}
