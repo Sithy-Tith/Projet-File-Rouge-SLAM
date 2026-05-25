@@ -21,7 +21,7 @@ final class AvailabilitiesController extends AbstractController
         if ($this->isGranted('ROLE_PLUMBER')) {
             $availabilities = $availabilitiesRepository->findBy(
                 ['fkEmployee' => $this->getUser()],
-                ['date' => 'ASC']
+                ['start' => 'ASC']
             );
         } else {
             $availabilities = $availabilitiesRepository->findAll();
