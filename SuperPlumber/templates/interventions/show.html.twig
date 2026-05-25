@@ -17,8 +17,12 @@
             <td>{{ intervention.type.value }}</td>
         </tr>
         <tr>
-            <th>Date</th>
-            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
+            <th>Date de début</th>
+            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Date de fin</th>
+            <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
             <th>Description</th>

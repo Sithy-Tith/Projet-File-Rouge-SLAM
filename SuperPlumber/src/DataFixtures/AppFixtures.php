@@ -111,7 +111,8 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $intervention = new Interventions();
-            $intervention->setDate($faker->dateTime);
+            $intervention->setStartAt($faker->dateTime);
+            $intervention->setEndAt($faker->dateTime);
             $intervention->setDescription($faker->text);
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));

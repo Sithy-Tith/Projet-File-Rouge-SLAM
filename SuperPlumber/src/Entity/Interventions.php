@@ -21,17 +21,17 @@ class Interventions
     #[ORM\Column(type: 'string', enumType: Type::class)]
     private ?Type $type;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTime $date = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $startAt = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $endAt = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(enumType: Status::class)]
     private ?Status $status = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
     private ?Employees $fkEmployee = null;
@@ -55,12 +55,6 @@ class Interventions
         return $this->id;
     }
 
-
-    public function getDate(): ?\DateTime
-    {
-        return $this->date;
-    }
-
     public function getType(): Type
     {
         return $this->type;
@@ -69,13 +63,6 @@ class Interventions
     public function setType(Type $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function setDate(?\DateTime $date): static
-    {
-        $this->date = $date;
 
         return $this;
     }
@@ -100,18 +87,6 @@ class Interventions
     public function setStatus(Status $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getDuration(): ?int
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(int $duration): static
-    {
-        $this->duration = $duration;
 
         return $this;
     }
@@ -168,5 +143,55 @@ class Interventions
         }
 
         return $this;
+    }
+
+        public function getStartAt(): ?\DateTime
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(?\DateTime $startAt): static
+    {
+        $this->startAt = $startAt;
+
+        return $this;
+    }
+
+    public function getEndAt(): ?\DateTime
+    {
+        return $this->endAt;
+    }
+
+    public function setEndAt(?\DateTime $endAt): static
+    {
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    // fonction utilitaire pour calculer la durée en minutes à partir des dates de début et fin
+    public function getDuration(): ?int
+    {
+        if (!$this->startAt || !$this->endAt) {
+            return null;
+        }
+
+        return (int) round(
+            ($this->endAt->getTimestamp() - $this->startAt->getTimestamp()) / 60
+        );
+    }
+
+    public function getDurationFormatted(): string //sert notamment à l'affichage twig heures + minutes au lieu de juste minutes
+    {
+        if (!$this->startAt || !$this->endAt) {
+            return '';
+        }
+
+        $minutes = $this->getDuration();
+
+        $h = intdiv($minutes, 60);
+        $m = $minutes % 60;
+
+        return "{$h}h {$m}min";
     }
 }

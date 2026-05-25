@@ -32,24 +32,29 @@ class InterventionsType extends AbstractType
                 'class' => Type::class,
                 'label' => "Type d'intervention",
             ])
-            ->add('description')
-            ->add('duration', null, [
-                'label' => "Durée estimée",
+            ->add('startAt', null, [
+                'required' => false,
             ])
+            ->add('endAt', null, [
+                'required' => false,
+            ])
+            ->add('description', null, [
+                'required' => false,
+                'label' => 'Description (facultatif)',])
             ->add('status', EnumType::class, [
                 'class' => Status::class,
                 'label' => "Statut",
                 'data' => Status::TO_PLAN,
                 'choice_label' => fn(Status $status) => $status->label(), #On affiche la traduction de la value de l'enum
             ])
-            ->add('date', null, [
-                'required' => false,
-            ])
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
                 'choice_label' => 'fullName',
                 'label' => 'Plombier en charge',
-            ]);
+
+                'required' => false,
+                'placeholder' => 'Aucun plombier assigné',
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

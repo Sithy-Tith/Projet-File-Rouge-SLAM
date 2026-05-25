@@ -36,7 +36,7 @@ final class ClientDashboardController extends AbstractController
 
                 $intervention->setStatus(Status::TO_PLAN);
                 $intervention->setfkClient($this->getUser());
-                $intervention->setDate(new \DateTime());
+                $intervention->setstartAt(new \DateTime());
 
                 // sauvegarde doctrine
                 $em->persist($intervention);
@@ -50,7 +50,7 @@ final class ClientDashboardController extends AbstractController
 
         $mesInterventions = $em->getRepository(Interventions::class)->findBy(
             ['fkClient' => $this->getUser()],
-            ['date' => 'ASC']
+            ['startAt' => 'ASC']
         );
 
         return $this->render('clients/dashboard.html.twig', [
@@ -63,7 +63,7 @@ final class ClientDashboardController extends AbstractController
     {
         $mesInterventions = $em->getRepository(Interventions::class)->findBy(
             ['fkClient' => $this->getUser()],
-            ['date' => 'DESC']
+            ['startAt' => 'DESC']
         );
 
         return $this->render('clients/interventions_list.html.twig', [
