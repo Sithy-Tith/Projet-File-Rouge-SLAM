@@ -12,12 +12,16 @@
                 <td>{{ availability.id }}</td>
             </tr>
             <tr>
-                <th>Availability</th>
-                <td>{{ availability.availability }}</td>
+                <th>Début</th>
+                <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
             </tr>
             <tr>
-                <th>Date</th>
-                <td>{{ availability.date ? availability.date|date('Y-m-d') : '' }}</td>
+                <th>Fin</th>
+                <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Plombier</th>
+                <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
             </tr>
         </tbody>
     </table>

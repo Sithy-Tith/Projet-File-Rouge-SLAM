@@ -9,8 +9,9 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Availability</th>
-                <th>Date</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Plombier</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,8 +19,9 @@
         {% for availability in availabilities %}
             <tr>
                 <td>{{ availability.id }}</td>
-                <td>{{ availability.availability }}</td>
-                <td>{{ availability.date ? availability.date|date('Y-m-d') : '' }}</td>
+                <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
+                <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
+                <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
                 <td>
                     <a href="{{ path('app_availabilities_show', {'id': availability.id}) }}">show</a>
                     <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}">edit</a>
@@ -27,7 +29,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
