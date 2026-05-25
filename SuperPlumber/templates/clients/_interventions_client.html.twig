@@ -1,0 +1,51 @@
+{# Liste les interventions liées au client #}
+
+{% block body %}
+
+<strong>
+    <h3>Liste des interventions</h3>
+</strong>
+
+{% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
+{% block table_headers_common %}
+{{ parent() }}
+{% endblock %}
+
+{% block table_headers_custom %}
+{{ parent() }}
+<th>Durée estimée</th>
+<th>Plombier</th>
+{% endblock %}
+
+{% block table_headers_after %}
+{{ parent() }}
+{% endblock %}
+
+
+{% block table_columns_common %}
+{{ parent() }}
+{% endblock %}
+
+{% block table_columns_custom %}
+{{ parent() }}
+<td> {{ intervention.duration }} heures</td>
+<td> {{ intervention.fkEmployee.getFullName }} </td>
+{% endblock %}
+
+{% block table_columns_after %}
+{{ parent() }}
+<td>
+    {# Avoir les bons paths avec les bons droits avant de décommenter pour ajouter ces actions :
+    <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
+    <a href="{{ path('app_interventions_cancel', {'id': intervention.id}) }}" class="btn btn-info m-1">Annuler</a>
+    #}
+    <div class="card">
+        <p>[NOTES] Voir _interventions_client/index.html pour plus d'actions</p>
+        <p>Actions pertinentes : 'Annuler' et 'Détails'</p>
+        <p>Créer view + path valide pour ces actions</p>
+    </div>
+</td>
+{% endblock %}
+{% endembed %}
+
+{% endblock body %}

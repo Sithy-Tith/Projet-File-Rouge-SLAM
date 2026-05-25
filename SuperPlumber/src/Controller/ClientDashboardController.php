@@ -50,7 +50,7 @@ final class ClientDashboardController extends AbstractController
 
         $mesInterventions = $em->getRepository(Interventions::class)->findBy(
             ['fkClient' => $this->getUser()],
-            ['date' => 'DESC']
+            ['date' => 'ASC']
         );
 
         return $this->render('clients/dashboard.html.twig', [
@@ -66,7 +66,7 @@ final class ClientDashboardController extends AbstractController
             ['date' => 'DESC']
         );
 
-        return $this->render('client_dashboard/interventions_list.html.twig',[
+        return $this->render('clients/interventions_list.html.twig', [
             'interventions' => $mesInterventions
         ]);
     }

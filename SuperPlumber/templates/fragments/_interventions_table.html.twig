@@ -6,7 +6,7 @@ pour les clients, plombiers et admins #}
     <div class="row">
         <div class="card shadow-sm">
             <div class="card-body p-0">
-                <table class="table table-striped mb-0">
+                <table class="table table-hover mb-0">
 
                     {# Colonnes communes à tous les rôles #}
                     <thead class="table-dark">
@@ -14,7 +14,7 @@ pour les clients, plombiers et admins #}
                             {% block table_headers_common %}
                             <th>Date</th>
                             <th>Statut</th>
-                            <th>Type</th>
+                            <th>Type d'intervention</th>
                             <th>Description</th>
                             {% endblock %}
 
@@ -32,7 +32,7 @@ pour les clients, plombiers et admins #}
                         {% for intervention in interventions %}
                         <tr>
                             {% block table_columns_common %}
-                            <td> {{ intervention.date|date('d/m/Y H:i') }} </td>
+                            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : 'À planifier' }}</td>
                             <td> {{ intervention.status.value }} </td>
                             <td> {{ intervention.type.value }} </td>
                             <td> {{ intervention.description }} </td>
@@ -45,6 +45,10 @@ pour les clients, plombiers et admins #}
                             {% block table_columns_after %}
                             {# Liste des actions disponibles, à écrire dans chaque template suivant le rôle #}
                             {% endblock %}
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">Aucune intervention trouvée</td>
                         </tr>
                         {% endfor %}
                     </tbody>
