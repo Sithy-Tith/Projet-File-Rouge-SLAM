@@ -7,20 +7,25 @@
     <h1>Liste des employés</h1>
 </div>
 
-<form action="{{path('app_employees_index')}}" method="get">
-    <div class="row col-3 m-2">
-        <div class="input-group">
-            <input type="text" class="form-control" name="search"
-                placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un message
-            par défaut sinon#}
-            <button class="btn btn-primary" type="submit">Rechercher</button>
+<div>
+    <form action="{{path('app_employees_index')}}" method="get">
+        <div class="row col-4 m-2">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search"
+                    placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un
+                message
+                par défaut sinon#}
+                <button class="btn btn-primary" type="submit">Rechercher</button>
+                {% if isSearch %}
+                <a href="{{path('app_employees_index')}}" class="btn btn-secondary">Réinitialiser</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
-{% if isSearch %}
-<a href="{{path('app_employees_index')}}" class="btn btn-secondary m-2 mx-3"> Retour à la liste</a>
-{% endif %}
+
+<a href="{{path('app_employees_new')}}" class="btn btn-primary m-2 mx-3">Ajouter un nouveau employé</a>
 
 {# Bootsrap à améliorer #}
 <div class="row">
@@ -58,7 +63,7 @@
                         </tr>
                         {% else %}
                         <tr>
-                            <td>Aucun employé enregistré</td>
+                            <td>Aucun employé trouvé</td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -3,13 +3,13 @@
 {% block title %}Edit Availabilities{% endblock %}
 
 {% block body %}
-    <h1>Edit Availabilities</h1>
+<h1>Edit Availabilities</h1>
 
-    {{ include('availabilities/_form.html.twig', {'button_label': 'Update'}) }}
+{{ include('availabilities/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_availabilities_index') }}" class="btn btn-outline-secondary btn-sm">
+<a href="{{ path('app_availabilities_index') }}" class="btn btn-outline-secondary btn-sm">
     <i class="ti ti-arrow-left"></i> Retour
-    </a>
+</a>
 
-    {{ include('availabilities/_delete_form.html.twig') }}
+{{ include('availabilities/_delete_form.html.twig') }}
 {% endblock %}

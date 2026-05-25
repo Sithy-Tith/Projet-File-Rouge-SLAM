@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Employees{% endblock %}
+{% block title %}Ajouter un employé{% endblock %}
 
 {% block body %}
-    <h1>Create new Employees</h1>
+<div class="m-3">
+    <h1>Ajouter un employé</h1>
+</div>
 
-    {{ include('employees/_form.html.twig') }}
+<div class="container-fluid">
+    <div class="card col-8 mx-3">
+        <div class="m-3">
+            {{ include('employees/_form.html.twig') }}
+        </div>
+        <div class="mx-2">
+            <a href="{{ path('app_employees_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
 
-    <a href="{{ path('app_employees_index') }}">back to list</a>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

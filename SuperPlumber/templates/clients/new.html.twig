@@ -3,9 +3,9 @@
 {% block title %}New Clients{% endblock %}
 
 {% block body %}
-    <h1>Create new Clients</h1>
+<h1>Create new Clients</h1>
 
-    {{ include('clients/_form.html.twig') }}
+{{ include('clients/_form.html.twig') }}
 
-    <a href="{{ path('app_clients_index') }}">back to list</a>
+<a href="{{ path('app_clients_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
 {% endblock %}

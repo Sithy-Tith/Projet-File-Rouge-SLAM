@@ -3,262 +3,266 @@
 {% block title %}Availabilities index{% endblock %}
 
 {% block body %}
-    {% if is_granted('ROLE_PLUMBER') %}
-        <div class="container mt-4">
-            <h1>Mes disponibilités</h1>
-            <p class="text-muted">Gérez vos créneaux de disponibilité</p>
-            <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
-                <i class="ti ti-plus"></i> Ajouter une disponibilité
-            </a>
-        </div>
-    {% else %}
-        <div class="container mt-4">
-            <h1>Gestion des disponibilités</h1>
-            <p class="text-muted">Vue d'ensemble de toutes les disponibilités des plombiers</p>
-            <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
-                <i class="ti ti-plus"></i> Ajouter une disponibilité
-            </a>
-        </div>
-    {% endif %}
+{% if is_granted('ROLE_PLUMBER') %}
+<div class="container mt-4">
+    <h1>Mes disponibilités</h1>
+    <p class="text-muted">Gérez vos créneaux de disponibilité</p>
+    <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
+        <i class="ti ti-plus"></i> Ajouter une disponibilité
+    </a>
+</div>
+{% else %}
+<div class="container mt-4">
+    <h1>Gestion des disponibilités</h1>
+    <p class="text-muted">Vue d'ensemble de toutes les disponibilités des plombiers</p>
+    <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
+        <i class="ti ti-plus"></i> Ajouter une disponibilité
+    </a>
+</div>
+{% endif %}
 
-    <style>
-        #calendar {
-            max-width: 1100px;
-            min-height: 650px;
-            margin: 20px auto 40px;
-        }
-    </style>
+<style>
+    #calendar {
+        max-width: 1100px;
+        min-height: 650px;
+        margin: 20px auto 40px;
+    }
+</style>
 
-    <div id="calendar"></div>
+<div id="calendar"></div>
 
-    <div class="container">
-        <h3 class="mt-5 mb-4">
-            {% if is_granted('ROLE_PLUMBER') %}
-                Tableau de vos disponibilités
-            {% else %}
-                Tableau de toutes les disponibilités
-            {% endif %}
-        </h3>
+<div class="container">
+    <h3 class="mt-5 mb-4">
+        {% if is_granted('ROLE_PLUMBER') %}
+        Tableau de vos disponibilités
+        {% else %}
+        Tableau de toutes les disponibilités
+        {% endif %}
+    </h3>
 
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Début</th>
-                    <th>Fin</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th>Plombier</th>
-                    {% endif %}
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Début</th>
+                <th>Fin</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Plombier</th>
+                {% endif %}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for availability in availabilities %}
-                <tr>
-                    <td>{{ availability.start ? availability.start|date('d/m/Y H:i') : '-' }}</td>
-                    <td>{{ availability.end ? availability.end|date('d/m/Y H:i') : '-' }}</td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <td>
-                            {% if availability.fkEmployee %}
-                                <span class="badge bg-info">{{ availability.fkEmployee.fullName }}</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Non assigné</span>
-                            {% endif %}
-                        </td>
+            <tr>
+                <td>{{ availability.start ? availability.start|date('d/m/Y H:i') : '-' }}</td>
+                <td>{{ availability.end ? availability.end|date('d/m/Y H:i') : '-' }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    {% if availability.fkEmployee %}
+                    <span class="badge bg-info">{{ availability.fkEmployee.fullName }}</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Non assigné</span>
                     {% endif %}
-                    <td>
-                        <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}" class="btn btn-sm btn-warning">
-                            <i class="ti ti-edit"></i> Modifier
-                        </a>
-                        {% if is_granted('ROLE_ADMIN') or availability.fkEmployee == app.user %}
-                            <form method="POST" action="{{ path('app_availabilities_delete', {'id': availability.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ availability.id) }}">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="ti ti-trash"></i> Supprimer
-                                </button>
-                            </form>
-                        {% endif %}
-                    </td>
-                </tr>
+                </td>
+                {% endif %}
+                <td>
+                    <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}"
+                        class="btn btn-sm btn-warning">
+                        <i class="ti ti-edit"></i> Modifier
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') or availability.fkEmployee == app.user %}
+                    <form method="POST" action="{{ path('app_availabilities_delete', {'id': availability.id}) }}"
+                        style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ availability.id) }}">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="ti ti-trash"></i> Supprimer
+                        </button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
             {% else %}
-                <tr>
-                    <td colspan="{% if is_granted('ROLE_ADMIN') %}5{% else %}4{% endif %}" class="text-center text-muted py-4">
-                        Aucune disponibilité trouvée
-                    </td>
-                </tr>
+            <tr>
+                <td colspan="{% if is_granted('ROLE_ADMIN') %}5{% else %}4{% endif %}"
+                    class="text-center text-muted py-4">
+                    Aucune disponibilité trouvée
+                </td>
+            </tr>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 
-    <!-- Popup qui s'affiche pour avoir le choix d'éditer/supprimer une disponibilité directement sur la vue -->
-    <div class="modal fade" id="availabilityModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Disponibilité</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Que voulez-vous faire ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-warning" id="btnEdit">
-                        <i class="ti ti-edit"></i> Éditer
-                    </button>
-                    <button type="button" class="btn btn-danger" id="btnDelete">
-                        <i class="ti ti-trash"></i> Supprimer
-                    </button>
-                </div>
+<!-- Popup qui s'affiche pour avoir le choix d'éditer/supprimer une disponibilité directement sur la vue -->
+<div class="modal fade" id="availabilityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Disponibilité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Que voulez-vous faire ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-warning" id="btnEdit">
+                    <i class="ti ti-edit"></i> Éditer
+                </button>
+                <button type="button" class="btn btn-danger" id="btnDelete">
+                    <i class="ti ti-trash"></i> Supprimer
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    {% block javascripts %}
-        <script>
-            window.onload = () => {
-                const updateUrlTemplate = '{{ path('app_availabilities_update_dates', {'id': 0}) }}';
-                const editUrlTemplate = '{{ path('app_availabilities_edit', {'id': 0}) }}';
-                const deleteUrlTemplate = '{{ path('app_availabilities_delete', {'id': 0}) }}';
-                const csrfToken = '{{ csrf_token('update_availability') }}';
-                const isPlumber = {{ is_granted('ROLE_PLUMBER') ? 'true' : 'false' }};
-                const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+{% block javascripts %}
+<script>
+    window.onload = () => {
+        const updateUrlTemplate = '{{ path('app_availabilities_update_dates', {'id': 0}) }}';
+        const editUrlTemplate = '{{ path('app_availabilities_edit', {'id': 0}) }}';
+        const deleteUrlTemplate = '{{ path('app_availabilities_delete', {'id': 0}) }}';
+        const csrfToken = '{{ csrf_token('update_availability') }}';
+        const isPlumber = {{ is_granted('ROLE_PLUMBER') ? 'true' : 'false'
+    }};
+    const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
 
-                let currentAvailabilityId = null;
-                const modal = new bootstrap.Modal(document.getElementById('availabilityModal'));
-                const btnEdit = document.getElementById('btnEdit');
-                const btnDelete = document.getElementById('btnDelete');
+    let currentAvailabilityId = null;
+    const modal = new bootstrap.Modal(document.getElementById('availabilityModal'));
+    const btnEdit = document.getElementById('btnEdit');
+    const btnDelete = document.getElementById('btnDelete');
 
-                const availabilitiesEvents = [
-                    {% for availability in availabilities %}
-                        {
-                            id: '{{ availability.id }}',
-                            title: '{{ availability.fkEmployee ? availability.fkEmployee.fullName|e('js') : 'Disponibilité' }}',
-                            start: '{{ availability.start ? availability.start|date('c') : '' }}',
-                            end: '{{ availability.end ? availability.end|date('c') : '' }}',
-                            deleteToken: '{{ csrf_token('delete' ~ availability.id) }}',
+    const availabilitiesEvents = [
+        {% for availability in availabilities %}
+    {
+        id: '{{ availability.id }}',
+            title: '{{ availability.fkEmployee ? availability.fkEmployee.fullName|e('js') : 'Disponibilité' }}',
+                start: '{{ availability.start ? availability.start|date('c') : '' }}',
+                    end: '{{ availability.end ? availability.end|date('c') : '' }}',
+                        deleteToken: '{{ csrf_token('delete ' ~ availability.id) }}',
                         },
-                    {% endfor %}
+    {% endfor %}
                 ];
 
-                // Map pour accéder aux tokens par ID
-                const tokensMap = {};
-                availabilitiesEvents.forEach(event => {
-                    tokensMap[event.id] = event.deleteToken;
-                });
+    // Map pour accéder aux tokens par ID
+    const tokensMap = {};
+    availabilitiesEvents.forEach(event => {
+        tokensMap[event.id] = event.deleteToken;
+    });
 
-                let calendarEl = document.querySelector('#calendar')
+    let calendarEl = document.querySelector('#calendar')
 
-                let calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    locale: 'fr',
-                    timeZone: 'local',
-                    editable: isAdmin || isPlumber,
-                    selectable: true,
-                    displayEventTime: true,
-                    displayEventEnd: true,
-                    eventTimeFormat: {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    },
-                    headerToolbar: {
-                        start: 'prev,next today',
-                        center: 'title',
-                        end: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
-                    events: availabilitiesEvents,
-                    eventDrop: async (info) => {
-                        if (isAdmin || isPlumber) {
-                            await updateAvailability(info);
-                        }
-                    },
-                    eventResize: async (info) => {
-                        if (isAdmin || isPlumber) {
-                            await updateAvailability(info);
-                        }
-                    },
-                    eventClick: (info) => {
-                        currentAvailabilityId = info.event.id;
-                        modal.show();
-                    }
-                });
-
-                function formatLocalDate(date) {
-                    const pad = (value) => String(value).padStart(2, '0');
-                    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-                }
-
-                async function updateAvailability(info) {
-                    const url = updateUrlTemplate.replace('/0/', `/${info.event.id}/`);
-                    const start = info.event.start ? formatLocalDate(info.event.start) : null;
-                    const end = info.event.end ? formatLocalDate(info.event.end) : null;
-
-                    if (!start || !end) {
-                        alert('Impossible de mettre à jour : start ou end manquant.');
-                        info.revert();
-                        return;
-                    }
-
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        body: JSON.stringify({start, end}),
-                    });
-
-                    if (!response.ok) {
-                        let message = 'Erreur lors de la mise à jour de la disponibilité.';
-                        try {
-                            const data = await response.json();
-                            if (data?.error) {
-                                message = data.error;
-                            }
-                        } catch (e) {
-                            
-                        }
-                        alert(message);
-                        info.revert();
-                    }
-                }
-
-                // Bouton Éditer
-                btnEdit.addEventListener('click', () => {
-                    const editUrl = editUrlTemplate.replace('/0/', `/${currentAvailabilityId}/`);
-                    window.location.href = editUrl;
-                });
-
-                // Bouton Supprimer
-                btnDelete.addEventListener('click', async () => {
-                    if (!confirm('Êtes-vous sûr de vouloir supprimer cette disponibilité ?')) {
-                        return;
-                    }
-
-                    const deleteUrl = deleteUrlTemplate.replace('/0/', `/${currentAvailabilityId}/`);
-                    const deleteToken = tokensMap[currentAvailabilityId];
-                    
-                    const formData = new FormData();
-                    formData.append('_token', deleteToken);
-
-                    const response = await fetch(deleteUrl, {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (response.ok) {
-                        modal.hide();
-                        // Recharger la page pour afficher les changements
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la suppression de la disponibilité.');
-                    }
-                });
-
-                calendar.render()
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        timeZone: 'local',
+        editable: isAdmin || isPlumber,
+        selectable: true,
+        displayEventTime: true,
+        displayEventEnd: true,
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        headerToolbar: {
+            start: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: availabilitiesEvents,
+        eventDrop: async (info) => {
+            if (isAdmin || isPlumber) {
+                await updateAvailability(info);
             }
-        </script>
-    {% endblock %}
+        },
+        eventResize: async (info) => {
+            if (isAdmin || isPlumber) {
+                await updateAvailability(info);
+            }
+        },
+        eventClick: (info) => {
+            currentAvailabilityId = info.event.id;
+            modal.show();
+        }
+    });
+
+    function formatLocalDate(date) {
+        const pad = (value) => String(value).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    async function updateAvailability(info) {
+        const url = updateUrlTemplate.replace('/0/', `/${info.event.id}/`);
+        const start = info.event.start ? formatLocalDate(info.event.start) : null;
+        const end = info.event.end ? formatLocalDate(info.event.end) : null;
+
+        if (!start || !end) {
+            alert('Impossible de mettre à jour : start ou end manquant.');
+            info.revert();
+            return;
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify({ start, end }),
+        });
+
+        if (!response.ok) {
+            let message = 'Erreur lors de la mise à jour de la disponibilité.';
+            try {
+                const data = await response.json();
+                if (data?.error) {
+                    message = data.error;
+                }
+            } catch (e) {
+
+            }
+            alert(message);
+            info.revert();
+        }
+    }
+
+    // Bouton Éditer
+    btnEdit.addEventListener('click', () => {
+        const editUrl = editUrlTemplate.replace('/0/', `/${currentAvailabilityId}/`);
+        window.location.href = editUrl;
+    });
+
+    // Bouton Supprimer
+    btnDelete.addEventListener('click', async () => {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette disponibilité ?')) {
+            return;
+        }
+
+        const deleteUrl = deleteUrlTemplate.replace('/0/', `/${currentAvailabilityId}/`);
+        const deleteToken = tokensMap[currentAvailabilityId];
+
+        const formData = new FormData();
+        formData.append('_token', deleteToken);
+
+        const response = await fetch(deleteUrl, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            modal.hide();
+            // Recharger la page pour afficher les changements
+            location.reload();
+        } else {
+            alert('Erreur lors de la suppression de la disponibilité.');
+        }
+    });
+
+    calendar.render()
+            }
+</script>
+{% endblock %}
 
 {% endblock %}

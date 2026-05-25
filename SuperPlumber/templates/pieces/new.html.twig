@@ -3,9 +3,9 @@
 {% block title %}New Pieces{% endblock %}
 
 {% block body %}
-    <h1>Create new Pieces</h1>
+<h1>Create new Pieces</h1>
 
-    {{ include('pieces/_form.html.twig') }}
+{{ include('pieces/_form.html.twig') }}
 
-    <a href="{{ path('app_pieces_index') }}">back to list</a>
+<a href="{{ path('app_pieces_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
 {% endblock %}

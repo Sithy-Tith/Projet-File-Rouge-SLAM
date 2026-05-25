@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Employees;
 use App\Enum\Position;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,15 +15,42 @@ class EmployeesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('position')
+            ->add('lastName', null, [
+                'label' => 'Nom *',
+                'attr' => [
+                    'placeholder' => 'Dupont'
+                ]
+            ])
+            ->add('firstName', null, [
+                'label' => 'Prénom *',
+                'attr' => [
+                    'placeholder' => 'Jean'
+                ]
+            ])
+            ->add('position', EnumType::class, [
+                'class' => Position::class,
+                'label' => "Poste *",
+            ])
+            ->add('email', null, [
+                'label' => 'Adresse email *',
+                'attr' => [
+                    'placeholder' => 'jean.dupont@exemple.com'
+                ]
+            ])
+            ->add('phone', null, [
+                'label' => 'Téléphone',
+                'attr' => [
+                    'placeholder' => '06xxxxxxxx'
+                ]
+            ])
             ->add('password', PasswordType::class, [
                 'mapped'   => false,
                 'required' => $options['is_new'],
+                'label' => "Mot de passe",
+                'attr' => [
+                    'placeholder' => $options['is_new'] ? '' : 'Nouveau mot de passe',
+                ]
             ])
-            #->add('phone')
 
         ;
     }

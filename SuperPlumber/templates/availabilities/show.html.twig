@@ -3,32 +3,32 @@
 {% block title %}Availabilities{% endblock %}
 
 {% block body %}
-    <h1>Availabilities</h1>
+<h1>Availabilities</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ availability.id }}</td>
-            </tr>
-            <tr>
-                <th>Début</th>
-                <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Fin</th>
-                <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Plombier</th>
-                <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ availability.id }}</td>
+        </tr>
+        <tr>
+            <th>Début</th>
+            <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Fin</th>
+            <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Plombier</th>
+            <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
+        </tr>
+    </tbody>
+</table>
 
-    <a href="{{ path('app_availabilities_index') }}">back to list</a>
+<a href="{{ path('app_availabilities_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
 
-    <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}">edit</a>
+<a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}">edit</a>
 
-    {{ include('availabilities/_delete_form.html.twig') }}
+{{ include('availabilities/_delete_form.html.twig') }}
 {% endblock %}
