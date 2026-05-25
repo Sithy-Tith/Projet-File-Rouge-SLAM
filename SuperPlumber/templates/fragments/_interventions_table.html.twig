@@ -1,0 +1,51 @@
+{# Squelette du tableau des interventions, utilisé et customisé
+pour les clients, plombiers et admins #}
+
+<div class="container mt-4">
+
+    <div class="row">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+
+                    {# Colonnes communes à tous les rôles #}
+                    <thead class="table-dark">
+                        <tr>
+                            {% block table_headers_common %}
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            {% endblock %}
+
+                            {% block table_headers_custom %}
+                            {# Colonnes propres à chaque rôle #}
+                            {% endblock table_headers_custom %}
+
+                            {% block table_headers_after %}
+                            <th>Actions</th>
+                            {% endblock table_headers_after %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for intervention in interventions %}
+                        <tr>
+                            {% block table_columns_common %}
+                            <td> {{ intervention.date|date('d/m/Y H:i') }} </td>
+                            <td> {{ intervention.status.value }} </td>
+                            <td> {{ intervention.type.value }} </td>
+                            <td> {{ intervention.description }} </td>
+                            {% endblock %}
+
+                            {% block table_columns_custom %}
+                            {# contenu de colonne custom suivant chaque rôle#}
+                            {% endblock %}
+
+                            {% block table_columns_after %}
+                            {# Liste des actions disponibles, à écrire dans chaque template suivant le rôle #}
+                            {% endblock %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>

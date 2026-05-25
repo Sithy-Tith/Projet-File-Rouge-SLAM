@@ -41,7 +41,9 @@ class InterventionsType extends AbstractType
                 'label' => "Statut",
                 'data' => Status::TO_PLAN,
             ])
-            ->add('date')
+            ->add('date', null, [
+                'required' => false,
+            ])
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
                 'choice_label' => 'fullName',
