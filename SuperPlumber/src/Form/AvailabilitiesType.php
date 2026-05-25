@@ -18,7 +18,9 @@ class AvailabilitiesType extends AbstractType
             ->add('date')
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
-                'choice_label' => 'id',
+                'choice_label' => 'fullName',
+                'placeholder' => 'Choix du plombier',
+                'label' => 'Plombier',
             ])
         ;
     }
