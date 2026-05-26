@@ -1,48 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Interventions index{% endblock %}
+{% block title %}Interventions{% endblock %}
 
 {% block body %}
-<h1>Interventions index</h1>
+<div class="m-3">
+    <h1>Liste des interventions</h1>
+</div>
+
+<a href="{{path('app_interventions_new')}}" class="btn btn-primary m-3 mx-3">Nouvelle intervention</a>
 
 
-<a href="{{ path('app_interventions_new') }}" class="btn btn-primary m-3">Nouvelle intervention</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Type</th>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Durée</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for intervention in interventions %}
-        <tr>
-            <td>{{ intervention.id }}</td>
-            <td>{{ intervention.type.value }}</td>
-            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ intervention.description }}</td>
-            <td>{{ intervention.status.label()|trans }}</td>
-            <td>{{ intervention.durationFormatted }}</td>
-            <td>
-                <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
-                <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
-                <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="6">no records found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{# Bootsrap à améliorer #}
+<div class="row">
+    <div class="col-11 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Description</th>
+                            <th>Statut</th>
+                            <th>Durée</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for intervention in interventions %}
+                        <tr>
+                            <td>{{ intervention.type.value }}</td>
+                            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                            <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                            <td>{{ intervention.description }}</td>
+                            <td>{{ intervention.status.label()|trans }}</td>
+                            <td>{{ intervention.durationFormatted }}</td>
+                            <td>{{ intervention.duration }}</td>
+                            <td>
+                                <a class="btn btn-primary m-1"
+                                    href="{{ path('app_interventions_show', {'id': intervention.id}) }}">Détails</a>
+                                <a class="btn btn-primary m-1"
+                                    href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">Modifier</a>
+                                <a class="btn btn-primary m-1"
+                                    href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du
+                                    matériel</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">Aucune intervention trouvée</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
