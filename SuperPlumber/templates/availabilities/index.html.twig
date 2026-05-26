@@ -43,9 +43,6 @@
         <table class="table table-hover">
             <thead class="table-light">
                 <tr>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <th>Id</th>
-                    {% endif %}
                     <th>Début</th>
                     <th>Fin</th>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -57,9 +54,6 @@
             <tbody>
             {% for availability in availabilities %}
                 <tr>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <td><strong>#{{ availability.id }}</strong></td>
-                    {% endif %}
                     <td>{{ availability.start ? availability.start|date('d/m/Y H:i') : '-' }}</td>
                     <td>{{ availability.end ? availability.end|date('d/m/Y H:i') : '-' }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
