@@ -3,10 +3,24 @@
 {% block title %}Availabilities index{% endblock %}
 
 {% block body %}
-    <h1>Availabilities index</h1>
-    <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm">
-    <i class="ti ti-plus"></i> Ajouter une disponibilité
-</a>
+    {% if is_granted('ROLE_PLUMBER') %}
+        <div class="container mt-4">
+            <h1>Mes disponibilités</h1>
+            <p class="text-muted">Gérez vos créneaux de disponibilité</p>
+            <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
+                <i class="ti ti-plus"></i> Ajouter une disponibilité
+            </a>
+        </div>
+    {% else %}
+        <div class="container mt-4">
+            <h1>Gestion des disponibilités</h1>
+            <p class="text-muted">Vue d'ensemble de toutes les disponibilités des plombiers</p>
+            <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm mb-4">
+                <i class="ti ti-plus"></i> Ajouter une disponibilité
+            </a>
+        </div>
+    {% endif %}
+
     <style>
         #calendar {
             max-width: 1100px;
@@ -17,35 +31,66 @@
 
     <div id="calendar"></div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Plombier</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for availability in availabilities %}
-            <tr>
-                <td>{{ availability.id }}</td>
-                <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
-                <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
-                <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
-                <td>
-                    <a href="{{ path('app_availabilities_show', {'id': availability.id}) }}">show</a>
-                    <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h3 class="mt-5 mb-4">
+            {% if is_granted('ROLE_PLUMBER') %}
+                Tableau de vos disponibilités
+            {% else %}
+                Tableau de toutes les disponibilités
+            {% endif %}
+        </h3>
+
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Id</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Plombier</th>
+                    {% endif %}
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for availability in availabilities %}
+                <tr>
+                    <td><strong>#{{ availability.id }}</strong></td>
+                    <td>{{ availability.start ? availability.start|date('d/m/Y H:i') : '-' }}</td>
+                    <td>{{ availability.end ? availability.end|date('d/m/Y H:i') : '-' }}</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            {% if availability.fkEmployee %}
+                                <span class="badge bg-info">{{ availability.fkEmployee.fullName }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Non assigné</span>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}" class="btn btn-sm btn-warning">
+                            <i class="ti ti-edit"></i> Modifier
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') or availability.fkEmployee == app.user %}
+                            <form method="POST" action="{{ path('app_availabilities_delete', {'id': availability.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ availability.id) }}">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="ti ti-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="{% if is_granted('ROLE_ADMIN') %}5{% else %}4{% endif %}" class="text-center text-muted py-4">
+                        Aucune disponibilité trouvée
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% block javascripts %}
         <script>
@@ -53,6 +98,8 @@
                 const updateUrlTemplate = '{{ path('app_availabilities_update_dates', {'id': 0}) }}';
                 const editUrlTemplate = '{{ path('app_availabilities_edit', {'id': 0}) }}';
                 const csrfToken = '{{ csrf_token('update_availability') }}';
+                const isPlumber = {{ is_granted('ROLE_PLUMBER') ? 'true' : 'false' }};
+                const isAdmin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
 
                 const availabilitiesEvents = [
                     {% for availability in availabilities %}
@@ -70,7 +117,7 @@
                 let calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     locale: 'fr',
-                    editable: true,
+                    editable: isAdmin || isPlumber,
                     selectable: true,
                     headerToolbar: {
                         start: 'prev,next today',
@@ -79,10 +126,14 @@
                     },
                     events: availabilitiesEvents,
                     eventDrop: async (info) => {
-                        await updateAvailability(info);
+                        if (isAdmin || isPlumber) {
+                            await updateAvailability(info);
+                        }
                     },
                     eventResize: async (info) => {
-                        await updateAvailability(info);
+                        if (isAdmin || isPlumber) {
+                            await updateAvailability(info);
+                        }
                     },
                     eventClick: (info) => {
                         const editUrl = editUrlTemplate.replace('/0/', `/${info.event.id}/`);
