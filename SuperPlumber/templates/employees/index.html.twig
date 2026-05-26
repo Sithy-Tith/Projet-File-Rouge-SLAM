@@ -46,7 +46,7 @@
                         {% for employee in employees %}
                         <tr>
                             <td>{{ employee.getFullName() }}</td>
-                            <td>{{ employee.position.value }}</td>
+                            <td>{{ employee.position.label()|trans }}</td>
                             <td>{{ employee.email }}</td>
                             <td>{{ employee.phone }}</td>
                             <td>

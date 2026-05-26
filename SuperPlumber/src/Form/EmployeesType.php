@@ -30,6 +30,7 @@ class EmployeesType extends AbstractType
             ->add('position', EnumType::class, [
                 'class' => Position::class,
                 'label' => "Poste *",
+                'choice_label' => fn(Position $position) => $position->label(), #On affiche la traduction de la value de l'enum
             ])
             ->add('email', null, [
                 'label' => 'Adresse email *',
