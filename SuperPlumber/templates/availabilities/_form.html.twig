@@ -1,4 +1,6 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary">
+    <i class="ti ti-device-floppy"></i> {{ button_label|default('Enregistrer') }}
+    </button>
 {{ form_end(form) }}

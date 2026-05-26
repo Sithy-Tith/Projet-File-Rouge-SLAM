@@ -21,6 +21,7 @@
     {% include "fragments/_header.html.twig" %}
     {% endblock header %}
     {% block body %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js" integrity="sha256-sQEgS6I+FEeOlX4oTVi7qW/HMRAh0O6vifpeZXIMRsg=" crossorigin="anonymous"></script>
     {% block javascripts %}
     <script src="{{ asset('app.js') }}"></script>
     {% endblock %}

@@ -13,10 +13,11 @@
         <tr>
             <th>Id</th>
             <th>Type</th>
-            <th>Date</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
             <th>Description</th>
             <th>Status</th>
-            <th>Duration</th>
+            <th>Durée</th>
             <th>actions</th>
         </tr>
     </thead>
@@ -25,10 +26,11 @@
         <tr>
             <td>{{ intervention.id }}</td>
             <td>{{ intervention.type.value }}</td>
-            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : '' }}</td>
             <td>{{ intervention.description }}</td>
             <td>{{ intervention.status.label()|trans }}</td>
-            <td>{{ intervention.duration }}</td>
+            <td>{{ intervention.durationFormatted }}</td>
             <td>
                 <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}">show</a>
                 <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
