@@ -23,10 +23,7 @@ class AvailabilitiesType extends AbstractType
                 'widget' => 'single_text',
                 'label' => 'Fin',
             ])
-            ->add('all_day', null, [
-                'label' => 'Toute la journée',
-                'required' => false,
-            ])
+
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
                 'choice_label' => 'fullName',

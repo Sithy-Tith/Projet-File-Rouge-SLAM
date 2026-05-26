@@ -116,7 +116,6 @@ class AppFixtures extends Fixture
             $intervention->setDescription($faker->text);
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
-            $intervention->setDuration(mt_rand(1, 7));
             $intervention->setFkClient($faker->randomElement($clientsList));
 
             // assigner un employé seulement si l'intervention n'est pas à planifier

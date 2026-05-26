@@ -16,9 +16,6 @@ class Availabilities
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
-    private ?bool $all_day = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $start = null;
 
@@ -66,17 +63,6 @@ class Availabilities
     {
         $this->fkEmployee = $fkEmployee;
 
-        return $this;
-    }
-
-    public function isAllDay(): ?bool
-    {
-        return $this->all_day;
-    }
-
-    public function setAllDay(?bool $all_day): static
-    {
-        $this->all_day = $all_day;
         return $this;
     }
 }
