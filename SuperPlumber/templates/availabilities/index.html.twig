@@ -152,8 +152,16 @@
                 let calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     locale: 'fr',
+                    timeZone: 'local',
                     editable: isAdmin || isPlumber,
                     selectable: true,
+                    displayEventTime: true,
+                    displayEventEnd: true,
+                    eventTimeFormat: {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    },
                     headerToolbar: {
                         start: 'prev,next today',
                         center: 'title',
@@ -175,6 +183,37 @@
                         modal.show();
                     }
                 });
+
+                function formatLocalDate(date) {
+                    const pad = (value) => String(value).padStart(2, '0');
+                    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+                }
+
+                async function updateAvailability(info) {
+                    const url = updateUrlTemplate.replace('/0/', `/${info.event.id}/`);
+                    const start = info.event.start ? formatLocalDate(info.event.start) : null;
+                    const end = info.event.end ? formatLocalDate(info.event.end) : null;
+
+                    if (!start || !end) {
+                        alert('Impossible de mettre à jour : start ou end manquant.');
+                        info.revert();
+                        return;
+                    }
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({start, end}),
+                    });
+
+                    if (!response.ok) {
+                        alert('Erreur lors de la mise à jour de la disponibilité.');
+                        info.revert();
+                    }
+                }
 
                 // Bouton Éditer
                 btnEdit.addEventListener('click', () => {

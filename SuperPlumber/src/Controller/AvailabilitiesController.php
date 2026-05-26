@@ -109,8 +109,9 @@ final class AvailabilitiesController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
-        $start = isset($data['start']) ? new \DateTime($data['start']) : null;
-        $end = isset($data['end']) ? new \DateTime($data['end']) : null;
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $start = isset($data['start']) ? \DateTime::createFromFormat('Y-m-d\TH:i:s', $data['start'], $timezone) : null;
+        $end = isset($data['end']) ? \DateTime::createFromFormat('Y-m-d\TH:i:s', $data['end'], $timezone) : null;
 
         if (!$start || !$end) {
             return new JsonResponse(['error' => 'Dates invalides.'], Response::HTTP_BAD_REQUEST);
