@@ -210,7 +210,16 @@
                     });
 
                     if (!response.ok) {
-                        alert('Erreur lors de la mise à jour de la disponibilité.');
+                        let message = 'Erreur lors de la mise à jour de la disponibilité.';
+                        try {
+                            const data = await response.json();
+                            if (data?.error) {
+                                message = data.error;
+                            }
+                        } catch (e) {
+                            
+                        }
+                        alert(message);
                         info.revert();
                     }
                 }
@@ -246,32 +255,6 @@
                         alert('Erreur lors de la suppression de la disponibilité.');
                     }
                 });
-
-                async function updateAvailability(info) {
-                    const url = updateUrlTemplate.replace('/0/', `/${info.event.id}/`);
-                    const start = info.event.start ? info.event.start.toISOString() : null;
-                    const end = info.event.end ? info.event.end.toISOString() : null;
-
-                    if (!start || !end) {
-                        alert('Impossible de mettre à jour : start ou end manquant.');
-                        info.revert();
-                        return;
-                    }
-
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        body: JSON.stringify({start, end}),
-                    });
-
-                    if (!response.ok) {
-                        alert('Erreur lors de la mise à jour de la disponibilité.');
-                        info.revert();
-                    }
-                }
 
                 calendar.render()
             }
