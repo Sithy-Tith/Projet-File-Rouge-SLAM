@@ -7,7 +7,9 @@
 
     {{ include('availabilities/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_availabilities_index') }}">back to list</a>
+    <a href="{{ path('app_availabilities_index') }}" class="btn btn-outline-secondary btn-sm">
+    <i class="ti ti-arrow-left"></i> Retour
+    </a>
 
     {{ include('availabilities/_delete_form.html.twig') }}
 {% endblock %}

@@ -4,6 +4,18 @@
 
 {% block body %}
     <h1>Availabilities index</h1>
+    <a href="{{ path('app_availabilities_new') }}" class="btn btn-primary btn-sm">
+    <i class="ti ti-plus"></i> Ajouter une disponibilité
+</a>
+    <style>
+        #calendar {
+            max-width: 1100px;
+            min-height: 650px;
+            margin: 20px auto 40px;
+        }
+    </style>
+
+    <div id="calendar"></div>
 
     <table class="table">
         <thead>
@@ -35,5 +47,78 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_availabilities_new') }}">Create new</a>
+    {% block javascripts %}
+        <script>
+            window.onload = () => {
+                const updateUrlTemplate = '{{ path('app_availabilities_update_dates', {'id': 0}) }}';
+                const editUrlTemplate = '{{ path('app_availabilities_edit', {'id': 0}) }}';
+                const csrfToken = '{{ csrf_token('update_availability') }}';
+
+                const availabilitiesEvents = [
+                    {% for availability in availabilities %}
+                        {
+                            id: '{{ availability.id }}',
+                            title: '{{ availability.fkEmployee ? availability.fkEmployee.fullName|e('js') : 'Disponibilité' }}',
+                            start: '{{ availability.start ? availability.start|date('c') : '' }}',
+                            end: '{{ availability.end ? availability.end|date('c') : '' }}',
+                        },
+                    {% endfor %}
+                ];
+
+                let calendarEl = document.querySelector('#calendar')
+
+                let calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'fr',
+                    editable: true,
+                    selectable: true,
+                    headerToolbar: {
+                        start: 'prev,next today',
+                        center: 'title',
+                        end: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: availabilitiesEvents,
+                    eventDrop: async (info) => {
+                        await updateAvailability(info);
+                    },
+                    eventResize: async (info) => {
+                        await updateAvailability(info);
+                    },
+                    eventClick: (info) => {
+                        const editUrl = editUrlTemplate.replace('/0/', `/${info.event.id}/`);
+                        window.location.href = editUrl;
+                    }
+                });
+
+                async function updateAvailability(info) {
+                    const url = updateUrlTemplate.replace('/0/', `/${info.event.id}/`);
+                    const start = info.event.start ? info.event.start.toISOString() : null;
+                    const end = info.event.end ? info.event.end.toISOString() : null;
+
+                    if (!start || !end) {
+                        alert('Impossible de mettre à jour : start ou end manquant.');
+                        info.revert();
+                        return;
+                    }
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({start, end}),
+                    });
+
+                    if (!response.ok) {
+                        alert('Erreur lors de la mise à jour de la disponibilité.');
+                        info.revert();
+                    }
+                }
+
+                calendar.render()
+            }
+        </script>
+    {% endblock %}
+
 {% endblock %}

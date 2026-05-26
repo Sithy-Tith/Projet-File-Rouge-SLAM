@@ -7,9 +7,12 @@ use App\Form\AvailabilitiesType;
 use App\Repository\AvailabilitiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 #[Route('/availabilities')]
 final class AvailabilitiesController extends AbstractController
@@ -90,6 +93,34 @@ final class AvailabilitiesController extends AbstractController
             'availability' => $availability,
             'form' => $form,
         ]);
+    }
+
+    //Fonction pour mettre à jour les dates d'une disponibilité via une requête AJAX (utilisée par FullCalendar)
+    #[Route('/{id}/update-dates', name: 'app_availabilities_update_dates', methods: ['POST'])]
+    public function updateDates(Request $request, Availabilities $availability, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    {
+        if (!$this->isGranted('ROLE_ADMIN') && $availability->getFkEmployee() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken('update_availability', $token))) {
+            return new JsonResponse(['error' => 'Jeton CSRF invalide.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $start = isset($data['start']) ? new \DateTime($data['start']) : null;
+        $end = isset($data['end']) ? new \DateTime($data['end']) : null;
+
+        if (!$start || !$end) {
+            return new JsonResponse(['error' => 'Dates invalides.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $availability->setStart($start);
+        $availability->setEnd($end);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
     }
 
     #[Route('/{id}', name: 'app_availabilities_delete', methods: ['POST'])]
