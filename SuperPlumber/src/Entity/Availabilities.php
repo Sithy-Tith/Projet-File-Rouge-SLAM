@@ -16,11 +16,11 @@ class Availabilities
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTime $start = null;
+    #[ORM\Column]
+    private ?int $availability = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTime $end = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'Availabilities')]
     private ?Employees $fkEmployee = null;
@@ -30,26 +30,26 @@ class Availabilities
         return $this->id;
     }
 
-    public function getStart(): ?\DateTime
+    public function getAvailability(): ?int
     {
-        return $this->start;
+        return $this->availability;
     }
 
-    public function setStart(\DateTime $start): static
+    public function setAvailability(int $availability): static
     {
-        $this->start = $start;
+        $this->availability = $availability;
 
         return $this;
     }
 
-    public function getEnd(): ?\DateTime
+    public function getDate(): ?\DateTime
     {
-        return $this->end;
+        return $this->date;
     }
 
-    public function setEnd(\DateTime $end): static
+    public function setDate(\DateTime $date): static
     {
-        $this->end = $end;
+        $this->date = $date;
 
         return $this;
     }

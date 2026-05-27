@@ -111,11 +111,11 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $intervention = new Interventions();
-            $intervention->setStartAt($faker->dateTime);
-            $intervention->setEndAt($faker->dateTime);
+            $intervention->setDate($faker->dateTime);
             $intervention->setDescription($faker->text);
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
+            $intervention->setDuration(mt_rand(1, 7));
             $intervention->setFkClient($faker->randomElement($clientsList));
 
             // assigner un employé seulement si l'intervention n'est pas à planifier
@@ -139,10 +139,8 @@ class AppFixtures extends Fixture
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
-            $start = $faker->dateTimeThisYear();
-            $end = (clone $start)->modify('+2 hours');
-            $availability->setStart($start);
-            $availability->setEnd($end);
+            $availability->setAvailability(mt_rand(0, 7));
+            $availability->setDate($faker->dateTimeThisYear());
             $availability->setFkEmployee($faker->randomElement($employeesList));
 
 

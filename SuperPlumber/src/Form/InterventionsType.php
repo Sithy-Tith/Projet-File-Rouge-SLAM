@@ -56,6 +56,9 @@ class InterventionsType extends AbstractType
                 'data' => Status::TO_PLAN,
                 'choice_label' => fn(Status $status) => $status->label(), #On affiche la traduction de la value de l'enum
             ])
+            ->add('date', null, [
+                'required' => false,
+            ])
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
                 'choice_label' => 'fullName',

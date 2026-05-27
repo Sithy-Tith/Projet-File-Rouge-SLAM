@@ -12,7 +12,7 @@ pour les clients, plombiers et admins #}
                     <thead class="table-dark">
                         <tr>
                             {% block table_headers_common %}
-                            <th>Date de début</th>
+                            <th>Date</th>
                             <th>Statut</th>
                             <th>Type d'intervention</th>
                             <th>Description</th>
@@ -32,7 +32,7 @@ pour les clients, plombiers et admins #}
                         {% for intervention in interventions %}
                         <tr>
                             {% block table_columns_common %}
-                            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'À planifier' }}</td>
+                            <td>{{ intervention.date ? intervention.date|date('Y-m-d H:i:s') : 'À planifier' }}</td>
                             <td> {{ intervention.status.label()|trans }} </td>
                             <td> {{ intervention.type.value }} </td>
                             <td> {{ intervention.description }} </td>
