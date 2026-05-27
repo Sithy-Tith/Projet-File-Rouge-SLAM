@@ -14,14 +14,29 @@ class PiecesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('quantity')
-            ->add('alertTreshold')
-            ->add('supplier')
-            ->add('usedPieces', EntityType::class, [
-                'class' => UsedPieces::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+            ->add('name', null, [
+                'label' => 'Nom *',
+                'attr' => [
+                    'placeholder' => 'Nom de la pièce ...'
+                ]
+            ])
+            ->add('quantity', null, [
+                'label' => 'Quantité *',
+                'attr' => [
+                    'placeholder' => 'Quantité en stock ...'
+                ]
+            ])
+            ->add('alertTreshold', null, [
+                'label' => "Seuil d'alerte *",
+                'attr' => [
+                    'placeholder' => "Seuil d'alerte ..."
+                ]
+            ])
+            ->add('supplier', null, [
+                'label' => 'Fournisseur *',
+                'attr' => [
+                    'placeholder' => 'Fournisseur ...'
+                ]
             ])
         ;
     }

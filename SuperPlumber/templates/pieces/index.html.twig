@@ -3,47 +3,61 @@
 {% block title %}Inventaire des pièces{% endblock %}
 
 {% block body %}
+
+<div class="m-3">
     <h1>Inventaire des pièces</h1>
-    {% if edition  %}
-        <a href="{{ path('app_pieces_inventory') }}">Quitter le mode édition</a>
+</div>
+
+<div>
+    <a class="btn btn-primary m-2" href=" {{ path('app_pieces_new') }}">Nouvelle pièce</a>
+    {% if edition %}
+    <a class="btn btn-primary m-2" href=" {{ path('app_pieces_inventory') }}">Quitter le mode édition</a>
     {% else %}
-        <a href="{{ path('app_pieces_inventory',{edition : true}) }}">Activer mode édition</a>
+    <a class="btn btn-secondary m-2" href=" {{ path('app_pieces_inventory',{edition : true}) }}">Activer mode
+        édition</a>
     {% endif %}
+</div>
 
-    <!--    Début du tableau des pièces / formulaire   -->
-    {% if edition %}
-        <form method="post" action="{{path('app_pieces_inventory_form_submitted') }}">
-    {% endif %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id (à enlever ?)</th>
-                <th>Nom</th>
-                <th>Fournisseur</th>
-                <th>Quantité</th>
-                <th {{edition ? '' : 'hidden'}}>Nouvelle quantité</th>
-                <th>Seuil d'alerte</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+<!--    Début du tableau des pièces / formulaire   -->
+<div class="row mt-4 mb-5">
+    <div class="col-11 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                {% if edition %}
+                <form method="post" action="{{path('app_pieces_inventory_form_submitted') }}">
+                    {% endif %}
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Fournisseur</th>
+                                <th>Quantité</th>
+                                <th {{edition ? '' : 'hidden' }}>Nouvelle quantité</th>
+                                <th>Seuil d'alerte</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
 
-        <tbody>
+                        <tbody>
 
-        <!--    Affichage en top des pièces avec alerte de stock    -->
-        {% for piece in alertePieces %}
-            {% include "pieces/_rows.html.twig" with { alerte: true } %}
-        {% endfor %}
+                            <!--    Affichage en top des pièces avec alerte de stock    -->
+                            {% for piece in alertePieces %}
+                            {% include "pieces/_rows.html.twig" with { alerte: true } %}
+                            {% endfor %}
 
-        <!--    Affichage des autres pièces    -->
-        {% for piece in normalPieces %}
-            {% include "pieces/_rows.html.twig" with { alerte: false} %}
-        {% endfor %}
-        <t/body>
-    </table>
-    {% if edition %}
-        <button type="submit">Enregistrer</button>
-        </form>
-    {% endif %}
+                            <!--    Affichage des autres pièces    -->
+                            {% for piece in normalPieces %}
+                            {% include "pieces/_rows.html.twig" with { alerte: false} %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if edition %}
+                    <button class="btn btn-primary m-2 mt-3" type="submit">Enregistrer</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_pieces_new') }}">Nouvelle pièce</a>
 {% endblock %}
