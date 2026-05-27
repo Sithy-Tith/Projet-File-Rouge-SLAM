@@ -27,7 +27,10 @@
 
 {% block table_columns_custom %}
 {{ parent() }}
-<td> {{ intervention.duration }} heures</td>
+{% set start = intervention.startAt|date('U') %}
+{% set end = intervention.endAt|date('U') %}
+
+<td>{{ ((end - start) // 3600) }}h {{((end-start)/60)%60}} </td>
 <td> {{ intervention.fkClient.getFullName }} </td>
 {% endblock %}
 
