@@ -1,68 +1,75 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Clients index
+Liste des clients
 {% endblock %}
 
 {% block body %}
-	<h1>Clients index</h1>
+<div class="m-3">
+    <h1>Liste des clients</h1>
+</div>
 
-	<form action="{{path('app_clients_index')}}" method="get">
-		<div class="row col-3 mt-5">
-			<div class="input-group">
-				<input
-				type="text" class="form-control" name="search" placeholder="{{ term|default('Rechercher un client ...') }}">
-				{#Affiche le text recherché ou un message par défaut sinon#}
-				<button class="btn btn-primary" type="submit">Rechercher</button>
-			</div>
-		</div>
-	</form>
+<div>
+    <form action="{{path('app_clients_index')}}" method="get">
+        <div class="row col-4 m-2">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search"
+                    placeholder="{{ term|default('Rechercher un client ...') }}">
+                {#Affiche le text recherché ou un message par défaut sinon#}
+                <button class="btn btn-primary" type="submit">Rechercher</button>
+                {% if isSearch %}
+                <a href="{{path('app_clients_index')}}" class="btn btn-secondary">
+                    Réinitialiser</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
 
-	{% if isSearch %}
-		<a href="{{path('app_clients_index')}}" class="btn btn-secondary my-3">
-			Retour à la liste</a>
-	{% endif %}
+<a href="{{ path('app_clients_new') }}" class="btn  btn-primary m-2 mx-3">Ajouter un nouveau client</a>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Email</th>
-				<th>Roles</th>
-				<th>Password</th>
-				<th>LastName</th>
-				<th>FirstName</th>
-				<th>Phone</th>
-				<th>Address</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for client in clients %}
-				<tr>
-					<td>{{ client.id }}</td>
-					<td>{{ client.email }}</td>
-					<td>{{ client.roles ? client.roles|json_encode : '' }}</td>
-					<td>{{ client.password }}</td>
-					<td>{{ client.lastName }}</td>
-					<td>{{ client.firstName }}</td>
-					<td>{{ client.phone }}</td>
-					<td>{{ client.address }}</td>
-					<td>
-						<a href="{{ path('app_clients_show', {'id': client.id}) }}">show</a>
-						<a href="{{ path('app_clients_edit', {'id': client.id}) }}">edit</a>
-						{% if is_granted("ROLE_ADMIN")%}
-							<a href="{{ path('app_client_dashboard', { '_switch_user': client.email }) }}">switch</a>
-						{% endif %}
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="9">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<a href="{{ path('app_clients_new') }}" class="btn btn-primary mt-2">Create new</a>
+{# Bootsrap à améliorer #}
+<div class="row">
+    <div class="col-11 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>NOM Prénom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Adresse</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.getFullName() }}</td>
+                            <td>{{ client.email }}</td>
+                            <td>{{ client.phone }}</td>
+                            <td>{{ client.address }}</td>
+                            <td>
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_clients_show', {'id': client.id}) }}">Détails</a>
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_clients_edit', {'id': client.id}) }}">Éditer</a>
+                                {% if is_granted("ROLE_ADMIN")%}
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_client_dashboard', { '_switch_user': client.email }) }}">Switch</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>Aucun Client trouvé</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

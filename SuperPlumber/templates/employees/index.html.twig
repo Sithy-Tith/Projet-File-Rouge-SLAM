@@ -13,8 +13,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" name="search"
                     placeholder="{{ term|default('Rechercher un employé ...') }}"> {#Affiche le text recherché ou un
-                message
-                par défaut sinon#}
+                message par défaut sinon#}
                 <button class="btn btn-primary" type="submit">Rechercher</button>
                 {% if isSearch %}
                 <a href="{{path('app_employees_index')}}" class="btn btn-secondary">Réinitialiser</a>

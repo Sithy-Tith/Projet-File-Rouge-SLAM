@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Clients{% endblock %}
+{% block title %}Ajouter un client{% endblock %}
 
 {% block body %}
-<h1>Create new Clients</h1>
+<div class="m-3">
+    <h1>Ajouter un client</h1>
+</div>
 
-{{ include('clients/_form.html.twig') }}
-
-<a href="{{ path('app_clients_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
+<div class="container-fluid">
+    <div class="card col-8 mx-3">
+        <div class="m-3">
+            {{ include('clients/_form.html.twig') }}
+            <a href="{{ path('app_clients_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

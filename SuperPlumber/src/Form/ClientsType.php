@@ -14,20 +14,50 @@ class ClientsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
+            ->add('lastName', null, [
+                'label' => 'Nom *',
+                'attr' => [
+                    'placeholder' => 'Dupont'
+                ]
+            ])
+            ->add('firstName', null, [
+                'label' => 'Prénom *',
+                'attr' => [
+                    'placeholder' => 'Jean'
+                ]
+            ])
+            ->add('email', null, [
+                'label' => 'Adresse email *',
+                'attr' => [
+                    'placeholder' => 'jean.dupont@exemple.com'
+                ]
+            ])
+            ->add('phone', null, [
+                'label' => 'Téléphone',
+                'attr' => [
+                    'placeholder' => '06xxxxxxxx'
+                ]
+            ])
+            ->add('address', null, [
+                'required' => false,
+                'label' => "Adresse ",
+                'attr' => [
+                    'placeholder' => 'Votre adresse...',
+                ]
+            ])
             #->add('roles') A GARDER
             ->add('password', PasswordType::class, [
                 'mapped'   => false,
                 'required' => $options['is_new'],
+                'label' => "Mot de passe",
+                'attr' => [
+                    'placeholder' => $options['is_new'] ? 'Créer un mot de passe' : 'Nouveau mot de passe',
+                ]
             ])
-            ->add('origin',HiddenType::class, [
+            ->add('origin', HiddenType::class, [
                 'mapped' => false,
                 'data' => $options['origin'], //Ajoute l'origine du formulaire, s'il vient de Interventions/new notamment
             ])
-            #->add('phone')
-            #->add('address')
         ;
     }
 
