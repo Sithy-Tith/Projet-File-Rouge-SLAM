@@ -111,11 +111,16 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $intervention = new Interventions();
-            $intervention->setDate($faker->dateTime);
+            $intervention->setStartAt(
+                $faker->dateTimeBetween('first day of this month', 'last day of this month')
+            );
+            // Fin de l'intervention quelques heures après le début
+            $start = $intervention->getStartAt();
+            $duration = mt_rand(1, 8);
+            $intervention->setEndAt((clone $start)->modify("+{$duration} hours"));
             $intervention->setDescription($faker->text);
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
-            $intervention->setDuration(mt_rand(1, 7));
             $intervention->setFkClient($faker->randomElement($clientsList));
 
             // assigner un employé seulement si l'intervention n'est pas à planifier
@@ -135,12 +140,14 @@ class AppFixtures extends Fixture
             $usedPiece->setIsConsumable($faker->boolean());
             $usedPiece->setFkPiece($faker->randomElement($piecesList));
             $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
-            $usedPiece->setQuantity(mt_rand(1,3));
+            $usedPiece->setQuantity(mt_rand(1, 3));
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
-            $availability->setAvailability(mt_rand(0, 7));
-            $availability->setDate($faker->dateTimeThisYear());
+            $start = $faker->dateTimeBetween('first day of this month', 'last day of this month');
+            $end = (clone $start)->modify('+2 hours');
+            $availability->setStart($start);
+            $availability->setEnd($end);
             $availability->setFkEmployee($faker->randomElement($employeesList));
 
 
