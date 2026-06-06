@@ -1,53 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Interventions
+{% block title %}Intervention
 {% endblock %}
 
 {% block body %}
-<h1>Interventions</h1>
+<div class="m-3">
+    <h1>Détails de l'intervention</h1>
+</div>
 
-<table class="table">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ intervention.id }}</td>
-        </tr>
-        <tr>
-            <th>Type d'intervention</th>
-            <td>{{ intervention.type.value }}</td>
-        </tr>
-        <tr>
-            <th>Date de début</th>
-            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Date de fin</th>
-            <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ intervention.description }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ intervention.status.label()|trans }}</td>
-        </tr>
-        <tr>
-            <th>Duration</th>
-            <td>{{ intervention.duration }}</td>
-        </tr>
-        <tr>
-            <th>Action</th>
-            <td>
-                <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du matériel</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container-fluid">
+    <div class="card shadow-sm col-7">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Type d'intervention</th>
+                    <td>{{ intervention.type.value }}</td>
+                </tr>
+                <tr>
+                    <th>Date de début</th>
+                    <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <th>Date de fin</th>
+                    <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ intervention.description }}</td>
+                </tr>
+                <tr>
+                    <th>Statut</th>
+                    <td>{{ intervention.status.label()|trans }}</td>
+                </tr>
+                <tr>
+                    {% set start = intervention.startAt|date('U') %}
+                    {% set end = intervention.endAt|date('U') %}
+                    <th>Durée estimée</th>
+                    <td>{{ intervention.getDurationFormatted }}</td>
+                </tr>
+                <tr>
+                    <th>Actions</th>
+                    <td>
+                        <a class="btn btn-primary m-1"
+                            href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">ֻÉditer</a>
+                        <a class="btn btn-primary m-1"
+                            href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du
+                            matériel</a>
+                        <a href="{{ path('app_interventions_index') }}" class="btn btn-primary m-2">Retour à la
+                            liste</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {{ include('interventions/_delete_form.html.twig') }}
 
-<a href="{{ path('app_interventions_index') }}">back to list</a>
 
-<a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">edit</a>
-
-{{ include('interventions/_delete_form.html.twig') }}
-{% endblock %}
+        {% endblock %}

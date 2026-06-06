@@ -5,23 +5,22 @@
 
 {% block body %}
 
-    {% if alerte %}
-        <tr class="table-danger">
+{% if alerte %}
+<tr class="table-danger">
     {% else %}
-        <tr class="table-info">
+<tr class="table-info">
     {% endif %}
-        <td>{{ piece.id }}</td>
-        <td>{{ piece.name }}</td>
-        <td>{{ piece.supplier }}</td>
-        <td>{{ piece.quantity }}</td>
-        <td {{edition ? '':'hidden'}}>
-            <input type='number' min='0' name='quantity_{{piece.id}}' value="{{piece.quantity}}" class="qty-input">
-        </td>
-        <td>{{ piece.alertTreshold }}</td>
-        <td>
-            <a href="{{ path('app_pieces_show', {'id': piece.id}) }}">show</a>
-            <a href="{{ path('app_pieces_edit', {'id': piece.id}) }}">edit</a>
-        </td>
-    </tr>
+    <td>{{ piece.name }}</td>
+    <td>{{ piece.supplier }}</td>
+    <td>{{ piece.quantity }}</td>
+    <td {{edition ? '' :'hidden'}}>
+        <input type='number' min='0' name='quantity_{{piece.id}}' value="{{piece.quantity}}" class="qty-input">
+    </td>
+    <td>{{ piece.alertTreshold }}</td>
+    <td>
+        <a href="{{ path('app_pieces_show', {'id': piece.id}) }}">Détails</a>
+        <a href="{{ path('app_pieces_edit', {'id': piece.id}) }}">Éditer</a>
+    </td>
+</tr>
 
 {% endblock %}

@@ -1,28 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Interventions{% endblock %}
+{% block title %}Ajouter une intervention{% endblock %}
 
 {% block body %}
 <div id="form-intervention">
-    <h1>Créer une nouovelle intervention</h1>
-    {{ form_start(formIntervention) }}
-    {{ form_widget(formIntervention) }}
-    <button type="submit" class="btn btn-primary m-3">{{ button_label|default('Enregistrer') }}</button>
-    {{ form_end(formIntervention) }}
-    <a href="{{ path('app_interventions_index') }}" class="btn btn-secondary mx-3">Retour à la liste</a>
+
+    <div class="m-3">
+        <h1>Ajouter un employé</h1>
+    </div>
+    <div class="container-fluid">
+        <div class="card col-8 mx-3">
+            <div class="m-3">
+                {{ form_start(formIntervention) }}
+                {{ form_widget(formIntervention) }}
+                <button type="submit" class="btn btn-primary m-1">{{ button_label|default('Enregistrer') }}</button>
+                <a href="{{ path('app_interventions_index') }}" class="btn btn-secondary m-1">Retour à la liste</a>
+                {{ form_end(formIntervention) }}
+            </div>
+            <div class="mx-2">
+
+            </div>
+        </div>
+    </div>
 </div>
+
 <div id="form-client" style="display: none;">
-    <h1>Créer un nouveau client</h1>
-    {{ form_start(formClient, {
-        action: path('app_clients_new'),
-        method: 'POST'
-    }) }}
-    {{ form_widget(formClient) }}
-    <button type="submit" class="btn btn-primary m-3">{{ button_label|default('Enregistrer') }}</button>
-    {{ form_end(formClient) }}
-    <a href="{{ path('app_interventions_new') }} " class="btn btn-secondary m-3">Retour à la création d'une intervention</a>
+
+    <div class="m-3">
+        <h1>Créer un nouveau client</h1>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card col-8 mx-3">
+            <div class="m-3">
+                {{ form_start(formClient, {
+                action: path('app_clients_new'),
+                method: 'POST'
+                }) }}
+                {{ form_widget(formClient) }}
+                <button type="submit" class="btn btn-primary m-1">{{ button_label|default('Enregistrer') }}</button>
+                <a href="{{ path('app_interventions_new') }} " class="btn btn-danger m-1">Annuler</a>
+                {{ form_end(formClient) }}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+
 
 {% block javascripts %}
 <script>
@@ -51,28 +75,28 @@
         });
     });
 
-     // N'affiche pas les champs 'Date' et 'Employé' si le statut est à 'TO_PLAN' ou Null
-     document.addEventListener('DOMContentLoaded', function () {
-    const status = document.querySelector('#interventions_status');
-    const dateField = document.querySelector('#interventions_date').parentElement;
-    const employeField = document.querySelector('#interventions_fkEmployee').parentElement;
+    // N'affiche pas les champs 'Date' et 'Employé' si le statut est à 'TO_PLAN' ou Null
+    document.addEventListener('DOMContentLoaded', function () {
+        const status = document.querySelector('#interventions_status');
+        const dateField = document.querySelector('#interventions_date').parentElement;
+        const employeField = document.querySelector('#interventions_fkEmployee').parentElement;
 
-    function toggleFields() {
-        if (status.value === 'to_plan' || status.value === '') {
-            dateField.style.display = 'none';
-            employeField.style.display = 'none';
-        } else {
-            dateField.style.display = '';
-            employeField.style.display = '';
+        function toggleFields() {
+            if (status.value === 'to_plan' || status.value === '') {
+                dateField.style.display = 'none';
+                employeField.style.display = 'none';
+            } else {
+                dateField.style.display = '';
+                employeField.style.display = '';
+            }
         }
-    }
 
-    // Exécuter au chargement
-    toggleFields();
+        // Exécuter au chargement
+        toggleFields();
 
-    // Exécuter quand on change le statut
-    status.addEventListener('change', toggleFields);
-});
+        // Exécuter quand on change le statut
+        status.addEventListener('change', toggleFields);
+    });
 
 </script>
 {% endblock javascripts %}

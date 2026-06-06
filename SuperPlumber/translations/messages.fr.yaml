@@ -2,8 +2,11 @@
 # Il va associer des clés d'un texte à afficher (par exemple status.to_plan) à une traduction
 
 status:
-    to_plan: "À planifier"
-    planned: "Planifié"
-    ongoing: "En cours"
-    finished: "Terminé"
-    canceled: "Annulé"
+  to_plan: "À planifier"
+  planned: "Planifié"
+  ongoing: "En cours"
+  finished: "Terminé"
+  canceled: "Annulé"
+position:
+  Administrator: "Administrateur"
+  Plumber: "Plombier"

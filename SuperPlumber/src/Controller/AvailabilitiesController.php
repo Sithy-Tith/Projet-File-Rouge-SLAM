@@ -146,7 +146,7 @@ final class AvailabilitiesController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        if ($this->isCsrfTokenValid('delete'.$availability->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $availability->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($availability);
             $entityManager->flush();
         }

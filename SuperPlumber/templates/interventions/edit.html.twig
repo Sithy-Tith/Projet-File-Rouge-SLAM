@@ -1,13 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Interventions{% endblock %}
+{% block title %}Éditer l'intervention{% endblock %}
 
 {% block body %}
-    <h1>Edit Interventions</h1>
+<div class="m-3">
+    <h1>Éditer l'intervention</h1>
+</div>
 
-    {{ include('interventions/_form.html.twig', {'button_label': 'Update'}) }}
+<div class="container-fluid">
+    <div class="card col-8 mx-3">
+        <div class="m-3">
+            {{ include('interventions/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+        </div>
+        <div class="mx-2">
+            <a href="{{ path('app_interventions_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
+            {{ include('interventions/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_interventions_index') }}">back to list</a>
-
-    {{ include('interventions/_delete_form.html.twig') }}
 {% endblock %}

@@ -1,34 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Clients
+{% block title %}Détails client
 {% endblock %}
 
 {% block body %}
-	<h1>Clients</h1>
+<div class="m-3">
+    <h1>{{ client.getFullName() }}</h1>
+</div>
 
-	<table class="table table-striped mt-5">
-		<thead class="table-dark">
-			<tr>
-				<th>NOM</th>
-				<th>Prénom</th>
-				<th>Téléphone</th>
-				<th>Email</th>
-				<th>Adresse</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{{client.lastName | upper }}</td>
-				<td>{{client.firstName | title}}</td>
-				<td>{{client.phone}}</td>
-				<td>{{client.email}}</td>
-				<td>{{client.address}}</td>
-			</tr>
-		</tbody>
-	</table>
-	{% if is_granted("ROLE_ADMIN")%}
-		<a href="{{ path('app_clients_index') }}">back to list</a>
-		<a href="{{ path('app_clients_edit', {'id': client.id}) }}">edit</a>
-		{{ include('clients/_delete_form.html.twig') }}
-	{% endif %}
+<div class="container-fluid">
+    <div class="card shadow-sm col-7">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>NOM Prénom</th>
+                    <td>{{ client.getFullName() }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ client.email }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ client.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Adresse</th>
+                    <td>{{ client.address }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class=" m-2">
+                <a class="btn btn-primary" href="{{ path('app_clients_index') }}">Retour à la liste</a>
+                <a class="btn btn-primary" href="{{ path('app_clients_edit', {'id': client.id}) }}">Éditer</a>
+                {{ include('clients/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

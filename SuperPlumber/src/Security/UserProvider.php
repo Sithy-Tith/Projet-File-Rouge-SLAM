@@ -3,8 +3,6 @@
 namespace App\Security;
 
 use App\Entity\Clients;
-use App\Entity\Employees;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -14,8 +12,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
-    public function __construct(private EntityManagerInterface $em) {}
-
     /**
      * Symfony calls this method if you use features like switch_user
      * or remember_me.
@@ -27,18 +23,11 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
      */
     public function loadUserByIdentifier($identifier): UserInterface
     {
-        // Cherche d'abord dans Clients, puis dans Employees
-        $user = $this->em->getRepository(Clients::class)->findOneBy(['email' => $identifier]);
-        
-        if (!$user) {
-            $user = $this->em->getRepository(Employees::class)->findOneBy(['email' => $identifier]);
-        }
-
-        if (!$user) {
-            throw new UserNotFoundException(sprintf('User with email "%s" not found.', $identifier));
-        }
-
-        return $user;
+        // Load a User object from your data source or throw UserNotFoundException.
+        // The $identifier argument may not actually be a username:
+        // it is whatever value is being returned by the getUserIdentifier()
+        // method in your User class.
+        throw new \Exception('TODO: fill in loadUserByIdentifier() inside ' . __FILE__);
     }
 
     /**
@@ -62,19 +51,13 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
      */
     public function refreshUser(UserInterface $user): UserInterface
     {
-        if ($user instanceof Clients) {
-            $refreshedUser = $this->em->getRepository(Clients::class)->find($user->getId());
-        } elseif ($user instanceof Employees) {
-            $refreshedUser = $this->em->getRepository(Employees::class)->find($user->getId());
-        } else {
+        if (!$user instanceof Clients) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
         }
 
-        if (!$refreshedUser) {
-            throw new UserNotFoundException(sprintf('User with id "%s" not found.', $user->getId()));
-        }
-
-        return $refreshedUser;
+        // Return a User object after making sure its data is "fresh".
+        // Or throw a UsernameNotFoundException if the user no longer exists.
+        throw new \Exception('TODO: fill in refreshUser() inside ' . __FILE__);
     }
 
     /**
@@ -82,8 +65,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
      */
     public function supportsClass(string $class): bool
     {
-        return $class === Clients::class || $class === Employees::class || 
-               is_subclass_of($class, Clients::class) || is_subclass_of($class, Employees::class);
+        return Clients::class === $class || is_subclass_of($class, Clients::class);
     }
 
     /**
@@ -91,12 +73,8 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof Clients && !$user instanceof Employees) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
-        }
-
-        $user->setPassword($newHashedPassword);
-        $this->em->persist($user);
-        $this->em->flush();
+        // TODO: when hashed passwords are in use, this method should:
+        // 1. persist the new password in the user storage
+        // 2. update the $user object with $user->setPassword($newHashedPassword);
     }
 }

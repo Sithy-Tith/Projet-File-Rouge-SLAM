@@ -1,38 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pieces{% endblock %}
+{% block title %}Inventaire{% endblock %}
 
 {% block body %}
-    <h1>Pieces</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ piece.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ piece.name }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
-                <td>{{ piece.quantity }}</td>
-            </tr>
-            <tr>
-                <th>AlertTreshold</th>
-                <td>{{ piece.alertTreshold }}</td>
-            </tr>
-            <tr>
-                <th>Supplier</th>
-                <td>{{ piece.supplier }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="m-3">
+    <h1>Inventaire : {{piece.name }}</h1>
+</div>
 
-    <a href="{{ path('app_pieces_index') }}">back to list</a>
+<div class="container-fluid">
+    <div class="card shadow-sm col-7">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ piece.name }}</td>
+                </tr>
+                <tr>
+                    <th>Quantité</th>
+                    <td>{{ piece.quantity }}</td>
+                </tr>
+                <tr>
+                    <th>Seuil d'alerte</th>
+                    <td>{{ piece.alertTreshold }}</td>
+                </tr>
+                <tr>
+                    <th>Fournissseur</th>
+                    <td>{{ piece.supplier }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_pieces_edit', {'id': piece.id}) }}">edit</a>
+        <div class="row">
+            <div class=" m-2">
+                <a href="{{ path('app_pieces_index') }}" class="btn btn-primary">Retour à la liste</a>
+                <a class="btn btn-primary" href="{{ path('app_pieces_edit',  {'id': piece.id}) }}">Éditer</a>
+                {{ include('pieces/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
 
-    {{ include('pieces/_delete_form.html.twig') }}
 {% endblock %}
