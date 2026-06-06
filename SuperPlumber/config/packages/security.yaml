@@ -47,7 +47,7 @@ security:
         ROLE_ADMIN: [ROLE_EMPLOYEE, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
-        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: PUBLIC_ACCESS }
         - { path: ^/availabilities, roles: ROLE_ADMIN }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
