@@ -1,21 +1,31 @@
 <?php
-
 namespace App\Controller;
 
+use App\Security\LoginSuccessHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
+    public function __construct(
+        private LoginSuccessHandler $loginSuccessHandler,
+        private TokenStorageInterface $tokenStorage
+    ) {}
 
-        // last username entered by the user
+    #[Route(path: '/login', name: 'app_login')]
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    {
+        // Si déjà connecté, rediriger vers le bon dashboard selon le rôle (avec le LoginSuccessHandler)
+        if ($this->getUser()) {
+            $token = $this->tokenStorage->getToken();
+            return $this->loginSuccessHandler->onAuthenticationSuccess($request, $token);
+        }
+
+        $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('login/login.html.twig', [

@@ -39,6 +39,9 @@ security:
                 # target: app_any_route
                 # where to redirect after logout
                 # target: app_any_route
+            remember_me: #pour la mémorisation du compte au login
+                secret: '%kernel.secret%'
+                lifetime: 604800
 
     role_hierarchy:
         ROLE_CLIENT: ROLE_USER

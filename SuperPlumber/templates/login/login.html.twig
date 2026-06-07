@@ -1,51 +1,80 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Connexion{% endblock %}
-
 {% block body %}
 
-<div class="col-3 mx-auto">
-    <form method="post">
-        {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+  <div style="width: 360px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.06);">
 
-        {% if app.user %}
-        <div class="mb-3">
-            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Se
-                déconnecter</a>
+    <div style="padding: 32px 28px;">
+
+      <p style="font-size: 18px; font-weight: 500; color: #111; margin: 0 0 20px;">Connexion</p>
+
+      {% if error %}
+        <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
+          {{ error.messageKey|trans(error.messageData, 'security') }}
         </div>
-        {% endif %}
+      {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">
-            Se connecter
-        </h1>
-
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"
-            autocomplete="email" placeholder="admin@test.com" required autofocus>
-
-        <label for="password">Mot de passe </label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password"
-            required placeholder="admin123">
-
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-            value="{{ csrf_token('authenticate') }}">
-
-        {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <input type="checkbox" name="_remember_me" id="_remember_me">
-            <label for="_remember_me">Remember me</label>
+      {% if app.user %}
+        <div class="alert alert-info" style="font-size: 13px; border-radius: 8px;">
+          Connecté en tant que {{ app.user.userIdentifier }},
+          <a href="{{ logout_path() }}">Se déconnecter</a>
         </div>
-        #}
+      {% endif %}
 
-        <button class="btn btn-lg btn-primary mt-4" type="submit">
-            Connexion
+      <form method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div style="margin-bottom: 14px;">
+          <label for="username" style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Email</label>
+          <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+            <input type="email" value="{{ last_username }}" name="_username" id="username"
+              autocomplete="email" placeholder="admin@test.com" required autofocus
+              style="border: none; background: transparent; flex: 1; font-size: 13px; color: #111; outline: none;">
+            <i class="ti ti-mail" style="font-size: 15px; color: #aaa;"></i>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label for="password" style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Mot de passe</label>
+          <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+            <input type="password" name="_password" id="password"
+              autocomplete="current-password" required placeholder="••••••••"
+              style="border: none; background: transparent; flex: 1; font-size: 13px; color: #111; outline: none;">
+            <i class="ti ti-eye" style="font-size: 15px; color: #aaa; cursor: pointer;" onclick="togglePassword()"></i>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+          <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+            <input type="checkbox" name="_remember_me" style="accent-color: #E8610A;">
+            <span style="font-size: 12px; color: #888;">Se souvenir de moi</span>
+          </label>
+          <a href="#" style="font-size: 12px; color: #E8610A; text-decoration: none;">Mot de passe oublié ?</a>
+        </div>
+
+        <button type="submit"
+          style="width: 100%; background: #E8610A; color: white; border: none; border-radius: 8px; padding: 10px 0; font-size: 13px; font-weight: 500; cursor: pointer;">
+          Se connecter &nbsp;<i class="ti ti-arrow-right"></i>
         </button>
-    </form>
+
+      </form>
+    </div>
+
+    <div style="border-top: 1px solid #f0f0f0; padding: 14px 28px; background: #fafafa;">
+      <p style="font-size: 11px; color: #aaa; margin: 0; text-align: center;">
+        SuperPlumber &copy; {{ "now"|date("Y") }} — Gestion d'interventions plomberie
+      </p>
+    </div>
+
+  </div>
 </div>
+
+<script>
+function togglePassword() {
+  const input = document.getElementById('password');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
 
 {% endblock %}
