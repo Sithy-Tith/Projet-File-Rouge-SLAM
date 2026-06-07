@@ -22,6 +22,8 @@
                             <th>Date de début</th>
                             <th>Date de fin</th>
                             <th>Description</th>
+                            <th>Plombier</th>
+                            <th>Client</th>
                             <th>Statut</th>
                             <th>Durée</th>
                             <th>Actions</th>
@@ -34,7 +36,33 @@
                             <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
                             <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
                             <td>{{ intervention.description }}</td>
-                            <td>{{ intervention.status.label()|trans }}</td>
+                            <td>
+                                {% if intervention.fkEmployee %}
+                                {{ intervention.fkEmployee.fullName }}
+                                {% else %}
+                                <span class="badge bg-warning text-dark">Non assigné</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if intervention.fkClient %}
+                                {{ intervention.fkClient.fullName }}
+                                {% else %}
+                                <span class="badge bg-secondary">Inconnu</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if intervention.status.value == 'to_plan' %}
+                                <span class="badge bg-warning text-dark">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'planned' %}
+                                <span class="badge bg-primary">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'ongoing' %}
+                                <span class="badge bg-info text-dark">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'finished' %}
+                                <span class="badge bg-success">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'canceled' %}
+                                <span class="badge bg-danger">{{ intervention.status.label()|trans }}</span>
+                                {% endif %}
+                            </td>
                             <td>{{ intervention.durationFormatted }}</td>
                             <td>{{ intervention.duration }}</td>
                             <td>
