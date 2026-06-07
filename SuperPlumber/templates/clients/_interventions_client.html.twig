@@ -29,7 +29,13 @@
 {% block table_columns_custom %}
 {{ parent() }}
 <td> {{ intervention.duration }} heures</td>
-<td> {{ intervention.fkEmployee.getFullName }} </td>
+<td>
+    {% if intervention.fkEmployee %}
+        {{ intervention.fkEmployee.fullName }}
+    {% else %}
+        <span class="badge bg-warning text-dark">Non assigné</span>
+    {% endif %}
+</td>
 {% endblock %}
 
 {% block table_columns_after %}
