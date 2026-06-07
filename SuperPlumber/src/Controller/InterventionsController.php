@@ -99,7 +99,6 @@ final class InterventionsController extends AbstractController
 
         return $this->redirectToRoute('app_interventions_index', [], Response::HTTP_SEE_OTHER);
     }
-
     #[Route('/{id}/assign', name: 'app_interventions_assign', methods: ['GET'])]
     public function assign(
         Interventions $intervention,
@@ -108,7 +107,7 @@ final class InterventionsController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $date = $request->query->get('date') ?? ($intervention->getStartAt()?->format('Y-m-d')); //si l'admin n'a pas saisi de date, on récup la date de début souhaitée par le client pour préremplissage sur la page d'attribution
+        $date = $request->query->get('date') ?? ($intervention->getStartAt()?->format('Y-m-d'));
         $duration = $request->query->get('duration');
         $availablePlumbers = [];
 

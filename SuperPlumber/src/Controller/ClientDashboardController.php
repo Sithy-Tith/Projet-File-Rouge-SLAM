@@ -10,16 +10,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AvailabilitiesRepository;
 
 #[Route('/client')]
 final class ClientDashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_client_dashboard', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, AvailabilitiesRepository $availRepo): Response
     {
         if ($request->isMethod('POST')) {
             $titre = $request->request->get('titre_intervention');
             $description = $request->request->get('description');
+            $dateChoisie = $request->request->get('date_souhaitee'); //date choisie par le client
 
             if (!empty($titre)) {
                 // Mapping des valeurs du formulaire aux valeurs de l'enum Type
@@ -36,8 +38,10 @@ final class ClientDashboardController extends AbstractController
 
                 $intervention->setStatus(Status::TO_PLAN);
                 $intervention->setfkClient($this->getUser());
-                $intervention->setStartAt(new \DateTime());
-
+                // Si le client a choisi une date, on la stocke comme startAt
+                if ($dateChoisie) {
+                    $intervention->setStartAt(new \DateTime($dateChoisie));
+                }
                 // sauvegarde doctrine
                 $em->persist($intervention);
                 $em->flush();
@@ -53,8 +57,15 @@ final class ClientDashboardController extends AbstractController
             ['startAt' => 'ASC']
         );
 
+        // Récupérer les dates distinctes des disponibilités futures
+        $availabilities = $availRepo->findBy(
+            [],
+            ['start' => 'ASC']
+        );
+
         return $this->render('clients/dashboard.html.twig', [
-            'interventions' => $mesInterventions
+            'interventions' => $mesInterventions,
+            'availabilities' => $availabilities,
         ]);
     }
 

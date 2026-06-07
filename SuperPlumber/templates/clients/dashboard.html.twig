@@ -49,6 +49,28 @@ sur le compte
                     <label for="desc" class="form-label">Description</label>
                     <textarea name="description" id="desc" class="form-control"></textarea>
                 </div>
+                <div class="mb-3">
+                    <label for="date_souhaitee" class="form-label">Date souhaitée</label>
+                    {% if availabilities is not empty %}
+                    <select name="date_souhaitee" id="date_souhaitee" class="form-select">
+                        <option value="">Pas de préférence</option>
+                        {% set datesAffichees = [] %}
+                        {% for availability in availabilities %}
+                        {% set dateStr = availability.start|date('Y-m-d') %}
+                        {% if dateStr not in datesAffichees %}
+                        {% set datesAffichees = datesAffichees|merge([dateStr]) %}
+                        <option value="{{ dateStr }}">
+                            {{ availability.start|date('d/m/Y') }}
+                            — {{ availability.fkEmployee.fullName }}
+                            ({{ availability.start|date('H:i') }} → {{ availability.end|date('H:i') }})
+                        </option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <p class="text-muted">Aucune disponibilité pour le moment.</p>
+                    {% endif %}
+                </div>
                 <p></p>
                 <button type="submit" class="btn btn-primary">Envoyer</button>
             </form>
