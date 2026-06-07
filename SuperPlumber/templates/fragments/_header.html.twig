@@ -137,10 +137,10 @@
 
             <!-- Bouton 'Retour admin'-->
             {% if is_granted("IS_IMPERSONATOR") %}
-            <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
+                <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
                 class="nav-link">
                 <img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2" alt="Retour admin">
-                {% endif %}
-
+                </a>
+            {% endif %}
     </div>
 </nav>
