@@ -24,7 +24,7 @@ class Availabilities
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $end = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Availabilities')]
+    #[ORM\ManyToOne(inversedBy: 'availabilities')]
     private ?Employees $fkEmployee = null;
 
     #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkAvailability')]

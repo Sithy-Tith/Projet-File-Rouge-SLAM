@@ -36,7 +36,7 @@ final class ClientDashboardController extends AbstractController
 
                 $intervention->setStatus(Status::TO_PLAN);
                 $intervention->setfkClient($this->getUser());
-                $intervention->setDate(new \DateTime());
+                $intervention->setStartAt(new \DateTime());
 
                 // sauvegarde doctrine
                 $em->persist($intervention);

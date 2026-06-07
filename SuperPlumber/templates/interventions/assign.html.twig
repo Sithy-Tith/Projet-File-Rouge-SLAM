@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% block title %}Attribuer une intervention{% endblock %}
+{% block body %}
+
+<div class="container mt-4">
+    <h1>Attribuer l'intervention</h1>
+    <p class="text-muted">
+        {{ intervention.type.value }} pour <strong>{{ intervention.fkClient.fullName }}</strong>
+    </p>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Rechercher un plombier disponible</h5>
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Date souhaitée</label>
+                    <input type="date" name="date" class="form-control"
+                           value="{{ date ?? '' }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Durée estimée (minutes)</label>
+                    <input type="number" name="duration" class="form-control"
+                           value="{{ duration ?? '' }}"
+                           placeholder="Ex: 120 pour 2h" required>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Rechercher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if availablePlumbers is not empty %}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Plombiers disponibles</h5>
+                <form method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('assign' ~ intervention.id) }}">
+                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="duration" value="{{ duration }}">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Plombier</th>
+                                <th>Disponible de</th>
+                                <th>À</th>
+                                <th>Intervention prévue</th>
+                                <th>Choisir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for availability in availablePlumbers %}
+                                <tr>
+                                    <td>{{ availability.fkEmployee.fullName }}</td>
+                                    <td>{{ availability.start|date('H:i') }}</td>
+                                    <td>{{ availability.end|date('H:i') }}</td>
+                                    <td>
+                                        {{ availability.start|date('H:i') }}
+                                        → {{ availability.start|date_modify('+' ~ duration ~ ' minutes')|date('H:i') }}
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="availability_id"
+                                                value="{{ availability.id }}"
+                                                class="btn btn-sm btn-success">
+                                            Attribuer
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+    {% elseif date and duration %}
+        <div class="alert alert-warning mt-3">
+            Aucun plombier disponible pour ce créneau.
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_interventions_index') }}" class="btn btn-secondary mt-3">
+        Retour
+    </a>
+</div>
+
+{% endblock %}

@@ -51,20 +51,17 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if intervention.status.value == 'to_plan' %}
-                                <span class="badge bg-warning text-dark">{{ intervention.status.label()|trans }}</span>
-                                {% elseif intervention.status.value == 'planned' %}
-                                <span class="badge bg-primary">{{ intervention.status.label()|trans }}</span>
-                                {% elseif intervention.status.value == 'ongoing' %}
-                                <span class="badge bg-info text-dark">{{ intervention.status.label()|trans }}</span>
-                                {% elseif intervention.status.value == 'finished' %}
-                                <span class="badge bg-success">{{ intervention.status.label()|trans }}</span>
-                                {% elseif intervention.status.value == 'canceled' %}
-                                <span class="badge bg-danger">{{ intervention.status.label()|trans }}</span>
-                                {% endif %}
+                                {% set statusColors = {
+                                'to_plan': 'bg-warning text-dark',
+                                'planned': 'bg-primary',
+                                'ongoing': 'bg-info text-dark',
+                                'finished': 'bg-success',
+                                'canceled': 'bg-danger'
+                                } %}
+                                <span class="badge {{ statusColors[intervention.status.value] ?? 'bg-secondary' }}">
+                                    {{ intervention.status.label()|trans }}
+                                </span>
                             </td>
-                            <td>{{ intervention.durationFormatted }}</td>
-                            <td>{{ intervention.duration }}</td>
                             <td>
                                 <a class="btn btn-primary m-1"
                                     href="{{ path('app_interventions_show', {'id': intervention.id}) }}">Détails</a>
@@ -73,6 +70,10 @@
                                 <a class="btn btn-primary m-1"
                                     href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du
                                     matériel</a>
+                                {% if intervention.status.value == 'to_plan' %}
+                                <a class="btn btn-success m-1"
+                                    href="{{ path('app_interventions_assign', {'id': intervention.id}) }}">Attribuer</a>
+                                {% endif %}
                             </td>
                         </tr>
                         {% else %}
