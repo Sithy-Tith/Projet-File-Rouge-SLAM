@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #444;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #444;
+            border-left: 4px solid #444;
+            padding-left: 8px;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .value {
+            margin-left: 4px;
+        }
+
+        .block {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Intervention n°{{ intervention.id }}</h1>
+
+    <h3>Informations</h3>
+
+    <div class="section">
+        <div class="block">
+            <span class="label">Client :</span>
+            <span class="value">{{ client?.getFullName ?? 'non spécifié' }}</span>
+        </div>
+
+        <div class="block">
+            <span class="label">Plombier :</span>
+            <span class="value">{{ plumber_name ?? 'non spécifié' }}</span>
+        </div>
+
+        {% if client.address %}
+        <div class="block">
+            <span class="label">Adresse :</span>
+            <span class="value">{{ client.address }}</span>
+        </div>
+        {% endif %}
+
+        {% if client.phone %}
+        <div class="block">
+            <span class="label">Téléphone du client :</span>
+            <span class="value">{{ client.phone }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <h3>Détails</h3>
+
+    <div class="section">
+        <div class="block">
+            <span class="label">Statut de l'intervention :</span>
+            <span class="value">{{ intervention.status.label()|trans }}</span>
+        </div>
+
+        <div class="block">
+            <span class="label">Type d'intervention :</span>
+            <span class="value">{{ intervention.type.value }}</span>
+        </div>
+
+        {% if intervention.description %}
+        <div class="block">
+            <span class="label">Description :</span>
+            <span class="value">{{ intervention.description }}</span>
+        </div>
+        {% endif %}
+
+        {% if intervention.startAt %}
+        <div class="block">
+            <span class="label">Date de l'intervention :</span>
+            <span class="value">{{ intervention.startAt|date('Y-m-d \\à H\\hi') }}</span>
+        </div>
+
+        {% if intervention.endAt %}
+        <div class="block">
+            <span class="label">Durée {{ intervention.status.value == 'finished' ? ':' : 'estimée :' }}</span>
+            <span class="value">{{ intervention.getDurationFormatted }}</span>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="block">
+            <span class="label">Date de l'intervention :</span>
+            <span class="value">à planifier</span>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
