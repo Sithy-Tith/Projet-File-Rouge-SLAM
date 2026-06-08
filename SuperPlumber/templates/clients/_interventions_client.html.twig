@@ -13,7 +13,7 @@
 
 {% block table_headers_custom %}
 {{ parent() }}
-<th>Durée estimée</th>
+<th style=" width: 90px">Durée</th>
 <th>Plombier</th>
 {% endblock %}
 
@@ -28,12 +28,12 @@
 
 {% block table_columns_custom %}
 {{ parent() }}
-<td> {{ intervention.duration }} heures</td>
+<td> {{ intervention.getDurationFormatted }}</td>
 <td>
     {% if intervention.fkEmployee %}
-        {{ intervention.fkEmployee.fullName }}
+    {{ intervention.fkEmployee.fullName }}
     {% else %}
-        <span class="badge bg-warning text-dark">Non assigné</span>
+    <span class="badge bg-warning text-dark">Non assigné</span>
     {% endif %}
 </td>
 {% endblock %}
