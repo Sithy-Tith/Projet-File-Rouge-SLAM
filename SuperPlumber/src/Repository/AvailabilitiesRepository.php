@@ -42,7 +42,7 @@ class AvailabilitiesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findAvailablePlumbers(\DateTime $date, int $durationMinutes): array
+    public function findAvailablePlumbers(\DateTime $date, int $durationMinutes): array //Fonction pour filtrer les plombiers dispos
     {
         $dateStart = (clone $date)->setTime(0, 0);
         $dateEnd = (clone $date)->setTime(23, 59);
