@@ -56,6 +56,7 @@ security:
         - { path: ^/interventions, roles: ROLE_ADMIN }
         - { path: ^/employees, roles: ROLE_ADMIN }
         - { path: ^/pieces, roles: ROLE_ADMIN }
+        - { path: ^/public, roles: [ROLE_ADMIN, ROLE_PLUMBER, ROLE_CLIENT] }
         - { path: ^/usedpieces, roles: [ROLE_PLUMBER, ROLE_ADMIN] } # usedpieces à faire à part de interventions
 
 when@test:
