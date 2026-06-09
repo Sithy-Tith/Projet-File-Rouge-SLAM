@@ -8,6 +8,8 @@ use App\Form\ClientsType;
 use App\Form\InterventionsType;
 use App\Repository\ClientsRepository;
 use App\Repository\InterventionsRepository;
+use App\Repository\AvailabilitiesRepository;
+use App\Enum\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,5 +98,66 @@ final class InterventionsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_interventions_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/{id}/assign', name: 'app_interventions_assign', methods: ['GET'])] //Fonction assign pour l'admin afin d'assigner un plombier sur une intervention
+    public function assign(
+        Interventions $intervention,
+        Request $request,
+        AvailabilitiesRepository $availRepo
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $date = $request->query->get('date') ?? ($intervention->getStartAt()?->format('Y-m-d')); //Si date déjà rentré par le client, préremplir sinon date rentrée par l'admin
+        $duration = $request->query->get('duration');
+        $availablePlumbers = [];
+
+        if ($date && $duration) {
+            $availablePlumbers = $availRepo->findAvailablePlumbers(
+                new \DateTime($date),
+                (int) $duration
+            );
+        }
+
+        return $this->render('interventions/assign.html.twig', [
+            'intervention' => $intervention,
+            'availablePlumbers' => $availablePlumbers,
+            'date' => $date,
+            'duration' => $duration,
+        ]);
+    }
+
+    #[Route('/{id}/assign', name: 'app_interventions_assign_confirm', methods: ['POST'])]
+    public function assignConfirm(
+        Interventions $intervention,
+        Request $request,
+        EntityManagerInterface $em,
+        AvailabilitiesRepository $availRepo
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if (!$this->isCsrfTokenValid('assign' . $intervention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $availabilityId = $request->request->get('availability_id');
+        $duration = (int) $request->request->get('duration');
+        $availability = $availRepo->find($availabilityId);
+
+        $startAt = clone $availability->getStart();
+        $endAt = (clone $startAt)->modify("+{$duration} minutes");
+
+        $intervention->setFkEmployee($availability->getFkEmployee());
+        $intervention->setFkAvailability($availability);
+        $intervention->setStartAt($startAt);
+        $intervention->setEndAt($endAt);
+        $intervention->setStatus(Status::PLANNED);
+
+        // Ajuster la dispo - enlever le créneau de l'intervention
+        $availability->setStart($endAt);
+
+        $em->flush();
+
+        $this->addFlash('success', 'Intervention attribuée avec succès.');
+        return $this->redirectToRoute('app_interventions_index');
     }
 }

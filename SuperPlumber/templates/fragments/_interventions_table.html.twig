@@ -32,8 +32,21 @@ pour les clients, plombiers et admins #}
                         {% for intervention in interventions %}
                         <tr>
                             {% block table_columns_common %}
-                            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'À planifier' }}</td>
-                            <td> {{ intervention.status.label()|trans }} </td>
+                            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'À planifier' }}
+                            </td>
+                            <td>
+                                {% if intervention.status.value == 'to_plan' %}
+                                <span class="badge bg-warning text-dark">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'planned' %}
+                                <span class="badge bg-primary">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'ongoing' %}
+                                <span class="badge bg-info text-dark">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'finished' %}
+                                <span class="badge bg-success">{{ intervention.status.label()|trans }}</span>
+                                {% elseif intervention.status.value == 'canceled' %}
+                                <span class="badge bg-danger">{{ intervention.status.label()|trans }}</span>
+                                {% endif %}
+                            </td>
                             <td> {{ intervention.type.value }} </td>
                             <td> {{ intervention.description }} </td>
                             {% endblock %}

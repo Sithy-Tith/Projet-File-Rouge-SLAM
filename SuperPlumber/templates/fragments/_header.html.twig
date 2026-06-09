@@ -130,17 +130,19 @@
             {% endif %}
 
             <!-- Bouton 'Se déconnecter'-->
+            {% if app.user %}
             <a href="/logout" class="nav-link">
                 <img src="{{asset('icons/box-arrow-right.svg')}}" title="Se déconnecter" class="d-inline-block mx-2"
                     alt="Déconnexion">
             </a>
+            {% endif %}
 
             <!-- Bouton 'Retour admin'-->
             {% if is_granted("IS_IMPERSONATOR") %}
-                <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
+            <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
                 class="nav-link">
                 <img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2" alt="Retour admin">
-                </a>
+            </a>
             {% endif %}
     </div>
 </nav>

@@ -45,6 +45,9 @@ class Interventions
     #[ORM\OneToMany(targetEntity: UsedPieces::class, mappedBy: 'fkIntervention', orphanRemoval: true)]
     private Collection $usedPieces;
 
+    #[ORM\ManyToOne(inversedBy: 'interventions')]
+    private ?Availabilities $fkAvailability = null;
+
     public function __construct()
     {
         $this->usedPieces = new ArrayCollection();
@@ -193,5 +196,16 @@ class Interventions
         $m = $minutes % 60;
 
         return "{$h}h {$m}min";
+    }
+
+    public function getFkAvailability(): ?Availabilities
+    {
+        return $this->fkAvailability;
+    }
+
+    public function setFkAvailability(?Availabilities $fkAvailability): static
+    {
+        $this->fkAvailability = $fkAvailability;
+        return $this;
     }
 }

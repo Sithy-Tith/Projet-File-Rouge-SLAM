@@ -7,6 +7,8 @@ use App\Entity\Employees;
 use App\Repository\AvailabilitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: AvailabilitiesRepository::class)]
 class Availabilities
@@ -22,9 +24,16 @@ class Availabilities
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $end = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Availabilities')]
+    #[ORM\ManyToOne(inversedBy: 'availabilities')]
     private ?Employees $fkEmployee = null;
 
+    #[ORM\OneToMany(targetEntity: Interventions::class, mappedBy: 'fkAvailability')]
+    private Collection $interventions;
+
+    public function __construct()
+    {
+        $this->interventions = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -64,5 +73,10 @@ class Availabilities
         $this->fkEmployee = $fkEmployee;
 
         return $this;
+    }
+
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
     }
 }

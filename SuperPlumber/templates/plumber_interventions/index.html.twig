@@ -12,7 +12,7 @@
 
 {% block table_headers_custom %}
 {{ parent() }}
-<th>Durée estimée</th>
+<th style="width:80px">Durée</th>
 <th>Client</th>
 {% endblock %}
 
@@ -27,11 +27,14 @@
 
 {% block table_columns_custom %}
 {{ parent() }}
-{% set start = intervention.startAt|date('U') %}
-{% set end = intervention.endAt|date('U') %}
-
-<td>{{ ((end - start) // 3600) }}h {{((end-start)/60)%60}} </td>
-<td> {{ intervention.fkClient.getFullName }} </td>
+<td>{{ intervention.getDurationFormatted ?? 'N/A' }} </td>
+<td>
+    {% if intervention.fkClient %}
+    {{ intervention.fkClient.fullName }}
+    {% else %}
+    <span class="badge bg-secondary">Inconnu</span>
+    {% endif %}
+</td>
 {% endblock %}
 
 {% block table_columns_after %}

@@ -136,15 +136,26 @@
                 const btnDelete = document.getElementById('btnDelete');
 
                 const availabilitiesEvents = [
-                    {% for availability in availabilities %}
+                        {% for availability in availabilities %}
                         {
                             id: '{{ availability.id }}',
                             title: '{{ availability.fkEmployee ? availability.fkEmployee.fullName|e('js') : 'Disponibilité' }}',
                             start: '{{ availability.start ? availability.start|date('c') : '' }}',
                             end: '{{ availability.end ? availability.end|date('c') : '' }}',
                             deleteToken: '{{ csrf_token('delete' ~ availability.id) }}',
+                            color: '#0d6efd', //Dispo en bleu dans planning
                         },
-                    {% endfor %}
+                        {% for intervention in availability.interventions %}
+                        {
+                            id: 'intervention-{{ intervention.id }}',
+                            title: '{{ intervention.type.value }} - {{ intervention.fkClient.fullName|e('js') }}',
+                            start: '{{ intervention.startAt ? intervention.startAt|date('c') : '' }}',
+                            end: '{{ intervention.endAt ? intervention.endAt|date('c') : '' }}',
+                            color: '#E8610A', //Intervention en orange dans planning
+                            editable: false,
+                        },
+                        {% endfor %}
+                        {% endfor %}
                 ];
 
                 // Map pour accéder aux tokens par ID
@@ -185,6 +196,9 @@
                         }
                     },
                     eventClick: (info) => {
+                        if (info.event.id.startsWith('intervention-')) { // permet de distinguer les deux types d'event (intervention) et (availability) pour ne pas cliquer sur le mauvais
+                            return;
+                            }
                         currentAvailabilityId = info.event.id;
                         modal.show();
                     }

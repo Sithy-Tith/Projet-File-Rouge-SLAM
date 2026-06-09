@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Availabilities;
+use App\Enum\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,29 @@ class AvailabilitiesRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findAvailablePlumbers(\DateTime $date, int $durationMinutes): array //Fonction pour filtrer les plombiers dispos
+    {
+        $dateStart = (clone $date)->setTime(0, 0);
+        $dateEnd = (clone $date)->setTime(23, 59);
+
+        $all = $this->createQueryBuilder('a')
+            ->leftJoin('a.fkEmployee', 'e')
+            ->addSelect('e')
+            ->where('a.start >= :dateStart')
+            ->andWhere('a.end <= :dateEnd')
+            ->andWhere('e.position = :position')
+            ->setParameter('dateStart', $dateStart)
+            ->setParameter('dateEnd', $dateEnd)
+            ->setParameter('position', Position::PLUMBER->value)
+            ->orderBy('a.start', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+            //Filtre pour trouver les plombiers qui ont assez de temps disponibles
+        return array_values(array_filter($all, function (Availabilities $a) use ($durationMinutes) {
+            $diff = ($a->getEnd()->getTimestamp() - $a->getStart()->getTimestamp()) / 60;
+            return $diff >= $durationMinutes;
+        }));
+    }
 }

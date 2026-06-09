@@ -1,66 +1,138 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-<h1>Tableau de bord</h1>
 
-<p>Bienvenue,
-    <strong>{{ app.user.firstName }}</strong>
-    !
-</p>
-{% if is_granted("IS_IMPERSONATOR")%}
-Vous êtes connecté en tant qu'<strong>admin</strong>
-sur le compte
-<strong>{{ app.user.userIdentifier }}</strong>
-{% else %}
-{% if app.user %}
-<div class="mb-3">
-    Vous êtes connecté en tant que :
-    <strong>{{ app.user.userIdentifier }}</strong>,
-    <p></p>
-    <p></p>
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-        <a href="{{ logout_path() }}">Logout</a>
-    </button>
-    {% if is_granted("IS_IMPERSONATOR")%}
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-        <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}">return to admin</a>
-    </button>
+<div class="container mt-4">
+
+    <!-- En-tête de bienvenue -->
+    <h1>Tableau de bord</h1>
+    <p>Bienvenue, <strong>{{ app.user.firstName }}</strong> !</p>
+
+    <!-- impersonation admin -->
+    {% if is_granted("IS_IMPERSONATOR") %}
+    <div class="alert alert-warning">
+        Connecté en tant qu'<strong>admin</strong> sur le compte <strong>{{ app.user.userIdentifier }}</strong>
+    </div>
+    {% else %}
+    {% if app.user %}
+    <div class="mb-3">
+        Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+    </div>
     {% endif %}
-</div>
-{% endif %}
-{% endif %}
+    {% endif %}
 
-<div class="card m-2">
-    <div class="card m-4">
-        <div class="card-body">
-            <h3 class="card-title">Nouvelle demande manuelle</h3>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="titre" class="form-label">Type d'intervention</label>
-                    <select name="titre_intervention" id="titre" class="form-select" required>
-                        <option value="" selected disabled>Choisissez un type...</option>
-                        <option value="fuite">Fuite d'eau</option>
-                        <option value="debouchage">Débouchage canalisation</option>
-                        <option value="chauffe_eau">Réparation Chauffe-eau</option>
-                        <option value="installation">Installation robinetterie</option>
-                    </select>
+    <!-- Messages flash -->
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="row g-4">
+
+        <!-- Colonne gauche : formulaire de demande + disponibilités -->
+        <div class="col-md-7">
+
+            <!-- Formulaire de nouvelle demande d'intervention -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Nouvelle demande d'intervention</h5>
+                    <form method="POST">
+
+
+                        <div class="mb-3">
+                            <label for="titre" class="form-label">Type d'intervention</label>
+                            <select name="titre_intervention" id="titre" class="form-select" required>
+                                <option value="" selected disabled>Choisissez un type...</option>
+                                <option value="fuite">Fuite d'eau</option>
+                                <option value="debouchage">Débouchage canalisation</option>
+                                <option value="chauffe_eau">Réparation Chauffe-eau</option>
+                                <option value="installation">Installation robinetterie</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="desc" class="form-label">Description</label>
+                            <textarea name="description" id="desc" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date_souhaitee" class="form-label">Date souhaitée</label>
+                            {% if availabilities is not empty %}
+                            <select name="date_souhaitee" id="date_souhaitee" class="form-select">
+                                <option value="">Pas de préférence</option>
+                                {% set datesAffichees = [] %}
+                                {% for availability in availabilities %}
+                                {% set dateStr = availability.start|date('Y-m-d') %}
+                                {% if dateStr not in datesAffichees %}
+                                {% set datesAffichees = datesAffichees|merge([dateStr]) %}
+                                <option value="{{ dateStr }}">
+                                    {{ availability.start|date('d/m/Y') }}
+                                    ({{ availability.start|date('H:i') }} → {{ availability.end|date('H:i') }})
+                                </option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <p class="text-muted">Aucune disponibilité pour le moment.</p>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="desc" class="form-label">Description</label>
-                    <textarea name="description" id="desc" class="form-control"></textarea>
+            </div>
+
+            <!-- Carte des disponibilités des plombiers -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Disponibilité des plombiers</h5>
+                    {% if availabilities is not empty %}
+                    {% set plombiersVus = [] %}
+                    {% for availability in availabilities %}
+                    {% if availability.fkEmployee.fullName not in plombiersVus %}
+                    {% set plombiersVus = plombiersVus|merge([availability.fkEmployee.fullName]) %}
+                    <div class="mb-3">
+
+                        <p class="fw-bold mb-2">{{ availability.fkEmployee.fullName }}</p>
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            {% for avail in availabilities %}
+                            {% if avail.fkEmployee.fullName == availability.fkEmployee.fullName %}
+                            <span class="badge bg-light text-dark border">
+                                {{ avail.start|date('D d/m') }}
+                                {{ avail.start|date('H:i') }}→{{ avail.end|date('H:i') }}
+                            </span>
+                            {% endif %}
+                            {% endfor %}
+                            <span class="badge bg-success rounded-pill px-3">Dispo</span>
+                        </div>
+                    </div>
+                    {% if not loop.last %}
+                    <hr>{% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-muted">Aucune disponibilité pour le moment.</p>
+                    {% endif %}
                 </div>
-                <p></p>
-                <button type="submit" class="btn btn-primary">Envoyer</button>
-            </form>
-        </div>
-    </div>
+            </div>
 
-    <!-- Liste des interventions en cours -->
-    <div class="card m-4">
-        <div class="card-body">
-            {% include "clients/_interventions_client.html.twig" %}
         </div>
-    </div>
 
+        <!-- Colonne droite : lien vers les interventions -->
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Mes interventions</h5>
+                    <p class="text-muted">Consultez le suivi de vos demandes d'intervention.</p>
+                    <a href="{{ path('app_client_interventions') }}" class="btn btn-primary">
+                        Voir mes interventions
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
 {% endblock body %}
