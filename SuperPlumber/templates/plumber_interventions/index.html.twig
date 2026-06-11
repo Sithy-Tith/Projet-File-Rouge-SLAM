@@ -1,57 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}>Mes interventions{% endblock %}
+{% block title %}
+    Mes interventions
+{% endblock %}
 
 {% block body %}
 
-{% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
+    {% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
 
-{% block table_headers_common %}
-{{ parent() }}
-{% endblock %}
+        {% block table_headers_common %}
+            {{ parent() }}
+        {% endblock %}
 
-{% block table_headers_custom %}
-{{ parent() }}
-<th style="width:80px">Durée</th>
-<th>Client</th>
-{% endblock %}
+        {% block table_headers_custom %}
+            {{ parent() }}
+            <th style="width:80px">Durée</th>
+            <th>Client</th>
+        {% endblock %}
 
-{% block table_headers_after %}
-{{ parent() }}
-{% endblock %}
+        {% block table_headers_after %}
+            {{ parent() }}
+        {% endblock %}
 
 
-{% block table_columns_common %}
-{{ parent() }}
-{% endblock %}
+        {% block table_columns_common %}
+            {{ parent() }}
+        {% endblock %}
 
-{% block table_columns_custom %}
-{{ parent() }}
-<td>{{ intervention.getDurationFormatted ?? 'N/A' }} </td>
-<td>
-    {% if intervention.fkClient %}
-    {{ intervention.fkClient.fullName }}
-    {% else %}
-    <span class="badge bg-secondary">Inconnu</span>
-    {% endif %}
-</td>
-{% endblock %}
+        {% block table_columns_custom %}
+            {{ parent() }}
+            <td>{{ intervention.getDurationFormatted ?? 'N/A' }} </td>
+            <td>
+                {% if intervention.fkClient %}
+                    {{ intervention.fkClient.fullName }}
+                {% else %}
+                    <span class="badge bg-secondary">Inconnu</span>
+                {% endif %}
+            </td>
+        {% endblock %}
 
-{% block table_columns_after %}
-{{ parent() }}
-<td>
-    {# Avoir les bons paths avec les bons droits avant de décommenter pour ajouter ces actions :
-    <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
-    <a href="{{ path('app_interventions_edit', {'id': intervention.id}) }}" class="btn btn-info m-1">Mettre à jour</a>
-    #}
-    <div class="card">
-        <p>Voir plumber_interventions/index.html pour plus d'actions</p>
-    </div>
-    <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}" class="btn btn-info m-1">Utiliser du
-        matériel</a>
-</td>
-{% endblock %}
-{% endembed %}
+        {% block table_columns_after %}
+            {{ parent() }}
+            <td>
+                <a href="{{ path('app_plumber_intervention_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
+                <a href="{{ path('app_plumber_intervention_edit', {'id': intervention.id}) }}" class="btn btn-info m-1">Mettre à jour</a>
+                <a href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}" class="btn btn-info m-1">Utiliser du
+                matériel</a>
+            </td>
+        {% endblock %}
+    {% endembed %}
 
 
 {% endblock %}
