@@ -80,6 +80,7 @@ final class InterventionsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Intervention modifiée');
             return $this->redirectToRoute('app_interventions_index', [], Response::HTTP_SEE_OTHER);
         }
 
