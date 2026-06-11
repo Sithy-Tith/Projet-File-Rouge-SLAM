@@ -1,62 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Intervention
+{% block title %}
+    Intervention
 {% endblock %}
 
 {% block body %}
-<div class="m-3">
-    <h1>Détails de l'intervention</h1>
-</div>
 
-<div class="container-fluid">
-    <div class="card shadow-sm col-7">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Type d'intervention</th>
-                    <td>{{ intervention.type.value }}</td>
-                </tr>
-                <tr>
-                    <th>Date de début</th>
-                    <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <th>Date de fin</th>
-                    <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ intervention.description }}</td>
-                </tr>
-                <tr>
-                    <th>Statut</th>
-                    <td>{{ intervention.status.label()|trans }}</td>
-                </tr>
-                <tr>
-                    {% set start = intervention.startAt|date('U') %}
-                    {% set end = intervention.endAt|date('U') %}
-                    <th>Durée estimée</th>
-                    <td>{{ intervention.getDurationFormatted }}</td>
-                </tr>
-                <tr>
-                    <th>Actions</th>
-                    <td>
-                        <a class="btn btn-primary m-1"
-                            href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">ֻÉditer</a>
+
+    {% embed "/fragments/_intervention_show.html.twig" with { intervention: intervention } %}
+
+        {% block common %}
+            {{parent()}}
+        {% endblock %}
+
+        {% block custom_lines %}
+            {{ parent() }}
+            <tr>
+                <th>Actions</th>
+                <td>
+                    <a class="btn btn-primary m-1"
+                        href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">Éditer</a>
                         <a class="btn btn-primary m-1"
                             href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">Utiliser du
                             matériel</a>
-                        <a href="{{ path('app_interventions_index') }}" class="btn btn-primary m-2">Retour à la
+                            <a href="{{ path('app_interventions_index') }}" class="btn btn-primary m-2">Retour à la
                             liste</a>
-                        <a href="{{ path('app_public_generatePDF', { id: intervention.id }) }}" target="_blank"
-                            class="btn btn-primary">
-                            <i class="bi bi-download"></i> PDF
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        {{ include('interventions/_delete_form.html.twig') }}
+                            <a href="{{ path('app_public_generatePDF', { id: intervention.id }) }}" target="_blank"
+                                class="btn btn-primary">
+                                <i class="bi bi-download"></i> PDF
+                            </a>
+                        </td>
+                    </tr>
+                {% endblock %}
+            {% endembed %}
 
+            {{ include('interventions/_delete_form.html.twig') }}
 
         {% endblock %}
