@@ -20,8 +20,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user = $token->getUser();
 
         if ($user instanceof Employees) {
-            return match($user->getPosition()) {
-                Position::ADMINISTRATOR => new RedirectResponse($this->router->generate('app_employees_index')),
+            return match ($user->getPosition()) {
+                Position::ADMINISTRATOR => new RedirectResponse($this->router->generate('app_admin_dashboard')),
                 Position::PLUMBER       => new RedirectResponse($this->router->generate('app_plumber_dashboard')),
                 default                 => new RedirectResponse($this->router->generate('app_login')),
             };
