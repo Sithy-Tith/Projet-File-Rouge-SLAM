@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Éditer l'intervention
+{% endblock %}
+
+{% block body %}
+    <div class="m-3">
+        <h1>Éditer l'intervention</h1>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card col-8 mx-3">
+            <div class="m-3">
+                {{ include('plumber_interventions/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+            </div>
+            <div class="mx-2">
+                <a href="{{ path('app_plumber_intervention_show', {'id': intervention.id}) }}" class="btn btn-secondary m-2">Annuler</a>
+                <a href="{{ path('app_plumber_interventions') }}" class="btn btn-primary m-2">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
