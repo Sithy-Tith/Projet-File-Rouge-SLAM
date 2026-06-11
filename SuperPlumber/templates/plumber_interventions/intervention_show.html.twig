@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Intervention
+{% endblock %}
+
+{% block body %}
+
+
+    {% embed "/fragments/_intervention_show.html.twig" with { intervention: intervention } %}
+
+        {% block common %}
+            {{parent()}}
+        {% endblock %}
+
+        {% block custom_lines %}
+            {{ parent() }}
+            <tr>
+                <th>Actions</th>
+                <td>
+                    <a class="btn btn-primary m-1"
+                        href="{{ path('app_plumber_intervention_edit', {'id': intervention.id}) }}">
+                        Éditer
+                    </a>
+                    <a class="btn btn-primary m-1"
+                        href="{{ path('app_used_pieces_use_piece', {'id': intervention.id}) }}">
+                        Utiliser du matériel
+                    </a>
+                    <a class="btn btn-primary m-2"
+                        href="{{ path('app_plumber_interventions') }}">
+                        Retour à la liste
+                    </a>
+                    <a class="btn btn-primary"
+                        href="{{ path('app_public_generatePDF', { id: intervention.id }) }}" target="_blank">
+                        <i class="bi bi-download"></i> PDF
+                    </a>
+                </td>
+            </tr>
+        {% endblock %}
+    {% endembed %}
+
+{% endblock %}
