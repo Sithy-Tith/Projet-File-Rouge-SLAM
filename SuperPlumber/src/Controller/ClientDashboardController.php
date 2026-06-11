@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AvailabilitiesRepository;
+use App\Repository\InterventionsRepository;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[Route('/client')]
 final class ClientDashboardController extends AbstractController
@@ -74,11 +76,41 @@ final class ClientDashboardController extends AbstractController
     {
         $mesInterventions = $em->getRepository(Interventions::class)->findBy(
             ['fkClient' => $this->getUser()],
-            ['startAt' => 'DESC']
+            ['startAt' => 'ASC']
         );
 
         return $this->render('clients/interventions_list.html.twig', [
             'interventions' => $mesInterventions
         ]);
+    }
+
+
+    #[Route('/interventions/{id}', name: 'app_client_intervention_show', methods: ['GET'])]
+    public function show_intervention(Interventions $intervention): Response
+    {
+        if ($this->getUser() === $intervention->getFkClient()) {
+            return $this->render('clients/intervention_show.html.twig', [
+                'intervention' => $intervention,
+            ]);
+        }
+
+        throw new AccessDeniedHttpException('Accès refusé');
+    }
+
+    // Permet au client d'annuler une intervention prévue
+    #[Route('/interventions/{id}/cancel', name: 'app_client_intervention_cancel', methods: ['GET'])]
+    public function cancel_intervention(Interventions $intervention, EntityManagerInterface $em): Response
+    {
+        if ($this->getUser() === $intervention->getFkClient()) {
+            $intervention->setStatus(Status::CANCELED);
+            $em->persist($intervention);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre intervention a été annulée');
+
+            return $this->redirectToRoute('app_client_intervention_show', ['id' => $intervention->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        throw new AccessDeniedHttpException('Accès refusé');
     }
 }
