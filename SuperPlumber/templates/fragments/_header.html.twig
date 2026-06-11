@@ -22,6 +22,11 @@
                         Accueil
                     </a>
                     {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{path('app_admin_dashboard')}}" class="nav-link">
+                        Accueil
+                    </a>
+                    {% endif %}
                     {#}
                     {% if is_granted('ROLE_EMPLOYEE') %}
                     <a href="{{path('app_employee_dashboard')}}" class="nav-link">
@@ -31,11 +36,6 @@
                     {#}
                     {% if is_granted('ROLE_PLUMBER') %}
                     <a href="{{path('app_plumber_dashboard')}}" class="nav-link">
-                        Accueil
-                    </a>
-                    {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{path('app_employees_index')}}" class="nav-link">
                         Accueil
                     </a>
                     {% endif %}
