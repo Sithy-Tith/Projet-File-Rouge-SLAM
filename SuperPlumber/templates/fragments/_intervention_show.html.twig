@@ -1,0 +1,60 @@
+{# Squelette du détail d'une intervention, utilisé et customisé
+pour les clients, plombiers et admins #}
+
+
+<div class="m-3">
+    <h1>Détails de l'intervention</h1>
+</div>
+
+<!-- Messages flash -->
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+<div class="container-fluid">
+    <div class="card shadow-sm col-7">
+        <table class="table">
+            <tbody>
+                {% block common %}
+                    <tr>
+                        <th>Type d'intervention</th>
+                        <td>{{ intervention.type.value }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de début</th>
+                        <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de fin</th>
+                        <td>{{ intervention.endAt ? intervention.endAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ intervention.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Statut</th>
+                        <td>{{ intervention.status.label()|trans }}</td>
+                    </tr>
+                    <tr>
+                        {% set start = intervention.startAt|date('U') %}
+                        {% set end = intervention.endAt|date('U') %}
+                        <th>Durée estimée</th>
+                        <td>{{ intervention.getDurationFormatted }}</td>
+                    </tr>
+                {% endblock %}
+                {% block custom_lines %}
+                    {#  Action customs. Ex:
+                    <tr>
+                    <th>Actions</th>
+                    <td><a href="...
+                    #}
+                {% endblock %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Intervention
+{% endblock %}
+
+{% block body %}
+
+
+    {% embed "/fragments/_intervention_show.html.twig" with { intervention: intervention } %}
+
+        {% block common %}
+            {{parent()}}
+        {% endblock %}
+
+        {% block custom_lines %}
+            {{ parent() }}
+            <tr>
+                <th>Actions</th>
+                <td>
+                    {% if intervention.status?.value !== 'canceled' %}
+                        <a class="btn btn-danger m-1" href="{{ path('app_client_intervention_cancel', {'id': intervention.id}) }}"
+                            onclick="return confirm('Confirmer l\'annulation de l\'intervention ?')">
+                        Annuler</a>
+                    {% endif %}
+
+                    <a href="{{ path('app_client_interventions') }}" class="btn btn-primary m-2">
+                    Retour à la liste</a>
+
+                    <a href="{{ path('app_public_generatePDF', { id: intervention.id }) }}" target="_blank" class="btn btn-primary">
+                        <i class="bi bi-download"></i> PDF</a>
+                    </td>
+                </tr>
+            {% endblock %}
+        {% endembed %}
+
+    {% endblock %}

@@ -2,56 +2,53 @@
 
 {% block body %}
 
-<strong>
-    <h3>Liste des interventions</h3>
-</strong>
+    <strong>
+        <h3>Liste des interventions</h3>
+    </strong>
 
-{% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
-{% block table_headers_common %}
-{{ parent() }}
-{% endblock %}
+    {% embed "/fragments/_interventions_table.html.twig" with { interventions: interventions } %}
+        {% block table_headers_common %}
+            {{ parent() }}
+        {% endblock %}
 
-{% block table_headers_custom %}
-{{ parent() }}
-<th style=" width: 90px">Durée</th>
-<th>Plombier</th>
-{% endblock %}
+        {% block table_headers_custom %}
+            {{ parent() }}
+            <th style=" width: 90px">Durée</th>
+            <th>Plombier</th>
+        {% endblock %}
 
-{% block table_headers_after %}
-{{ parent() }}
-{% endblock %}
+        {% block table_headers_after %}
+            {{ parent() }}
+        {% endblock %}
 
 
-{% block table_columns_common %}
-{{ parent() }}
-{% endblock %}
+        {% block table_columns_common %}
+            {{ parent() }}
+        {% endblock %}
 
-{% block table_columns_custom %}
-{{ parent() }}
-<td> {{ intervention.getDurationFormatted }}</td>
-<td>
-    {% if intervention.fkEmployee %}
-    {{ intervention.fkEmployee.fullName }}
-    {% else %}
-    <span class="badge bg-warning text-dark">Non assigné</span>
-    {% endif %}
-</td>
-{% endblock %}
+        {% block table_columns_custom %}
+            {{ parent() }}
+            <td> {{ intervention.getDurationFormatted }}</td>
+            <td>
+                {% if intervention.fkEmployee %}
+                    {{ intervention.fkEmployee.fullName }}
+                {% else %}
+                    <span class="badge bg-warning text-dark">Non assigné</span>
+                {% endif %}
+            </td>
+        {% endblock %}
 
-{% block table_columns_after %}
-{{ parent() }}
-<td>
-    {# Avoir les bons paths avec les bons droits avant de décommenter pour ajouter ces actions :
-    <a href="{{ path('app_interventions_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
-    <a href="{{ path('app_interventions_cancel', {'id': intervention.id}) }}" class="btn btn-info m-1">Annuler</a>
-    #}
-    <div class="card">
-        <p>[NOTES] Voir _interventions_client/index.html pour plus d'actions</p>
-        <p>Actions pertinentes : 'Annuler' et 'Détails'</p>
-        <p>Créer view + path valide pour ces actions</p>
-    </div>
-</td>
-{% endblock %}
-{% endembed %}
+        {% block table_columns_after %}
+            {{ parent() }}
+            <td>
+                <a href="{{ path('app_client_intervention_show', {'id': intervention.id}) }}" class="btn btn-info m-1">Détails</a>
+                {% if intervention.status?.value !== 'canceled' %}
+                    <a class="btn btn-danger" href="{{ path('app_client_intervention_cancel', {'id': intervention.id}) }}"
+                        onclick="return confirm('Confirmer l\'annulation de l\'intervention ?')">
+                    Annuler</a>
+                {% endif %}
+            </td>
+        {% endblock %}
+    {% endembed %}
 
 {% endblock body %}
