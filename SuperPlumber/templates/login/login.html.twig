@@ -3,43 +3,49 @@
 {% block body %}
 
 <div style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
-  <div style="width: 360px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.06);">
+  <div
+    style="width: 360px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.06);">
 
     <div style="padding: 32px 28px;">
 
       <p style="font-size: 18px; font-weight: 500; color: #111; margin: 0 0 20px;">Connexion</p>
 
       {% if error %}
-        <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
-          {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
+      <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+      </div>
       {% endif %}
 
       {% if app.user %}
-        <div class="alert alert-info" style="font-size: 13px; border-radius: 8px;">
-          Connecté en tant que {{ app.user.userIdentifier }},
-          <a href="{{ logout_path() }}">Se déconnecter</a>
-        </div>
+      <div class="alert alert-info" style="font-size: 13px; border-radius: 8px;">
+        Connecté en tant que {{ app.user.userIdentifier }},
+        <a href="{{ logout_path() }}">Se déconnecter</a>
+      </div>
       {% endif %}
 
       <form method="post">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <div style="margin-bottom: 14px;">
-          <label for="username" style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Email</label>
-          <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
-            <input type="email" value="{{ last_username }}" name="_username" id="username"
-              autocomplete="email" placeholder="admin@test.com" required autofocus
+          <label for="username"
+            style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Email</label>
+          <div
+            style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+            <input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email"
+              placeholder="admin@test.com" required autofocus
               style="border: none; background: transparent; flex: 1; font-size: 13px; color: #111; outline: none;">
             <i class="ti ti-mail" style="font-size: 15px; color: #aaa;"></i>
           </div>
         </div>
 
         <div style="margin-bottom: 20px;">
-          <label for="password" style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Mot de passe</label>
-          <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
-            <input type="password" name="_password" id="password"
-              autocomplete="current-password" required placeholder="••••••••"
+          <label for="password"
+            style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Mot de
+            passe</label>
+          <div
+            style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+            <input type="password" name="_password" id="password" autocomplete="current-password" required
+              placeholder="••••••••"
               style="border: none; background: transparent; flex: 1; font-size: 13px; color: #111; outline: none;">
             <i class="ti ti-eye" style="font-size: 15px; color: #aaa; cursor: pointer;" onclick="togglePassword()"></i>
           </div>
@@ -58,6 +64,12 @@
           Se connecter &nbsp;<i class="ti ti-arrow-right"></i>
         </button>
 
+        <!-- Lien vers inscription -->
+        <p style="text-align: center; font-size: 12px; color: #888; margin-top: 16px;">
+          Pas encore de compte ? <a href="{{ path('app_register') }}"
+            style="color: #E8610A; text-decoration: none;">Créer un compte</a>
+        </p>
+
       </form>
     </div>
 
@@ -71,10 +83,10 @@
 </div>
 
 <script>
-function togglePassword() {
-  const input = document.getElementById('password');
-  input.type = input.type === 'password' ? 'text' : 'password';
-}
+  function togglePassword() {
+    const input = document.getElementById('password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
 </script>
 
 {% endblock %}
