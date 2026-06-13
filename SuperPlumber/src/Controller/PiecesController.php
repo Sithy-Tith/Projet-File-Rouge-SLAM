@@ -69,7 +69,7 @@ final class PiecesController extends AbstractController
     #[Route('/{id}', name: 'app_pieces_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Pieces $piece, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$piece->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $piece->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($piece);
             $entityManager->flush();
         }
@@ -79,27 +79,19 @@ final class PiecesController extends AbstractController
 
 
 
-//  --------   Méthodes personnalisées  ----------------
+    //  --------   Méthodes personnalisées  ----------------
 
-// Affiche l'inventaire de toutes les pièces avec leurs stock
+    // Affiche l'inventaire de toutes les pièces avec leurs stock
 
-#[Route('/inventaire' , name: 'app_pieces_inventory', methods: ['GET'])]
+    #[Route('/inventaire', name: 'app_pieces_inventory', methods: ['GET'])]
     public function inventory(PiecesRepository $piecesRepository, Request $request): Response
     {
         // Vérifie si le paramètre 'edition' a été passé en url
-        $edition=$request->query->getBoolean('edition',false);
+        $edition = $request->query->getBoolean('edition', false);
 
-        $pieces = $piecesRepository->findAll();
-        $alertPieces=[];
-        $normalPieces=[];
-        foreach($pieces as $piece){
-            // Si la pièce possède un stock inférieur à son seuil d'alerte
-            if ($piece->getQuantity()<= $piece->getAlertTreshold()){
-                $alertPieces[]=$piece;
-            }else{
-                $normalPieces[]=$piece;
-            }
-        }
+        $alertPieces = $piecesRepository->getAlertPieces();
+        $normalPieces = $piecesRepository->getNonAlertPieces();
+
         return $this->render('pieces/index.html.twig', [
             'alertePieces' => $alertPieces,
             'normalPieces' => $normalPieces,
@@ -108,22 +100,22 @@ final class PiecesController extends AbstractController
     }
 
     // Récupère le formulaire de mise à jour du stock
-    #[Route(name: 'app_pieces_inventory_form_submitted', methods: ['GET','POST'])]
+    #[Route(name: 'app_pieces_inventory_form_submitted', methods: ['GET', 'POST'])]
     public function inventoryFormSubmitted(
         PiecesRepository $piecesRepository,
-        EntityManagerInterface $entityManager) : Response
-    {
-        $changes=$_POST;
-        foreach($changes as $key=>$value){
-            if($value==''){
+        EntityManagerInterface $entityManager
+    ): Response {
+        $changes = $_POST;
+        foreach ($changes as $key => $value) {
+            if ($value == '') {
                 continue;
             }
             // Chaque Input du form est de type "[attribut]_{idPiece}"
             // On vient récupérer l'attribut et l'id avec explode('_')
-            list($attribut,$idPiece)=explode('_',$key);
+            list($attribut, $idPiece) = explode('_', $key);
             switch ($attribut) {
                 case 'quantity':
-                    $piece=$piecesRepository->findOneBy(['id'=>$idPiece])->setQuantity((int)$value);
+                    $piece = $piecesRepository->findOneBy(['id' => $idPiece])->setQuantity((int)$value);
                     break;
                 default:
                     break;
@@ -134,10 +126,4 @@ final class PiecesController extends AbstractController
 
         return $this->redirectToRoute('app_pieces_inventory');
     }
-
-
-
-
-
-
 }

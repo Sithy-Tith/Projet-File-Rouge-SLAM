@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+    <!-- En-tête de bienvenue -->
+    <h1>Tableau de bord</h1>
+    <p>Bienvenue, <strong>{{ app.user.firstName }}</strong> !</p>
+
+    <!-- Messages flash -->
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="row g-4">
+
+        <!-- Colonne gauche : Liste des demandes d'interventions (to_plan) + disponibilités -->
+        <div class="col-md-6">
+
+            <!-- Liste des iInterventions à planifier -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="fw-bold my-1">Demandes d'interventions</h5>
+                    <p class="text-muted mb-0">Interventions à planifier</p>
+                </div>
+
+                <div class="card-body">
+
+                    {% if interToPlan is empty %}
+                    <div class="alert alert-info mb-0">
+                        Aucune intervention en attente de planification !
+                    </div>
+                    {% else %}
+
+                    {% for intervention in interToPlan %}
+                    <a href="{{ path('app_interventions_assign', {'id': intervention.id}) }}"
+                        class="text-decoration-none text-dark">
+                        <div class="p-3 mb-3 rounded border bg-light">
+                            <div class="row align-item-center">
+
+                                <!-- Date demandée -->
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Date demandée</span>
+                                    <span class="badge bg-white text-dark border fw-semibold">
+                                        {{ intervention.startAt
+                                        ? intervention.startAt|date('D d/m')
+                                        : 'Pas de préférence'
+                                        }}
+                                    </span>
+                                </div>
+
+                                <!-- Client -->
+                                <div class="col-md-4 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Client</span>
+                                    <span class="fw-semibold">
+                                        {{ intervention.fkClient?.getFullName }}
+                                    </span>
+                                </div>
+
+                                <!-- Type d'intervention -->
+                                <div class="col-md-5 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Type d’intervention</span>
+                                    <span class="badge bg-primary">
+                                        {{ intervention.type?.value }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <!-- Carte des disponibilités des plombiers -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Disponibilité des plombiers</h5>
+                    {% if availabilities is not empty %}
+                    {% set plombiersVus = [] %}
+                    {% for availability in availabilities %}
+                    {% if availability.fkEmployee.fullName not in plombiersVus %}
+                    {% set plombiersVus = plombiersVus|merge([availability.fkEmployee.fullName]) %}
+                    <div class="mb-3">
+
+                        <p class="fw-bold mb-2">{{ availability.fkEmployee.fullName }}</p>
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            {% for avail in availabilities %}
+                            {% if avail.fkEmployee.fullName == availability.fkEmployee.fullName %}
+                            <span class="badge bg-light text-dark border">
+                                {{ avail.start|date('D d/m') }}
+                                {{ avail.start|date('H:i') }}→{{ avail.end|date('H:i') }}
+                            </span>
+                            {% endif %}
+                            {% endfor %}
+                            <span class="badge bg-success rounded-pill px-3">Dispo</span>
+                        </div>
+                    </div>
+                    {% if not loop.last %}
+                    <hr>{% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-muted">Aucune disponibilité pour le moment !</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Colonne droite : Alertes de stock-->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h5 class="fw-bold my-1 mb-3">Alertes de stock</h5>
+                    <a href="{{ path('app_pieces_inventory')}}" class="btn btn-secondary mb-3">
+                        Voir l'inventaire complet</a>
+                </div>
+
+                <!-- Liste des pièces en alerte -->
+                <div class="card-body">
+
+                    {% if alertPieces is empty %}
+                    <div class="alert alert-info mb-0">
+                        Aucune alerte de stock !
+                    </div>
+                    {% else %}
+
+                    {% for piece in alertPieces %}
+                    <a href="{{ path('app_pieces_show', {'id': piece.id}) }}" class="text-decoration-none text-dark">
+                        <div class="p-3 mb-3 rounded border bg-light">
+                            <div class="row align-item-center">
+
+                                <!-- Nom de la pièce -->
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <span class="fw-bold">
+                                        {{ piece.name }}
+                                    </span>
+                                </div>
+
+                                <!-- Fournisseur -->
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Nom du fournisseur</span>
+                                    <span class="fw-semibold">
+                                        {{ piece.supplier }}
+                                    </span>
+                                </div>
+
+                                <!-- Stock actuel -->
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Quantité</span>
+                                    <span class="badge bg-danger">
+                                        {{ piece.quantity }}
+                                    </span>
+                                </div>
+
+                                <!-- Seuil d'alerte -->
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <span class="text-muted small d-block">Seuil d'alerte</span>
+                                    <span class="badge bg-info">
+                                        {{ piece.alertTreshold }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}

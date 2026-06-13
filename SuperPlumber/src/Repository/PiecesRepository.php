@@ -16,6 +16,26 @@ class PiecesRepository extends ServiceEntityRepository
         parent::__construct($registry, Pieces::class);
     }
 
+    public function getAlertPieces(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.quantity <= p.alertTreshold')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getNonAlertPieces(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.quantity > p.alertTreshold')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return Pieces[] Returns an array of Pieces objects
     //     */
