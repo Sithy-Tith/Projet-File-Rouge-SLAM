@@ -19,7 +19,7 @@
                 <th>Actions</th>
                 <td>
                     <a class="btn btn-primary m-1"
-                        href="{{ path('app_interventions_edit', {'id': intervention.id}) }}">
+                        href="{{ path('app_plumber_intervention_edit', {'id': intervention.id}) }}">
                         Éditer
                     </a>
                     <a class="btn btn-primary m-1"
@@ -27,7 +27,7 @@
                         Utiliser du matériel
                     </a>
                     <a class="btn btn-primary m-2"
-                        href="{{ path('app_interventions_index') }}">
+                        href="{{ path('app_plumber_interventions') }}">
                         Retour à la liste
                     </a>
                     <a class="btn btn-primary"
@@ -38,7 +38,5 @@
             </tr>
         {% endblock %}
     {% endembed %}
-
-    {{ include('interventions/_delete_form.html.twig') }}
 
 {% endblock %}
