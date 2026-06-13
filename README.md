@@ -137,5 +137,5 @@ php bin/console doctrine:fixtures:load
 
 | Nom | Rôle | GitHub |
 |---|---|---|
-| Aryen | Développeur | [@Sithy-Tith](https://github.com/Sithy-Tith) |
-| Ilan | Développeur | [@ilan-github](https://github.com/ilanven) |
+| Sithy Tith | Développeur | [@Sithy-Tith](https://github.com/Sithy-Tith) |
+| Ilan Veneri | Développeur | [@ilan-github](https://github.com/ilanven) |
