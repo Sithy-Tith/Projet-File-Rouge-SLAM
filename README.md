@@ -138,4 +138,4 @@ php bin/console doctrine:fixtures:load
 | Nom | Rôle | GitHub |
 |---|---|---|
 | Sithy Tith | Développeur | [@Sithy-Tith](https://github.com/Sithy-Tith) |
-| Ilan Veneri | Développeur | [@ilan-github](https://github.com/ilanven) |
+| Ilan Veneri | Développeur | [@ilanven](https://github.com/ilanven) |
