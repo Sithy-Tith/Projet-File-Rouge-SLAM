@@ -50,6 +50,7 @@ security:
         ROLE_ADMIN: [ROLE_EMPLOYEE, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
+        - { path: ^/$, roles: PUBLIC_ACCESS } # Accès à tous à la route racine uniquement, sans les sous-routes
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/availabilities, roles: [ROLE_ADMIN, ROLE_PLUMBER] }
         - { path: ^/register, roles: PUBLIC_ACCESS }
