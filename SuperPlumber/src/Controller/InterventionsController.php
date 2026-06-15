@@ -52,8 +52,8 @@ final class InterventionsController extends AbstractController
 
         $formIntervention = $this->createForm(InterventionsType::class, $intervention);
         $formClient = $this->createForm(ClientsType::class, new Clients(), [
-            'origin' => 'intervention' // Permet de rediriger une création de client depuis intervention directement sur ce controller
-        ]);
+            'origin' => 'intervention', // Permet de rediriger une création de client depuis intervention directement sur ce controller
+            ]);
 
 
         return $this->render('interventions/new.html.twig', [

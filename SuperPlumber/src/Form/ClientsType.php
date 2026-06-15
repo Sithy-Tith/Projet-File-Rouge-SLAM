@@ -6,6 +6,7 @@ use App\Entity\Clients;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,13 +19,15 @@ class ClientsType extends AbstractType
                 'label' => 'Nom *',
                 'attr' => [
                     'placeholder' => 'Dupont'
-                ]
+                ],
+                'disabled' => $options['from_client'],
             ])
             ->add('firstName', null, [
                 'label' => 'Prénom *',
                 'attr' => [
                     'placeholder' => 'Jean'
-                ]
+                ],
+                'disabled' => $options['from_client'],
             ])
             ->add('email', null, [
                 'label' => 'Adresse email *',
@@ -38,13 +41,15 @@ class ClientsType extends AbstractType
                     'placeholder' => '06xxxxxxxx'
                 ]
             ])
-            ->add('address', null, [
+            ->add('address', TextType::class, [
+                'label' => 'Adresse',
                 'required' => false,
-                'label' => "Adresse ",
                 'attr' => [
-                    'placeholder' => 'Votre adresse...',
+                    'class' => 'adresse-autocomplete',
+                    'autocomplete' => 'off'
                 ]
             ])
+
             #->add('roles') A GARDER
             ->add('password', PasswordType::class, [
                 'mapped'   => false,
@@ -67,6 +72,7 @@ class ClientsType extends AbstractType
             'data_class' => Clients::class,
             'is_new'     => true,
             'origin' => null,
+            'from_client' => false,
         ]);
     }
 }

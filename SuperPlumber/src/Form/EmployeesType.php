@@ -19,19 +19,21 @@ class EmployeesType extends AbstractType
                 'label' => 'Nom *',
                 'attr' => [
                     'placeholder' => 'Dupont'
-                ]
+                ],
+                'disabled' => $options['from_plumber']
             ])
             ->add('firstName', null, [
                 'label' => 'Prénom *',
                 'attr' => [
                     'placeholder' => 'Jean'
-                ]
+                ],
+                'disabled' => $options['from_plumber']
             ])
             ->add('position', EnumType::class, [
                 'class' => Position::class,
                 'label' => "Poste *",
                 'choice_label' => fn(Position $position) => $position->label(), #On affiche la traduction de la value de l'enum
-            ])
+                'disabled' => $options['from_plumber']])
             ->add('email', null, [
                 'label' => 'Adresse email *',
                 'attr' => [
@@ -61,6 +63,7 @@ class EmployeesType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Employees::class,
             'is_new'     => true,
+            'from_plumber' => false,
         ]);
     }
 }
