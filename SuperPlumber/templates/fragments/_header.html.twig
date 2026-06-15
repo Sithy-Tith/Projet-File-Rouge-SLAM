@@ -115,7 +115,7 @@
                 {% endif %}
 
                 {% if is_granted("IS_IMPERSONATOR") %}
-                    <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" class="nav-link" title="Retour admin">
+                    <a href="{{ path('app_admin_dashboard', {'_switch_user': '_exit'}) }}" class="nav-link" title="Retour admin">
                         <img src="{{ asset('icons/key-admin.svg') }}" alt="Retour admin"
                              style="width: 20px; height: 20px; transition: transform 0.2s ease;"
                              onmouseover="this.style.transform='scale(1.2)'"
