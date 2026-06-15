@@ -128,7 +128,7 @@
                         <div class="d-flex justify-content-between align-items-center p-2 rounded mb-2" style="background:var(--bs-gray-100);">
                             <div>
                                 <p class="fw-bold mb-0" style="font-size:12px;">
-                                    {{ availability.start|date('D d/m') }}
+                                    {{ availability.start|format_datetime(pattern='EEE',locale='fr') }}
                                 </p>
                                 <p class="text-muted mb-0" style="font-size:11px;">
                                     {{ availability.start|date('H:i') }} → {{ availability.end|date('H:i') }}

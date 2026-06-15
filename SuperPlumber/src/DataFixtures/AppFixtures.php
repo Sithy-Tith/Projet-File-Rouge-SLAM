@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $piecesTypes = ['Pipe', 'Elbow', 'Coupling', 'Reducer', 'Valve', 'Gasket', 'Robinet'];
+        $piecesTypes = ['Tuyau', 'Coude', 'Manchon', 'Reduction', 'Vanne', 'Joint', 'Robinet'];
 
         // -------------------------------------------------------
         // un admin fixe pour pouvoir se connecter
