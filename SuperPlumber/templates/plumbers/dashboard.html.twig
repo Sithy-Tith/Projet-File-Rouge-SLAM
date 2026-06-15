@@ -1,31 +1,158 @@
-{% extends "base.html.twig" %}
-
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard Plombier{% endblock %}
 {% block body %}
-	<h1>Tableau de bord</h1>
 
-	<p>Bienvenue,
-		<strong>{{ app.user.firstName }}</strong>
-		!
-	</p>
-	{% if is_granted("IS_IMPERSONATOR")%}
-		Vous êtes connecté en tant qu'<strong>admin</strong>
-		sur le compte
-		<strong>{{ app.user.userIdentifier }}</strong>
-	{% else %}
-		{% if app.user %}
-			<div class="mb-3">
-				Vous êtes connecté en tant que :
-				<strong>{{ app.user.userIdentifier }}</strong>,
-				<p></p>
-				<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-					<a href="{{ logout_path() }}">Logout</a>
-				</button>
-				{% if is_granted("IS_IMPERSONATOR")%}
-					<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">
-						<a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}">return to admin</a>
-					</button>
-				{% endif %}
-			</div>
-		{% endif %}
-	{% endif %}
+<div class="container mt-4">
+
+    <!-- En-tête de bienvenue -->
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <div>
+            <p class="fw-bold mb-0">Bonjour, {{ app.user.fullName }}</p>
+            <p class="text-muted mb-0" style="font-size:12px;">Plombier - SuperPlumber</p>
+        </div>
+    </div>
+
+    <!-- Message impersonation admin -->
+    {% if is_granted("IS_IMPERSONATOR") %}
+        <div class="alert alert-warning mb-4">
+            Connecté en tant qu'<strong>admin</strong> sur le compte <strong>{{ app.user.userIdentifier }}</strong>
+        </div>
+    {% else %}
+        {% if app.user %}
+            <div class="alert alert-info mb-4">
+                Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+                <a href="{{ logout_path() }}" class="btn btn-sm btn-danger ms-2">Logout</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- Messages flash -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="p-3 rounded" style="background:var(--bs-gray-100)">
+                <p class="text-muted mb-1" style="font-size:12px;">Interventions aujourd'hui</p>
+                <p class="fw-bold mb-0" style="font-size:22px;">{{ todayCount }}</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 rounded" style="background:var(--bs-gray-100)">
+                <p class="text-muted mb-1" style="font-size:12px;">Cette semaine</p>
+                <p class="fw-bold mb-0" style="font-size:22px;">{{ weekCount }}</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 rounded" style="background:var(--bs-gray-100)">
+                <p class="text-muted mb-1" style="font-size:12px;">Disponibilités</p>
+                <p class="fw-bold mb-0" style="font-size:22px;">{{ availabilities|length }}</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 rounded" style="background:var(--bs-gray-100)">
+                <p class="text-muted mb-1" style="font-size:12px;">En cours</p>
+                <p class="fw-bold mb-0" style="font-size:22px;">{{ ongoingCount }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Colonne gauche : interventions -->
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Prochaines interventions</h5>
+                        <a href="{{ path('app_plumber_interventions') }}" style="font-size:12px; color:#E8610A;">Voir tout</a>
+                    </div>
+
+                    {% set statusColors = {
+                        'to_plan': 'bg-warning text-dark',
+                        'planned': 'bg-primary',
+                        'ongoing': 'bg-success',
+                        'finished': 'bg-secondary',
+                        'canceled': 'bg-danger'
+                    } %}
+
+                    {% for intervention in interventions|slice(0, 5) %}
+                        <div class="d-flex align-items-center gap-3 py-2 border-bottom">
+                            <!-- Bloc heure -->
+                            <div class="text-center rounded p-2" style="background:#FAECE7; min-width:56px;">
+                                <div style="font-size:13px; font-weight:500; color:#993C1D;">
+                                    {{ intervention.startAt ? intervention.startAt|date('H:i') : '--:--' }}
+                                </div>
+                                <div style="font-size:10px; color:#D85A30;">
+                                    {{ intervention.startAt ? intervention.startAt|date('d/m') : '-' }}
+                                </div>
+                            </div>
+                            <!-- Infos -->
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="mb-0 fw-bold text-truncate" style="font-size:13px;">
+                                    {{ intervention.type.value }} — {{ intervention.fkClient.fullName }}
+                                </p>
+                                <p class="mb-0 text-muted" style="font-size:11px;">
+                                    {{ intervention.startAt ? intervention.startAt|date('H:i') : '-' }}
+                                    → {{ intervention.endAt ? intervention.endAt|date('H:i') : '-' }}
+                                    · {{ intervention.durationFormatted }}
+                                </p>
+                            </div>
+                            <!-- Statut -->
+                            <span class="badge {{ statusColors[intervention.status.value] ?? 'bg-secondary' }}">
+                                {{ intervention.status.label()|trans }}
+                            </span>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">Aucune intervention à venir</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne droite : disponibilités -->
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Mes disponibilités</h5>
+                        <a href="{{ path('app_availabilities_index') }}" style="font-size:12px; color:#E8610A;">Gérer</a>
+                    </div>
+
+                    {% for availability in availabilities|slice(0, 4) %}
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded mb-2" style="background:var(--bs-gray-100);">
+                            <div>
+                                <p class="fw-bold mb-0" style="font-size:12px;">
+                                    {{ availability.start|date('D d/m') }}
+                                </p>
+                                <p class="text-muted mb-0" style="font-size:11px;">
+                                    {{ availability.start|date('H:i') }} → {{ availability.end|date('H:i') }}
+                                </p>
+                            </div>
+                            {% if availability.interventions|length > 0 %}
+                                <span class="badge" style="background:#FAECE7; color:#993C1D;">Occupé</span>
+                            {% else %}
+                                <span class="badge bg-success">Libre</span>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">Aucune disponibilité</p>
+                    {% endfor %}
+
+                    <a href="{{ path('app_availabilities_new') }}" class="btn btn-sm w-100 mt-2"
+                       style="background:#E8610A; color:white; border:none;">
+                        <i class="ti ti-plus"></i> Ajouter une disponibilité
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 {% endblock body %}
