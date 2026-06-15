@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Form\ClientsSelfType;
+use App\Form\EmployeesSelfType;
 use App\Repository\ClientsRepository;
+use App\Repository\EmployeesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -63,6 +65,36 @@ class ProfileController extends AbstractController
         $user = $security->getUser();
         return $this->render('employees/show.html.twig', [
             'employee' => $user,
+        ]);
+    }
+
+
+    #[Route('/employee/profile/edit', name: 'app_employees_profile_edit')]
+    #[IsGranted('ROLE_EMPLOYEE')]
+    public function edit_employee(
+        Request $request,
+        EmployeesRepository $employeesRepository,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $hasher
+    ): Response {
+
+        $employee = $employeesRepository->findOneBy(['id' => $this->getUser()->getId()]);
+        $form = $this->createForm(EmployeesSelfType::class, $employee, ['is_new' => false]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData()) {
+                $password = $form->get('password')->getData();
+                $employee->setPassword($hasher->hashPassword($employee, $password));
+            }
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_employees_profile', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('employees/edit.html.twig', [
+            'employee' => $employee,
+            'form' => $form,
         ]);
     }
 }

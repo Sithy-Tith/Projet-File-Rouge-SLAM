@@ -31,9 +31,13 @@
         </table>
         <div class="row">
             <div class=" m-2">
-                <a class="btn btn-primary" href="{{ path('app_employees_index') }}">Retour à la liste</a>
-                <a class="btn btn-primary" href="{{ path('app_employees_edit', {'id': employee.id}) }}">Éditer</a>
-                {{ include('employees/_delete_form.html.twig') }}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-primary" href="{{ path('app_employees_index') }}">Retour à la liste</a>
+                    <a class="btn btn-primary" href="{{ path('app_employees_edit', {'id': employee.id}) }}">Éditer</a>
+                    {{ include('employees/_delete_form.html.twig') }}
+                {% elseif is_granted('ROLE_PLUMBER') %}
+                    <a class="btn btn-primary" href="{{ path('app_employees_profile_edit', {'id': employee.id}) }}">Éditer</a>
+                {% endif %}
             </div>
         </div>
     </div>
