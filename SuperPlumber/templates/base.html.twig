@@ -30,7 +30,11 @@
         }
 
         img[src*="logo-mario"] {
-            animation: marioJump 0.6s ease infinite alternate;
+            transition: transform 0.2s ease;
+        }
+
+        img[src*="logo-mario"]:hover {
+            animation: marioJump 0.3s ease infinite alternate;
         }
     </style>
 
