@@ -13,8 +13,12 @@
             {{ include('clients/_form.html.twig', {'button_label': 'Enregistrer'}) }}
         </div>
         <div class="mx-2">
-            <a href="{{ path('app_clients_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
-            {{ include('clients/_delete_form.html.twig') }}
+            {% if is_granted('ROLE_CLIENT') %}
+                <a href="{{ path('app_clients_profile') }}" class="btn btn-secondary m-2">Annuler</a>
+            {% elseif is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_clients_index') }}" class="btn btn-secondary m-2">Retour à la liste</a>
+                {{ include('clients/_delete_form.html.twig') }}
+            {% endif %}
         </div>
     </div>
 </div>
