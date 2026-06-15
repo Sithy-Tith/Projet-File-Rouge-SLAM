@@ -16,6 +16,7 @@ body {
 .navbar-item .nav-link:hover {
     background-color: #444fa4;
     color: rgba(255, 255, 255, 1);
+}
 .navbar-inner {
     display: flex;
     align-items: center;
