@@ -69,10 +69,12 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $client = new Clients();
-            $client->setEmail($faker->unique()->email);
             $client->setAddress($faker->address);
             $client->setFirstName($faker->firstName);
             $client->setLastName($faker->lastName);
+            $firstName = $this->format_mail($client->getFirstName());
+            $lastName = $this->format_mail($client->getLastName());
+            $client->setEmail("$firstName.$lastName@gmail.com");
             $client->setPhone($faker->phoneNumber);
             $client->setPassword($this->hasher->hashPassword($client, 'password123'));
             $manager->persist($client);
@@ -83,7 +85,9 @@ class AppFixtures extends Fixture
             $employee->setFirstName($faker->firstName);
             $employee->setPhone($faker->phoneNumber);
             $employee->setPosition($faker->randomElement(Position::cases()));
-            $employee->setEmail($faker->unique()->email);
+            $first = $this->format_mail($employee->getFirstName());
+            $last  = $this->format_mail($employee->getLastName());
+            $employee->setEmail("$first.$last@gmail.com");
             $employee->setPassword($this->hasher->hashPassword($employee, 'employee123'));
             $manager->persist($employee);
             $employeesList[] = $employee;
@@ -160,5 +164,17 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function format_mail($string)
+    {
+        // Supprime les accents
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        // Remplace tout ce qui n'est pas lettre ou chiffre par rien
+        $string = preg_replace('/[^a-zA-Z0-9]/', '', $string);
+
+        // Minuscule
+        return strtolower($string);
     }
 }
