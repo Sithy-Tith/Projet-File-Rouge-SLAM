@@ -5,6 +5,7 @@ body {
 /* ── Navbar ── */
 .bg-custom {
     background-color: #E75A10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nav-item .nav-link {
@@ -17,6 +18,7 @@ body {
     background-color: #444fa4;
     color: rgba(255, 255, 255, 1);
 }
+
 .navbar-inner {
     display: flex;
     align-items: center;
@@ -49,14 +51,36 @@ body {
     list-style: none;
 }
 
+
 /* Zone droite — icônes */
 .navbar-icons {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 1rem;
     flex-shrink: 0;
     margin-left: auto;
 }
+
+.navbar-icons img {
+    width: 25px;
+    height: 25px;
+    transition: transform 0.2s ease;
+}
+
+.navbar-icons img:hover {
+    transform: scale(1.2);
+}
+
+.navbar-icons a {
+    padding: 6px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.navbar-icons a:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
 
 /* Page login */
 .navbar-login-center {

@@ -100,26 +100,17 @@
 
                 {% if is_granted('ROLE_EMPLOYEE') %}
                     <a href="{{ path('app_employees_profile') }}" class="nav-link" title="Mon compte">
-                        <img src="{{ asset('icons/person-circle.svg') }}" alt="Mon compte"
-                             style="width: 20px; height: 20px; transition: transform 0.2s ease;"
-                             onmouseover="this.style.transform='scale(1.2)'"
-                             onmouseout="this.style.transform='scale(1)'">
+                        <img src="{{ asset('icons/person-circle.svg') }}" alt="Mon compte">
                     </a>
                 {% elseif is_granted('ROLE_CLIENT') %}
                     <a href="{{ path('app_clients_profile') }}" class="nav-link" title="Mon compte">
-                        <img src="{{ asset('icons/person-circle.svg') }}" alt="Mon compte"
-                             style="width: 20px; height: 20px; transition: transform 0.2s ease;"
-                             onmouseover="this.style.transform='scale(1.2)'"
-                             onmouseout="this.style.transform='scale(1)'">
+                        <img src="{{ asset('icons/person-circle.svg') }}" alt="Mon compte">
                     </a>
                 {% endif %}
 
                 {% if app.user %}
                     <a href="/logout" class="nav-link">
-                        <img src="{{ asset('icons/box-arrow-right.svg') }}" alt="Déconnexion" title="Se déconnecter"
-                             style="width: 20px; height: 20px; transition: transform 0.2s ease;"
-                             onmouseover="this.style.transform='scale(1.2)'"
-                             onmouseout="this.style.transform='scale(1)'">
+                        <img src="{{ asset('icons/box-arrow-right.svg') }}" alt="Déconnexion" title="Se déconnecter">
                     </a>
                 {% endif %}
 
