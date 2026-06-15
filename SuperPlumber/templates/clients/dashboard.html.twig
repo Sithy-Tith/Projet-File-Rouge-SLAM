@@ -102,7 +102,7 @@
                             {% for avail in availabilities %}
                             {% if avail.fkEmployee.fullName == availability.fkEmployee.fullName %}
                             <span class="badge bg-light text-dark border">
-                                {{ avail.start|date('D d/m') }}
+                                {{ avail.start|format_datetime(pattern='EEE', locale='fr') }}
                                 {{ avail.start|date('H:i') }}→{{ avail.end|date('H:i') }}
                             </span>
                             {% endif %}
