@@ -70,12 +70,21 @@ final class EmployeesController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_employees_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Employees $employee, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Employees $employee,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $hasher
+    ): Response {
         $form = $this->createForm(EmployeesType::class, $employee, ['is_new' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData()) {
+                $password = $form->get('password')->getData();
+                $employee->setPassword($hasher->hashPassword($employee, $password));
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_employees_index', [], Response::HTTP_SEE_OTHER);
