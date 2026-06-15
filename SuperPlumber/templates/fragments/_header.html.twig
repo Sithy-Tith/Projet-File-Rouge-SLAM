@@ -27,13 +27,7 @@
                         Accueil
                     </a>
                     {% endif %}
-                    {#}
-                    {% if is_granted('ROLE_EMPLOYEE') %}
-                    <a href="{{path('app_employee_dashboard')}}" class="nav-link">
-                        Accueil
-                    </a>
-                    {% endif %}
-                    {#}
+
                     {% if is_granted('ROLE_PLUMBER') %}
                     <a href="{{path('app_plumber_dashboard')}}" class="nav-link">
                         Accueil
@@ -125,6 +119,8 @@
             <a href="{{path('app_clients_profile')}}" title="Informations du compte" class="nav-link">
                 {% endif %}
                 <img src="{{asset('icons/person-circle.svg')}}" title="Informations du compte" class=" mx-2"
+                    style="width: 20px; height: 20px; transition: transform 0.2s ease;"
+                    onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"
                     alt="Mon Compte">
             </a>
             {% endif %}
@@ -133,6 +129,8 @@
             {% if app.user %}
             <a href="/logout" class="nav-link">
                 <img src="{{asset('icons/box-arrow-right.svg')}}" title="Se déconnecter" class="d-inline-block mx-2"
+                    style="width: 20px; height: 20px; transition: transform 0.2s ease;"
+                    onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"
                     alt="Déconnexion">
             </a>
             {% endif %}
@@ -141,7 +139,10 @@
             {% if is_granted("IS_IMPERSONATOR") %}
             <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
                 class="nav-link">
-                <img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2" alt="Retour admin">
+                <img src="{{asset('icons/key-admin.svg')}}" class="d-inline-block mx-2"
+                    style="width: 20px; height: 20px; transition: transform 0.2s ease;"
+                    onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"
+                    alt="Retour admin">
             </a>
             {% endif %}
     </div>
