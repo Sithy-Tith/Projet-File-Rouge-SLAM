@@ -49,14 +49,21 @@
                             <td>{{ employee.email }}</td>
                             <td>{{ employee.phone }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ path('app_employees_show', {'id': employee.id})}}">
-                                    Détails</a>
-                                <a class="btn btn-primary" href="{{ path('app_employees_edit', {'id': employee.id}) }}">
-                                    Modifier</a>
-                                {% if is_granted("ROLE_ADMIN") %}
                                 <a class="btn btn-primary"
-                                    href="{{ path('app_plumber_dashboard', { '_switch_user': employee.email }) }}">
-                                    Switch</a>
+                                    href="{{ path('app_employees_show', {'id': employee.id}) }}">Détails</a>
+                                <a class="btn btn-primary"
+                                    href="{{ path('app_employees_edit', {'id': employee.id}) }}">Modifier</a>
+                                {% if is_granted("ROLE_ADMIN") %}
+                                <span style="border-left: 1px solid #ccc; margin: 0 4px;"></span>
+                                <a class="btn"
+                                    href="{{ path('app_employees_index', {'_switch_user': employee.email}) }}"
+                                    style="background:#E8610A; color:white; padding: 6px 10px; transition: background-color 0.2s ease;"
+                                    title="Switch sur ce compte"
+                                    onmouseover="this.style.background='#c45208'; this.querySelector('img').style.transform='scale(1.2)'"
+                                    onmouseout="this.style.background='#E8610A'; this.querySelector('img').style.transform='scale(1)'">
+                                    <img src="{{ asset('icons/key-admin.svg') }}" alt="Switch"
+                                        style="width: 18px; height: 18px; transition: transform 0.2s ease;">
+                                </a>
                                 {% endif %}
                             </td>
                         </tr>
