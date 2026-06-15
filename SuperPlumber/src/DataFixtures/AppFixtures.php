@@ -23,7 +23,50 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $piecesTypes = ['Tuyau', 'Coude', 'Manchon', 'Reduction', 'Vanne', 'Joint', 'Robinet'];
+        $piecesTypes = [
+            'Tuyau PVC 16 mm',
+            'Tuyau PVC 20 mm',
+            'Tuyau PVC 25 mm',
+            'Tuyau cuivre 12 mm',
+            'Tuyau cuivre 14 mm',
+            'Tuyau cuivre 16 mm',
+
+            'Coude 90° 16 mm',
+            'Coude 90° 20 mm',
+            'Coude 90° 25 mm',
+            'Coude 45° 16 mm',
+            'Coude 45° 20 mm',
+
+            'Manchon 16 mm',
+            'Manchon 20 mm',
+            'Manchon 25 mm',
+
+            'Réduction 20→16 mm',
+            'Réduction 25→20 mm',
+            'Réduction 32→25 mm',
+
+            'Vanne quart-de-tour 20 mm',
+            'Vanne quart-de-tour 25 mm',
+            'Vanne papillon 20 mm',
+
+            'Joint fibre 12 mm',
+            'Joint fibre 15 mm',
+            'Joint caoutchouc 20 mm',
+            'Joint silicone universel',
+
+            'Robinet d’arrêt 12 mm',
+            'Robinet d’arrêt 15 mm',
+            'Robinet machine à laver',
+            'Robinet extérieur antigel',
+
+            'Té 16 mm',
+            'Té 20 mm',
+            'Té 25 mm',
+            'Raccord laiton 12 mm',
+            'Raccord laiton 15 mm',
+            'Raccord rapide 20 mm'
+        ];
+
 
         // -------------------------------------------------------
         // un admin fixe pour pouvoir se connecter
@@ -56,7 +99,7 @@ class AppFixtures extends Fixture
         $client->setEmail('client@test.com');
         $client->setAddress($faker->address);
         $client->setFirstName('client');
-        $client->setLastName('pigeon');
+        $client->setLastName('fidèle');
         $client->setPhone(0622222222);
         $client->setPassword($this->hasher->hashPassword($client, 'client123'));
         $manager->persist($client);
