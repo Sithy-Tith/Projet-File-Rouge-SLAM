@@ -40,7 +40,7 @@ final class ClientsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
     {
         $client = new Clients();
-        $form = $this->createForm(ClientsType::class, $client, ['is_new' => true]);
+        $form = $this->createForm(ClientsType::class, $client, ['is_new' => true,'from_client' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,7 +76,7 @@ final class ClientsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_clients_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Clients $client, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
     {
-        $form = $this->createForm(ClientsType::class, $client, ['is_new' => false]);
+        $form = $this->createForm(ClientsType::class, $client, ['is_new' => false,'from_client' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

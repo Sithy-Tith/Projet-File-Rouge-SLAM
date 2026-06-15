@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\ClientsSelfType;
+use App\Form\ClientsType;
 use App\Form\EmployeesSelfType;
 use App\Repository\ClientsRepository;
 use App\Repository\EmployeesRepository;
@@ -37,7 +37,7 @@ class ProfileController extends AbstractController
     ): Response {
 
         $client = $clientsRepository->findOneBy(['id' => $this->getUser()->getId()]);
-        $form = $this->createForm(ClientsSelfType::class, $client, ['is_new' => false]);
+        $form = $this->createForm(ClientsType::class, $client, ['is_new' => false,'from_client' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
