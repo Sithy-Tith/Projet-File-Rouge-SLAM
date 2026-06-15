@@ -51,10 +51,10 @@ final class ClientsController extends AbstractController
             $entityManager->flush();
 
             // Si le form vient de interventions_new, on l'y redirige avec l'id du nouveau client
-            if ($form->get('origin')->getData()==='intervention'){
-                return $this->redirectToRoute('app_interventions_new',[
+            if ($form->get('origin')->getData() === 'intervention') {
+                return $this->redirectToRoute('app_interventions_new', [
                     'client' => $client->getId(),
-                ]) ;
+                ]);
             }
             return $this->redirectToRoute('app_clients_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -74,12 +74,17 @@ final class ClientsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_clients_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Clients $client, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
     {
         $form = $this->createForm(ClientsType::class, $client, ['is_new' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData()) {
+                $password = $form->get('password')->getData();
+                $client->setPassword($hasher->hashPassword($client, $password));
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_clients_index', [], Response::HTTP_SEE_OTHER);
