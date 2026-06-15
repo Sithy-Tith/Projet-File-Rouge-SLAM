@@ -14,7 +14,8 @@ class LoginController extends AbstractController
     public function __construct(
         private LoginSuccessHandler $loginSuccessHandler,
         private TokenStorageInterface $tokenStorage
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
@@ -38,5 +39,11 @@ class LoginController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route('/', name: 'app_home')] // Path pour la redirection par défaut de l'application sur login
+    public function home(): Response
+    {
+        return $this->redirectToRoute('app_login');
     }
 }

@@ -1,23 +1,106 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Register{% endblock %}
-
+{% block title %}Inscription{% endblock %}
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div style="width: 420px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.06);">
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.firstName) }}
-        {{ form_row(registrationForm.lastName) }}
-        {{ form_row(registrationForm.email) }}
-        {#{{ form_row(registrationForm.phone) }}
-        {{ form_row(registrationForm.address) }}#}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        <div style="padding: 32px 28px;">
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <!-- Logo + titre -->
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 32px;">
+                <div>
+                    <div style="font-size: 15px; font-weight: 500; color: #111;">SuperPlumber</div>
+                    <div style="font-size: 11px; color: #888;">Créer un compte</div>
+                </div>
+            </div>
+
+            <p style="font-size: 18px; font-weight: 500; color: #111; margin: 0 0 20px;">Inscription</p>
+
+            <!-- Erreurs globales -->
+            {% if registrationForm.vars.errors|length > 0 %}
+                <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
+
+            {{ form_start(registrationForm, {'attr': {'style': 'width:100%'}}) }}
+
+                <!-- Prénom -->
+                <div style="margin-bottom: 14px;">
+                    <label style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Prénom</label>
+                    <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+                        {{ form_widget(registrationForm.firstName, {'attr': {'style': 'border:none; background:transparent; flex:1; font-size:13px; color:#111; outline:none; width:100%', 'placeholder': 'Jean'}}) }}
+                        <i class="ti ti-user" style="font-size: 15px; color: #aaa;"></i>
+                    </div>
+                    {{ form_errors(registrationForm.firstName) }}
+                </div>
+
+                <!-- Nom -->
+                <div style="margin-bottom: 14px;">
+                    <label style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Nom</label>
+                    <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+                        {{ form_widget(registrationForm.lastName, {'attr': {'style': 'border:none; background:transparent; flex:1; font-size:13px; color:#111; outline:none; width:100%', 'placeholder': 'Dupont'}}) }}
+                        <i class="ti ti-user" style="font-size: 15px; color: #aaa;"></i>
+                    </div>
+                    {{ form_errors(registrationForm.lastName) }}
+                </div>
+
+                <!-- Email -->
+                <div style="margin-bottom: 14px;">
+                    <label style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Email</label>
+                    <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+                        {{ form_widget(registrationForm.email, {'attr': {'style': 'border:none; background:transparent; flex:1; font-size:13px; color:#111; outline:none; width:100%', 'placeholder': 'jean@exemple.com'}}) }}
+                        <i class="ti ti-mail" style="font-size: 15px; color: #aaa;"></i>
+                    </div>
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <!-- Mot de passe -->
+                <div style="margin-bottom: 20px;">
+                    <label style="font-size: 11px; font-weight: 500; color: #666; display: block; margin-bottom: 4px;">Mot de passe</label>
+                    <div style="display: flex; align-items: center; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;">
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'style': 'border:none; background:transparent; flex:1; font-size:13px; color:#111; outline:none; width:100%', 'placeholder': '••••••••', 'id': 'password'}}) }}
+                        <i class="ti ti-eye" style="font-size: 15px; color: #aaa; cursor: pointer;" onclick="togglePassword()"></i>
+                    </div>
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                <!-- CGU -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'style': 'accent-color: #E8610A;'}}) }}
+                    <span style="font-size: 12px; color: #888;">J'accepte les conditions d'utilisation</span>
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <!-- Bouton -->
+                <button type="submit" style="width: 100%; background: #E8610A; color: white; border: none; border-radius: 8px; padding: 10px 0; font-size: 13px; font-weight: 500; cursor: pointer;">
+                    Créer mon compte &nbsp;<i class="ti ti-arrow-right"></i>
+                </button>
+
+                <!-- Lien vers login -->
+                <p style="text-align: center; font-size: 12px; color: #888; margin-top: 16px;">
+                    Déjà un compte ? <a href="{{ path('app_login') }}" style="color: #E8610A; text-decoration: none;">Se connecter</a>
+                </p>
+
+            {{ form_end(registrationForm) }}
+        </div>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #f0f0f0; padding: 14px 28px; background: #fafafa;">
+            <p style="font-size: 11px; color: #aaa; margin: 0; text-align: center;">
+                SuperPlumber &copy; {{ "now"|date("Y") }} — Gestion d'interventions plomberie
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const input = document.getElementById('password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
+
 {% endblock %}
