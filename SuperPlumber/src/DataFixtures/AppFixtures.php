@@ -23,7 +23,50 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $piecesTypes = ['Tuyau', 'Coude', 'Manchon', 'Reduction', 'Vanne', 'Joint', 'Robinet'];
+        $piecesTypes = [
+            'Tuyau PVC 16 mm',
+            'Tuyau PVC 20 mm',
+            'Tuyau PVC 25 mm',
+            'Tuyau cuivre 12 mm',
+            'Tuyau cuivre 14 mm',
+            'Tuyau cuivre 16 mm',
+
+            'Coude 90° 16 mm',
+            'Coude 90° 20 mm',
+            'Coude 90° 25 mm',
+            'Coude 45° 16 mm',
+            'Coude 45° 20 mm',
+
+            'Manchon 16 mm',
+            'Manchon 20 mm',
+            'Manchon 25 mm',
+
+            'Réduction 20→16 mm',
+            'Réduction 25→20 mm',
+            'Réduction 32→25 mm',
+
+            'Vanne quart-de-tour 20 mm',
+            'Vanne quart-de-tour 25 mm',
+            'Vanne papillon 20 mm',
+
+            'Joint fibre 12 mm',
+            'Joint fibre 15 mm',
+            'Joint caoutchouc 20 mm',
+            'Joint silicone universel',
+
+            'Robinet d’arrêt 12 mm',
+            'Robinet d’arrêt 15 mm',
+            'Robinet machine à laver',
+            'Robinet extérieur antigel',
+
+            'Té 16 mm',
+            'Té 20 mm',
+            'Té 25 mm',
+            'Raccord laiton 12 mm',
+            'Raccord laiton 15 mm',
+            'Raccord rapide 20 mm'
+        ];
+
 
         // -------------------------------------------------------
         // un admin fixe pour pouvoir se connecter
@@ -56,7 +99,7 @@ class AppFixtures extends Fixture
         $client->setEmail('client@test.com');
         $client->setAddress($faker->address);
         $client->setFirstName('client');
-        $client->setLastName('pigeon');
+        $client->setLastName('fidèle');
         $client->setPhone(0622222222);
         $client->setPassword($this->hasher->hashPassword($client, 'client123'));
         $manager->persist($client);
@@ -69,10 +112,12 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $client = new Clients();
-            $client->setEmail($faker->unique()->email);
             $client->setAddress($faker->address);
             $client->setFirstName($faker->firstName);
             $client->setLastName($faker->lastName);
+            $firstName = $this->format_mail($client->getFirstName());
+            $lastName = $this->format_mail($client->getLastName());
+            $client->setEmail("$firstName.$lastName@gmail.com");
             $client->setPhone($faker->phoneNumber);
             $client->setPassword($this->hasher->hashPassword($client, 'password123'));
             $manager->persist($client);
@@ -83,7 +128,9 @@ class AppFixtures extends Fixture
             $employee->setFirstName($faker->firstName);
             $employee->setPhone($faker->phoneNumber);
             $employee->setPosition($faker->randomElement(Position::cases()));
-            $employee->setEmail($faker->unique()->email);
+            $first = $this->format_mail($employee->getFirstName());
+            $last  = $this->format_mail($employee->getLastName());
+            $employee->setEmail("$first.$last@gmail.com");
             $employee->setPassword($this->hasher->hashPassword($employee, 'employee123'));
             $manager->persist($employee);
             $employeesList[] = $employee;
@@ -118,7 +165,7 @@ class AppFixtures extends Fixture
             $start = $intervention->getStartAt();
             $duration = mt_rand(1, 8);
             $intervention->setEndAt((clone $start)->modify("+{$duration} hours"));
-            $intervention->setDescription($faker->text);
+            $intervention->setDescription($faker->realText(200));
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
             $intervention->setFkClient($faker->randomElement($clientsList));
@@ -133,7 +180,7 @@ class AppFixtures extends Fixture
         }
 
         // -------------------------------------------------------
-        // créer les pièces utilisées et disponibilités
+        // créer les pièces utilisées
         // -------------------------------------------------------
         for ($i = 0; $i < 10; $i++) {
             $usedPiece = new UsedPieces();
@@ -142,23 +189,42 @@ class AppFixtures extends Fixture
             $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
             $usedPiece->setQuantity(mt_rand(1, 3));
             $manager->persist($usedPiece);
+        }
 
+
+        // -------------------------------------------------------
+        // créer les disponibilités des plombiers
+        // -------------------------------------------------------
+        for ($i = 0; $i < 30; $i++) {
             $availability = new Availabilities();
-            $start = $faker->dateTimeBetween('first day of this month', 'last day of this month');
-            $end = (clone $start)->modify('+2 hours');
+            // 1. Générer un jour aléatoire du mois
+            $day = $faker->dateTimeBetween('first day of this month', 'last day of this month');
+            // 2. Fixer l'heure à 08:00
+            $start = (clone $day)->setTime(8, 0);
+            $nbHours = mt_rand(4, 10);
+            $end = (clone $start)->modify('+' . $nbHours . ' hours');
             $availability->setStart($start);
             $availability->setEnd($end);
-            $availability->setFkEmployee($faker->randomElement($employeesList));
+            // L'appliquer seuelemnt aux plombiers
+            do {
+                $availability->setFkEmployee($faker->randomElement($employeesList));
+            } while ($availability->getFkEmployee()->getPosition()->value !== 'Plumber');
 
-
-            $manager->persist($client);
-            $manager->persist($employee);
-            $manager->persist($intervention);
-            $manager->persist($piece);
-            $manager->persist($usedPiece);
             $manager->persist($availability);
         }
 
         $manager->flush();
+    }
+
+    public function format_mail(string $string)
+    {
+        // Supprime les accents
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        // Remplace tout ce qui n'est pas lettre ou chiffre par rien
+        $string = preg_replace('/[^a-zA-Z0-9]/', '', $string);
+
+        // Minuscule
+        return strtolower($string);
     }
 }
