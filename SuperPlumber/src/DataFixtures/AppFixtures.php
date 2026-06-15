@@ -165,7 +165,7 @@ class AppFixtures extends Fixture
             $start = $intervention->getStartAt();
             $duration = mt_rand(1, 8);
             $intervention->setEndAt((clone $start)->modify("+{$duration} hours"));
-            $intervention->setDescription($faker->text);
+            $intervention->setDescription($faker->realText(200));
             $intervention->setType($faker->randomElement(Type::cases()));
             $intervention->setStatus($faker->randomElement(Status::cases()));
             $intervention->setFkClient($faker->randomElement($clientsList));
@@ -191,11 +191,17 @@ class AppFixtures extends Fixture
             $manager->persist($usedPiece);
 
             $availability = new Availabilities();
-            $start = $faker->dateTimeBetween('first day of this month', 'last day of this month');
-            $end = (clone $start)->modify('+2 hours');
+            // 1. Générer un jour aléatoire du mois
+            $day = $faker->dateTimeBetween('first day of this month', 'last day of this month');
+            // 2. Fixer l'heure à 08:00
+            $start = (clone $day)->setTime(8, 0);
+            $nbHours = mt_rand(4, 10);
+            $end = (clone $start)->modify('+' . $nbHours . ' hours');
             $availability->setStart($start);
             $availability->setEnd($end);
-            $availability->setFkEmployee($faker->randomElement($employeesList));
+            do {
+                $availability->setFkEmployee($faker->randomElement($employeesList));
+            } while ($availability->getFkEmployee()->getPosition()->value !== 'Plumber');
 
 
             $manager->persist($client);
