@@ -6,3 +6,9 @@ body {
     background-color: #E75A10;
 }
 
+/* Adapter la hauteur des images du header, par conséquent la hauteur du header */
+.header-img{
+    height: 5vh;
+    width: 100%;
+    object-fit: cover;
+}
