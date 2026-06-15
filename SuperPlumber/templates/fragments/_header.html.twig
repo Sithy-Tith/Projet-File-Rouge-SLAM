@@ -1,120 +1,99 @@
-{# Header included dans le base.html.twig #}
+{# Header inclus dans base.html.twig #}
 
+{% if is_granted('ROLE_CLIENT') %}
+{% set accueilRoute = path('app_client_dashboard') %}
+{% elseif is_granted('ROLE_ADMIN') %}
+{% set accueilRoute = path('app_admin_dashboard') %}
+{% elseif is_granted('ROLE_PLUMBER') %}
+{% set accueilRoute = path('app_plumber_dashboard') %}
+{% else %}
+{% set accueilRoute = '#' %}
+{% endif %}
 
-<nav class="navbar navbar-expand-sm bg-custom navbar-light fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <img src="{{asset('images/logo-mario.png')}}" alt="Logo mario SuperPlumber" class="d-inline-block align-top"
-                height="30">
-        </a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+<nav class="navbar navbar-expand-md bg-custom fixed-top">
+    <div class="container-fluid navbar-inner">
+
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+
+        {# Page login : logos centrés #}
+        <div class="navbar-login-center">
+            <a href="{{ accueilRoute }}">
+                <img src="{{ asset('images/logo-mario.png') }}" alt="Logo SuperPlumber" class="header-img">
+            </a>
+            <a href="{{ accueilRoute }}">
+                <img src="{{ asset('images/Superplumber_titre.png') }}" alt="SuperPlumber"
+                    class="header-img navbar-titre">
+            </a>
+        </div>
+
+        {% else %}
+
+        {# Zone gauche : logo + titre #}
+        <div class="navbar-brand-group">
+            <a href="{{ accueilRoute }}">
+                <img src="{{ asset('images/logo-mario.png') }}" alt="Logo SuperPlumber" class="header-img">
+            </a>
+            <a href="{{ accueilRoute }}">
+                <img src="{{ asset('images/Superplumber_titre.png') }}" alt="SuperPlumber"
+                    class="header-img navbar-titre">
+            </a>
+        </div>
+
+        {# Zone centre : liens (collapse en hamburger sur petit écran) #}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu" aria-expanded="false" aria-label="Menu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Liens de navigation -->
-        <div class="navbar-collapse collapse" id="navbar-menu">
-            <ul class="navbar-nav">
-
-                <!-- Accueil -->
-                <li class="navbar-item">
-                    {% if is_granted('ROLE_CLIENT') %}
-                    <a href="{{path('app_client_dashboard')}}" class="nav-link">
-                        Accueil
-                    </a>
-                    {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{path('app_admin_dashboard')}}" class="nav-link">
-                        Accueil
-                    </a>
-                    {% endif %}
-
-                    {% if is_granted('ROLE_PLUMBER') %}
-                    <a href="{{path('app_plumber_dashboard')}}" class="nav-link">
-                        Accueil
-                    </a>
-                    {% endif %}
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav navbar-links-center">
+                <li class="nav-item">
+                    <a href="{{ accueilRoute }}" class="nav-link">Accueil</a>
                 </li>
-
-                <!-- Employés -->
                 {% if can_access_path("/employees") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_employees_index')}}" class="nav-link">
-                        Employés
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_employees_index') }}" class="nav-link">Employés</a>
                 </li>
                 {% endif %}
-
-                <!-- Interventions -->
-
-                <!-- Pour les admins -->
                 {% if can_access_path("/interventions") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_interventions_index')}}" class="nav-link">
-                        Interventions
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_interventions_index') }}" class="nav-link">Interventions</a>
                 </li>
                 {% endif %}
-
-                <!-- Pour les plombiers -->
                 {% if can_access_path("/plumber") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_plumber_interventions')}}" class="nav-link">
-                        Mes interventions
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_plumber_interventions') }}" class="nav-link">Mes interventions</a>
                 </li>
                 {% endif %}
-
-                <!-- Pour les clients -->
                 {% if can_access_path("/client") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_client_interventions')}}" class="nav-link">
-                        Mes interventions
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_client_interventions') }}" class="nav-link">Mes interventions</a>
                 </li>
                 {% endif %}
-
-                <!-- Inventaire -->
                 {% if can_access_path("/pieces") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_pieces_index')}}" class="nav-link">
-                        Inventaire
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_pieces_index') }}" class="nav-link">Inventaire</a>
                 </li>
                 {% endif %}
-
-                <!-- Clients -->
                 {% if can_access_path("/admin/clients") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_clients_index')}}" class="nav-link">
-                        Clients
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_clients_index') }}" class="nav-link">Clients</a>
                 </li>
                 {% endif %}
-
-                <!-- Plannings -->
                 {% if can_access_path("/availabilities") %}
-                <li class="navbar-item">
-                    <a href="{{path('app_availabilities_index')}}" class="nav-link">
-                        Plannings
-                    </a>
+                <li class="nav-item">
+                    <a href="{{ path('app_availabilities_index') }}" class="nav-link">Plannings</a>
                 </li>
                 {% endif %}
-
             </ul>
         </div>
 
-        <!-- Logo SuperPlumber -->
-        <a class="navbar-brand" href="#">
-            <img src="{{asset('images/Superplumber_titre.png')}}" alt="Titre SuperPlumber"
-                class="d-inline-block align-top" height="30">
-        </a>
-
-        <!-- Vérifier si l'utilisateur est connecté -->
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-
-        <!-- Bouton 'Mon compte' -->
-        {% if is_granted('ROLE_EMPLOYEE') %}
-        <a href="{{path('app_employees_profile')}}" title="Informations du compte" class="nav-link">
+        {# Zone droite : icônes (toujours visibles) #}
+        <div class="navbar-icons">
+            {% if is_granted('ROLE_EMPLOYEE') %}
+            <a href="{{ path('app_employees_profile') }}" class="nav-link" title="Mon compte">
+                <img src="{{ asset('icons/person-circle.svg') }}" alt="Mon compte" class="navbar-icon">
+            </a>
             {% elseif is_granted('ROLE_CLIENT') %}
             <a href="{{path('app_clients_profile')}}" title="Informations du compte" class="nav-link">
                 {% endif %}
@@ -125,7 +104,6 @@
             </a>
             {% endif %}
 
-            <!-- Bouton 'Se déconnecter'-->
             {% if app.user %}
             <a href="/logout" class="nav-link">
                 <img src="{{asset('icons/box-arrow-right.svg')}}" title="Se déconnecter" class="d-inline-block mx-2"
@@ -135,7 +113,6 @@
             </a>
             {% endif %}
 
-            <!-- Bouton 'Retour admin'-->
             {% if is_granted("IS_IMPERSONATOR") %}
             <a href="{{ path('app_employees_index', {'_switch_user': '_exit'}) }}" title="Repasser sur le compte admin"
                 class="nav-link">
@@ -145,5 +122,9 @@
                     alt="Retour admin">
             </a>
             {% endif %}
+        </div>
+
+        {% endif %}
+
     </div>
 </nav>

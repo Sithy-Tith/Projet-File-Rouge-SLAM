@@ -52,15 +52,15 @@ class AvailabilitiesRepository extends ServiceEntityRepository
             ->addSelect('e')
             ->where('a.start >= :dateStart')
             ->andWhere('a.end <= :dateEnd')
-            ->andWhere('e.position = :position')
+            //    ->andWhere('e.position = :position')
             ->setParameter('dateStart', $dateStart)
             ->setParameter('dateEnd', $dateEnd)
-            ->setParameter('position', Position::PLUMBER->value)
+            //    ->setParameter('position', Position::PLUMBER->value)
             ->orderBy('a.start', 'ASC')
             ->getQuery()
             ->getResult();
 
-            //Filtre pour trouver les plombiers qui ont assez de temps disponibles
+        //Filtre pour trouver les plombiers qui ont assez de temps disponibles
         return array_values(array_filter($all, function (Availabilities $a) use ($durationMinutes) {
             $diff = ($a->getEnd()->getTimestamp() - $a->getStart()->getTimestamp()) / 60;
             return $diff >= $durationMinutes;

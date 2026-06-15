@@ -7,6 +7,7 @@ Application web de gestion d'interventions plomberie développée avec Symfony
 ## Prérequis
 
 - PHP 8.2+
+- Symfony 8.0+
 - Composer
 - MySQL / MariaDB
 
@@ -66,17 +67,17 @@ L'application est accessible sur `http://localhost:8000`
 
 ## Comptes de test
 
-| Rôle | Email | Mot de passe |
-|---|---|---|
-| Administrateur | admin@test.com | admin123 |
-| Plombier | plombier@test.com | plombier123 |
-| Client | client@test.com | client123 |
+| Rôle           | Email             | Mot de passe |
+| -------------- | ----------------- | ------------ |
+| Administrateur | admin@test.com    | admin123     |
+| Plombier       | plombier@test.com | plombier123  |
+| Client         | client@test.com   | client123    |
 
 ---
 
 ## Stack technique
 
-- **Backend** : Symfony 6.4 (PHP 8.2)
+- **Backend** : Symfony 8.0 (PHP 8.5.2)
 - **Base de données** : MariaDB / MySQL avec Doctrine ORM
 - **Frontend** : Twig, Bootstrap 5, FullCalendar 5
 - **Sécurité** : Symfony Security, tokens CSRF
@@ -90,10 +91,11 @@ L'application est accessible sur `http://localhost:8000`
 SuperPlumber/
 ├── src/
 │   ├── Controller/     # Controllers Symfony
+│   ├── DataFixtures/   # Données de test pour alimenter la BDD
 │   ├── Entity/         # Entités Doctrine
+│   ├── Enum/           # Enums PHP (Status, Type, Position)
 │   ├── Form/           # Formulaires Symfony
 │   ├── Repository/     # Requêtes personnalisées
-│   ├── Enum/           # Enums PHP (Status, Type, Position)
 │   └── Security/       # Authentification et autorisations
 ├── templates/          # Templates Twig
 ├── migrations/         # Migrations Doctrine
@@ -112,6 +114,7 @@ SuperPlumber/
 - Gestion de l'inventaire des pièces avec alertes de stock
 - Switch user pour l'administrateur
 - Dashboard personnalisé par rôle
+- Demande d'intervention de la part d'un client
 
 ---
 
@@ -135,7 +138,7 @@ php bin/console doctrine:fixtures:load
 
 ## Équipe
 
-| Nom | Rôle | GitHub |
-|---|---|---|
-| Sithy Tith | Développeur | [@Sithy-Tith](https://github.com/Sithy-Tith) |
-| Ilan Veneri | Développeur | [@ilanven](https://github.com/ilanven) |
+| Nom         | Rôle        | GitHub                                       |
+| ----------- | ----------- | -------------------------------------------- |
+| Sithy Tith  | Développeur | [@Sithy-Tith](https://github.com/Sithy-Tith) |
+| Ilan Veneri | Développeur | [@ilanven](https://github.com/ilanven)       |

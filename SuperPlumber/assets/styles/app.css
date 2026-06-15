@@ -2,6 +2,7 @@ body {
     background-color: white;
 }
 
+/* ── Navbar ── */
 .bg-custom {
     background-color: #E75A10;
 }
@@ -15,4 +16,89 @@ body {
 .navbar-item .nav-link:hover {
     background-color: #444fa4;
     color: rgba(255, 255, 255, 1);
+.navbar-inner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 0.75rem;
+    gap: 0.5rem;
+}
+
+/* Zone gauche */
+.navbar-brand-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.navbar-brand-group a {
+    display: flex;
+    align-items: center;
+}
+
+/* Zone centre — liens */
+.navbar-links-center {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Zone droite — icônes */
+.navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* Page login */
+.navbar-login-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* Images */
+.header-img {
+    height: 5vh;
+    min-height: 32px;
+    max-height: 48px;
+    width: auto;
+    /* ← pas de 100% : on laisse le ratio libre */
+    display: block;
+}
+
+
+/* ── Responsive ── */
+
+/* Étape 1 : le titre disparaît avant le hamburger */
+@media (max-width: 520px) {
+    .navbar-titre {
+        display: none;
+    }
+}
+
+/* Étape 2 : collapse Bootstrap prend le relais à md (768px) */
+/* Le hamburger doit être centré visuellement entre logo et icônes */
+@media (max-width: 767px) {
+    .navbar-toggler {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    /* Quand le menu est ouvert, les liens s'affichent en colonne sous la navbar */
+    .navbar-collapse.show .navbar-links-center {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem 0;
+        gap: 0;
+    }
 }
