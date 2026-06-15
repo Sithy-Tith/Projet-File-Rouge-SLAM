@@ -7,6 +7,15 @@ body {
     background-color: #E75A10;
 }
 
+.navbar-item .nav-link {
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+    padding: 6px 10px;
+}
+
+.navbar-item .nav-link:hover {
+    background-color: #444fa4;
+    color: rgba(255, 255, 255, 1);
 .navbar-inner {
     display: flex;
     align-items: center;
