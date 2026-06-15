@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ClientsType;
-use App\Form\EmployeesSelfType;
+use App\Form\EmployeesType;
 use App\Repository\ClientsRepository;
 use App\Repository\EmployeesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,7 +79,7 @@ class ProfileController extends AbstractController
     ): Response {
 
         $employee = $employeesRepository->findOneBy(['id' => $this->getUser()->getId()]);
-        $form = $this->createForm(EmployeesSelfType::class, $employee, ['is_new' => false]);
+        $form = $this->createForm(EmployeesType::class, $employee, ['is_new' => false, 'from_plumber' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
