@@ -180,7 +180,7 @@ class AppFixtures extends Fixture
         }
 
         // -------------------------------------------------------
-        // créer les pièces utilisées et disponibilités
+        // créer les pièces utilisées
         // -------------------------------------------------------
         for ($i = 0; $i < 10; $i++) {
             $usedPiece = new UsedPieces();
@@ -189,7 +189,13 @@ class AppFixtures extends Fixture
             $usedPiece->setFkIntervention($faker->randomElement($interventionsList));
             $usedPiece->setQuantity(mt_rand(1, 3));
             $manager->persist($usedPiece);
+        }
 
+
+        // -------------------------------------------------------
+        // créer les disponibilités des plombiers
+        // -------------------------------------------------------
+        for ($i = 0; $i < 30; $i++) {
             $availability = new Availabilities();
             // 1. Générer un jour aléatoire du mois
             $day = $faker->dateTimeBetween('first day of this month', 'last day of this month');
@@ -199,23 +205,18 @@ class AppFixtures extends Fixture
             $end = (clone $start)->modify('+' . $nbHours . ' hours');
             $availability->setStart($start);
             $availability->setEnd($end);
+            // L'appliquer seuelemnt aux plombiers
             do {
                 $availability->setFkEmployee($faker->randomElement($employeesList));
             } while ($availability->getFkEmployee()->getPosition()->value !== 'Plumber');
 
-
-            $manager->persist($client);
-            $manager->persist($employee);
-            $manager->persist($intervention);
-            $manager->persist($piece);
-            $manager->persist($usedPiece);
             $manager->persist($availability);
         }
 
         $manager->flush();
     }
 
-    public function format_mail($string)
+    public function format_mail(string $string)
     {
         // Supprime les accents
         $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
