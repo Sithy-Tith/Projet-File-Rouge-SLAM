@@ -32,6 +32,7 @@ final class ClientDashboardController extends AbstractController
                     'debouchage' => Type::DEBOUCHAGE,
                     'chauffe_eau' => Type::REPARATION,
                     'installation' => Type::INSTALLATION,
+                    'autre' => Type::AUTRE,
                 ];
 
                 $intervention = new Interventions();
