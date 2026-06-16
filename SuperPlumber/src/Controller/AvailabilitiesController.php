@@ -39,6 +39,8 @@ final class AvailabilitiesController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $availability = new Availabilities();
+        $availability->setStart((new \DateTime())->setTime(8, 0)); // Par défaut : aujourd'hui à 8h
+        $availability->setEnd((new \DateTime())->setTime(16, 0)); // Par défaut : aujourd'hui à 16h
         $form = $this->createForm(AvailabilitiesType::class, $availability);
         // si plombier, définir le fkEmployee sur l'utilisateur actuel et supprimer le champ fkEmployee du formulaire
         if ($this->isGranted('ROLE_PLUMBER')) {
