@@ -31,8 +31,10 @@ final class InterventionsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, ClientsRepository $clientsRepository): Response
     {
         $intervention = new Interventions();
+        $intervention->setStatus(Status::TO_PLAN);  // Valeur par défaut
+
+        // Si un client est passé dans l'URL, dans le cas d'une création d'un client pendant la création d'une intervention
         $clientId = $request->query->get('client');
-        // Si un client est passé dans l'URL
         if ($clientId) {
             $client = $clientsRepository->find($clientId);
             if ($client) {
@@ -53,7 +55,7 @@ final class InterventionsController extends AbstractController
         $formIntervention = $this->createForm(InterventionsType::class, $intervention);
         $formClient = $this->createForm(ClientsType::class, new Clients(), [
             'origin' => 'intervention', // Permet de rediriger une création de client depuis intervention directement sur ce controller
-            ]);
+        ]);
 
 
         return $this->render('interventions/new.html.twig', [
