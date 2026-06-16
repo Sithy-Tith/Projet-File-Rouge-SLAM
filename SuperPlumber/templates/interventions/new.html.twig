@@ -6,7 +6,7 @@
 <div id="form-intervention">
 
     <div class="m-3">
-        <h1>Ajouter un employé</h1>
+        <h1>Ajouter une intervention</h1>
     </div>
     <div class="container-fluid">
         <div class="card col-8 mx-3">
@@ -78,15 +78,19 @@
     // N'affiche pas les champs 'Date' et 'Employé' si le statut est à 'TO_PLAN' ou Null
     document.addEventListener('DOMContentLoaded', function () {
         const status = document.querySelector('#interventions_status');
-        const dateField = document.querySelector('#interventions_date').parentElement;
+        const dateFields = document.querySelectorAll('.dateField');
         const employeField = document.querySelector('#interventions_fkEmployee').parentElement;
 
         function toggleFields() {
             if (status.value === 'to_plan' || status.value === '') {
-                dateField.style.display = 'none';
+                dateFields.forEach(field => {
+                    field.parentElement.style.display = 'none';
+                })
                 employeField.style.display = 'none';
             } else {
-                dateField.style.display = '';
+                dateFields.forEach(field => {
+                    field.parentElement.style.display = '';
+                })
                 employeField.style.display = '';
             }
         }

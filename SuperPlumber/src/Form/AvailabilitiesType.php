@@ -20,7 +20,7 @@ class AvailabilitiesType extends AbstractType
                 'time_widget' => 'choice',
                 'hours' => range(8, 18),
                 'minutes' => [0, 15, 30, 45],
-                'label' => 'Début',
+                'label' => 'Début*',
                 'required' => false,
                 'placeholder' => [
                     'hour' => 'Heure',
@@ -32,7 +32,7 @@ class AvailabilitiesType extends AbstractType
                 'time_widget' => 'choice',
                 'hours' => range(8,18),
                 'minutes' => [0, 15, 30, 45],
-                'label' => 'Fin',
+                'label' => 'Fin*',
                 'required' => false,
                 'placeholder' => [
                     'hour' => 'Heure',

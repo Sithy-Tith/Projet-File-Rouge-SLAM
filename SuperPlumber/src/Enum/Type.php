@@ -8,4 +8,5 @@ enum Type: string
     case DEBOUCHAGE = 'Débouchage de canalisation';
     case REPARATION = 'Réparation Chauffe-eau';
     case INSTALLATION = 'Installation robinetterie';
+    case AUTRE = "Autre";
 }
