@@ -19,9 +19,9 @@ class AvailabilitiesType extends AbstractType
                 'date_widget' => 'single_text',
                 'time_widget' => 'choice',
                 'hours' => range(8, 18),
-                'minutes' => [0, 15, 30, 45],
-                'label' => 'Début*',
-                'required' => false,
+                'minutes' => [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
+                'label' => 'Début *',
+                'required' => true,
                 'placeholder' => [
                     'hour' => 'Heure',
                     'minute' => 'Minute',
@@ -31,9 +31,9 @@ class AvailabilitiesType extends AbstractType
                 'date_widget' => 'single_text',
                 'time_widget' => 'choice',
                 'hours' => range(8,18),
-                'minutes' => [0, 15, 30, 45],
-                'label' => 'Fin*',
-                'required' => false,
+                'minutes' => [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
+                'label' => 'Fin *',
+                'required' => true,
                 'placeholder' => [
                     'hour' => 'Heure',
                     'minute' => 'Minute',
@@ -44,7 +44,8 @@ class AvailabilitiesType extends AbstractType
                 'class' => Employees::class,
                 'choice_label' => 'fullName',
                 'placeholder' => 'Choix du plombier',
-                'label' => 'Plombier',
+                'label' => 'Plombier *',
+                'required' => true,
             ])
         ;
     }
