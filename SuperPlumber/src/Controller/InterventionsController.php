@@ -53,7 +53,7 @@ final class InterventionsController extends AbstractController
         $formIntervention = $this->createForm(InterventionsType::class, $intervention);
         $formClient = $this->createForm(ClientsType::class, new Clients(), [
             'origin' => 'intervention', // Permet de rediriger une création de client depuis intervention directement sur ce controller
-            ]);
+        ]);
 
 
         return $this->render('interventions/new.html.twig', [
@@ -110,6 +110,9 @@ final class InterventionsController extends AbstractController
 
         $date = $request->query->get('date') ?? ($intervention->getStartAt()?->format('Y-m-d')); //Si date déjà rentré par le client, préremplir sinon date rentrée par l'admin
         $duration = $request->query->get('duration');
+        $description = $request->query->get('description')
+            ?? $intervention->getDescription() // ← prend la description existante si pas dans l'URL
+            ?? '';
         $availablePlumbers = [];
 
         if ($date && $duration) {
@@ -124,6 +127,7 @@ final class InterventionsController extends AbstractController
             'availablePlumbers' => $availablePlumbers,
             'date' => $date,
             'duration' => $duration,
+            'description' => $description,
         ]);
     }
 
@@ -143,6 +147,7 @@ final class InterventionsController extends AbstractController
         $availabilityId = $request->request->get('availability_id');
         $duration = (int) $request->request->get('duration');
         $availability = $availRepo->find($availabilityId);
+        $description = (string) $request->request->get('description');
 
         $startAt = clone $availability->getStart();
         $endAt = (clone $startAt)->modify("+{$duration} minutes");
@@ -152,6 +157,7 @@ final class InterventionsController extends AbstractController
         $intervention->setStartAt($startAt);
         $intervention->setEndAt($endAt);
         $intervention->setStatus(Status::PLANNED);
+        $intervention->setDescription($description);
 
         // Ajuster la dispo - enlever le créneau de l'intervention
         $availability->setStart($endAt);
