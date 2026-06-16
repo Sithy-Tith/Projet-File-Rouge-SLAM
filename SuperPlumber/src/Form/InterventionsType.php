@@ -49,7 +49,6 @@ class InterventionsType extends AbstractType
             ->add('status', EnumType::class, [
                 'class' => Status::class,
                 'label' => "Statut *",
-                'data' => Status::TO_PLAN,
                 'choice_label' => fn(Status $status) => $status->label(), #On affiche la traduction de la value de l'enum
             ])
             ->add('fkEmployee', EntityType::class, [
