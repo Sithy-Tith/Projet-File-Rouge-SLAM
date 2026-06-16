@@ -1,13 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Availabilities{% endblock %}
+{% block title %}Ajouter une Disponibilité{% endblock %}
 
 {% block body %}
-<h1>Create new Availabilities</h1>
+<div class="m-3">
+    <h1>Ajouter une Disponibilité</h1>
+</div>
 
-{{ include('availabilities/_form.html.twig') }}
-
-<a href="{{ path('app_availabilities_index') }}" class="btn btn-outline-secondary btn-sm">
-    <i class="ti ti-arrow-left"></i> Retour
-</a>
+<div class="container-fluid">
+    <div class="card col-8 mx-3">
+        <div class="m-3">
+            {{ include('availabilities/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+        </div>
+        <div class="mx-2">
+            <a href="{{ path('app_availabilities_index') }}" class="btn btn-secondary m-2">Annuler</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

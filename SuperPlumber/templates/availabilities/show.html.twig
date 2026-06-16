@@ -1,34 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Availabilities{% endblock %}
+{% block title %}Disponibilité{% endblock %}
 
 {% block body %}
-<h1>Availabilities</h1>
+<div class="m-3">
+    <h1>{{availability.fkEmployee.getFullName}}</h1>
+</div>
 
-<table class="table">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ availability.id }}</td>
-        </tr>
-        <tr>
-            <th>Début</th>
-            <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Fin</th>
-            <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
-        </tr>
-        <tr>
-            <th>Plombier</th>
-            <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
-        </tr>
-    </tbody>
-</table>
-
-<a href="{{ path('app_availabilities_index') }}" class="btn btn-primary m-2">Retour à la liste</a>
-
-<a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}">edit</a>
-
-{{ include('availabilities/_delete_form.html.twig') }}
+<div class="container-fluid">
+    <div class="card shadow-sm col-7">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Début</th>
+                    <td>{{ availability.start ? availability.start|date('Y-m-d H:i') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Fin</th>
+                    <td>{{ availability.end ? availability.end|date('Y-m-d H:i') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Plombier</th>
+                    <td>{{ availability.fkEmployee ? availability.fkEmployee.fullName : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class=" m-2">
+                <a href="{{ path('app_availabilities_index') }}" class="btn btn-secondary m-2">Retour</a>
+                <a href="{{ path('app_availabilities_edit', {'id': availability.id}) }}" class=" btn btn-primary
+                    m-2">Éditer</a>
+                {{ include('availabilities/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

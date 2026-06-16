@@ -17,11 +17,11 @@ class AvailabilitiesType extends AbstractType
         $builder
             ->add('start', DateTimeType::class, [
                 'widget' => 'single_text',
-                'label' => 'Début',
+                'label' => 'Début *',
             ])
             ->add('end', DateTimeType::class, [
                 'widget' => 'single_text',
-                'label' => 'Fin',
+                'label' => 'Fin *',
             ])
 
             ->add('fkEmployee', EntityType::class, [

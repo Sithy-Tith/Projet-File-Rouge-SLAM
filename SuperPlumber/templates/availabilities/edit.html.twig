@@ -1,15 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Availabilities{% endblock %}
+{% block title %}Éditer la disponibilité{% endblock %}
 
 {% block body %}
-<h1>Edit Availabilities</h1>
+<div class="m-3">
+    <h1>Éditer la disponibilité de {{ availability.fkEmployee.getFullName }}</h1>
+</div>
 
-{{ include('availabilities/_form.html.twig', {'button_label': 'Update'}) }}
-
-<a href="{{ path('app_availabilities_index') }}" class="btn btn-outline-secondary btn-sm">
-    <i class="ti ti-arrow-left"></i> Retour
-</a>
-
-{{ include('availabilities/_delete_form.html.twig') }}
+<div class="container-fluid">
+    <div class="card col-8 mx-3">
+        <div class="m-3">
+            {{ include('availabilities/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+        </div>
+        <div class="mx-2">
+            <a href="{{ path('app_availabilities_index') }}" class="btn btn-secondary m-2">Annuler</a>
+            {{ include('availabilities/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
 {% endblock %}
