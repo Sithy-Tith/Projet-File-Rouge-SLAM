@@ -49,7 +49,7 @@
                                     <span class="text-muted small d-block">Date demandée</span>
                                     <span class="badge bg-white text-dark border fw-semibold">
                                         {{ intervention.startAt
-                                        ? intervention.startAt|date('D d/m')
+                                        ? intervention.startAt|format_datetime(pattern='dd/MM EEE', locale='fr')
                                         : 'Pas de préférence'
                                         }}
                                     </span>
@@ -96,7 +96,7 @@
                             {% for avail in availabilities %}
                             {% if avail.fkEmployee.fullName == availability.fkEmployee.fullName %}
                             <span class="badge bg-light text-dark border">
-                                {{ avail.start|format_datetime(pattern='EEE', locale='fr') }}
+                                {{ avail.start|format_datetime(pattern='dd/MM EEE', locale='fr') }}
                                 {{ avail.start|date('H:i') }}→{{ avail.end|date('H:i') }}
                             </span>
                             {% endif %}
