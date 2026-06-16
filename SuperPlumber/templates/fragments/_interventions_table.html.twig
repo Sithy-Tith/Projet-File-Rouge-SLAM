@@ -32,7 +32,7 @@ pour les clients, plombiers et admins #}
                         {% for intervention in interventions %}
                         <tr>
                             {% block table_columns_common %}
-                            <td>{{ intervention.startAt ? intervention.startAt|date('Y-m-d H:i:s') : 'À planifier' }}
+                            <td>{{ intervention.startAt ? intervention.startAt|date('d/m/y H:i:s') : 'À planifier' }}
                             </td>
                             <td>
                                 {% if intervention.status.value == 'to_plan' %}
