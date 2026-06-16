@@ -7,7 +7,7 @@
     <p class="text-muted">
         <strong>{{ intervention.type.value }}</strong> — {{ intervention.fkClient.fullName }}
         {% if intervention.startAt %}
-            — Date souhaitée : <strong>{{ intervention.startAt|date('d/m/Y') }}</strong>
+        — Date souhaitée : <strong>{{ intervention.startAt|date('d/m/Y') }}</strong>
         {% endif %}
     </p>
 
@@ -17,18 +17,21 @@
             <form method="GET" class="row g-3">
                 <div class="col-md-5">
                     <label class="form-label">Date</label>
-                    <input type="date" name="date" class="form-control"
-                           value="{{ date ?? '' }}" required>
+                    <input type="date" name="date" class="form-control" value="{{ date ?? '' }}" required>
                 </div>
                 <div class="col-md-5">
                     <label class="form-label">Durée estimée (minutes)</label>
-                    <input type="number" name="duration" class="form-control"
-                           value="{{ duration ?? '' }}"
-                           placeholder="Ex: 120 pour 2h" required>
+                    <input type="number" name="duration" class="form-control" value="{{ duration ?? '' }}"
+                        placeholder="Ex: 120 pour 2h" required>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="2"
+                        placeholder="Description de l'intervention...">{{ description ?? '' }}</textarea>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
-                        Rechercher
+                        Rechercher un plombier disponible
                     </button>
                 </div>
             </form>
@@ -36,53 +39,53 @@
     </div>
 
     {% if availablePlumbers is not empty %}
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5>Plombiers disponibles le {{ date|date_modify('0 day')|date('d/m/Y') }}</h5>
-                <form method="POST">
-                    <input type="hidden" name="_token" value="{{ csrf_token('assign' ~ intervention.id) }}">
-                    <input type="hidden" name="date" value="{{ date }}">
-                    <input type="hidden" name="duration" value="{{ duration }}">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5>Plombiers disponibles le {{ date|date_modify('0 day')|date('d/m/Y') }}</h5>
+            <form method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('assign' ~ intervention.id) }}">
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="duration" value="{{ duration }}">
+                <input type="hidden" name="description" value="{{ description }}">
 
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Plombier</th>
-                                <th>Disponible de</th>
-                                <th>À</th>
-                                <th>Créneau intervention</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for availability in availablePlumbers %}
-                                <tr>
-                                    <td><strong>{{ availability.fkEmployee.fullName }}</strong></td>
-                                    <td>{{ availability.start|date('H:i') }}</td>
-                                    <td>{{ availability.end|date('H:i') }}</td>
-                                    <td>
-                                        {{ availability.start|date('H:i') }}
-                                        → {{ availability.start|date_modify('+' ~ duration ~ ' minutes')|date('H:i') }}
-                                    </td>
-                                    <td>
-                                        <button type="submit" name="availability_id"
-                                                value="{{ availability.id }}"
-                                                class="btn btn-success">
-                                            Attribuer
-                                        </button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </form>
-            </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Plombier</th>
+                            <th>Disponible de</th>
+                            <th>À</th>
+                            <th>Créneau intervention</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for availability in availablePlumbers %}
+                        <tr>
+                            <td><strong>{{ availability.fkEmployee.fullName }}</strong></td>
+                            <td>{{ availability.start|date('H:i') }}</td>
+                            <td>{{ availability.end|date('H:i') }}</td>
+                            <td>
+                                {{ availability.start|date('H:i') }}
+                                → {{ availability.start|date_modify('+' ~ duration ~ ' minutes')|date('H:i') }}
+                            </td>
+                            <td>
+                                <button type="submit" name="availability_id" value="{{ availability.id }}"
+                                    class="btn btn-success">
+                                    Attribuer
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
         </div>
+    </div>
 
     {% elseif date and duration %}
-        <div class="alert alert-warning mt-3">
-            Aucun plombier disponible pour ce créneau. Essayez une autre date ou durée.
-        </div>
+    <div class="alert alert-warning mt-3">
+        Aucun plombier disponible pour ce créneau. Essayez une autre date ou durée.
+    </div>
     {% endif %}
 
     <a href="{{ path('app_interventions_index') }}" class="btn btn-secondary mt-3">
