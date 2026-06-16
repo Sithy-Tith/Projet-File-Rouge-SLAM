@@ -32,14 +32,7 @@ class InterventionsType extends AbstractType
                 'class' => Type::class,
                 'label' => "Type d'intervention *",
             ])
-            ->add('startAt', null, [
-                'required' => false,
-                'label' => "Commence le :"
-            ])
-            ->add('endAt', null, [
-                'required' => false,
-                'label' => "Termine le :",
-            ])
+
             ->add('description', null, [
                 'label' => 'Description',
                 'attr' => [
@@ -50,6 +43,16 @@ class InterventionsType extends AbstractType
                 'class' => Status::class,
                 'label' => "Statut *",
                 'choice_label' => fn(Status $status) => $status->label(), #On affiche la traduction de la value de l'enum
+            ])
+            ->add('startAt', null, [
+                'required' => false,
+                'attr' => ['class' => 'dateField'],
+                'label' => "Commence le :"
+            ])
+            ->add('endAt', null, [
+                'required' => false,
+                'attr' => ['class' => 'dateField'],
+                'label' => "Termine le :",
             ])
             ->add('fkEmployee', EntityType::class, [
                 'class' => Employees::class,
