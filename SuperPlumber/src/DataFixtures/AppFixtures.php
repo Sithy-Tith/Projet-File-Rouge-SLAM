@@ -99,7 +99,7 @@ class AppFixtures extends Fixture
         $client->setEmail('client@test.com');
         $client->setAddress($faker->address);
         $client->setFirstName('client');
-        $client->setLastName('fidèle');
+        $client->setLastName('fidele');
         $client->setPhone(0622222222);
         $client->setPassword($this->hasher->hashPassword($client, 'client123'));
         $manager->persist($client);
