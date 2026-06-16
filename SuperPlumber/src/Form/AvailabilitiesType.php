@@ -16,12 +16,28 @@ class AvailabilitiesType extends AbstractType
     {
         $builder
             ->add('start', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Début *',
+                'date_widget' => 'single_text',
+                'time_widget' => 'choice',
+                'hours' => range(8, 18),
+                'minutes' => [0, 15, 30, 45],
+                'label' => 'Début*',
+                'required' => false,
+                'placeholder' => [
+                    'hour' => 'Heure',
+                    'minute' => 'Minute',
+                ],
             ])
             ->add('end', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Fin *',
+                'date_widget' => 'single_text',
+                'time_widget' => 'choice',
+                'hours' => range(8,18),
+                'minutes' => [0, 15, 30, 45],
+                'label' => 'Fin*',
+                'required' => false,
+                'placeholder' => [
+                    'hour' => 'Heure',
+                    'minute' => 'Minute',
+                ],
             ])
 
             ->add('fkEmployee', EntityType::class, [
