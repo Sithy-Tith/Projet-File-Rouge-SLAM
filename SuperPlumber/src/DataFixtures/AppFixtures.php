@@ -48,8 +48,6 @@ class AppFixtures extends Fixture
             $manager,
             $faker,
             $clients,
-            $plumbers,
-            $workDays,
             $availabilities,
             $now
         );
@@ -593,12 +591,11 @@ class AppFixtures extends Fixture
         ObjectManager $manager,
         Generator $faker,
         array $clients,
-        array $plumbers,
-        array $workDays,
         array $availabilities,
         DateTime $now
     ): array {
         $interventions = [];
+        $today = (clone $now)->setTime(0, 0);
 
         /*
          * =========================================================
@@ -609,33 +606,54 @@ class AppFixtures extends Fixture
          * - CANCELED
          * =========================================================
          */
+        $pastAvailabilities = [];
+
+        foreach ($availabilities as $byDate) {
+            foreach ($byDate as $dateKey => $availability) {
+                $date = new DateTime(
+                    $dateKey,
+                    $now->getTimezone()
+                );
+
+                if ($date < $today) {
+                    $pastAvailabilities[] = $availability;
+                }
+            }
+        }
+
         for ($i = 0; $i < 22; $i++) {
-            $day = (clone $now)
-                ->setTime(0, 0)
-                ->modify(
-                    '-' . random_int(1, 21) . ' days'
-                );
-
             /*
-             * Pour les fixtures, on choisit uniquement
-             * un plombier qui travaille ce jour-là.
+             * Une même disponibilité peut recevoir plusieurs
+             * interventions tant qu'il lui reste au moins une heure.
              */
-            $workingIndexes =
-                $this->getWorkingPlumberIndexes(
-                    $day,
-                    $workDays
+            $availableSlots = array_values(
+                array_filter(
+                    $pastAvailabilities,
+                    fn(Availabilities $availability): bool =>
+                    $this->getRemainingAvailabilityMinutes(
+                        $availability
+                    ) >= 180
+                )
+            );
+
+            if ($availableSlots === []) {
+                throw new \LogicException(
+                    'Pas assez de disponibilités passées pour créer les interventions.'
                 );
+            }
 
-            $plumberIndex =
-                $workingIndexes[array_rand($workingIndexes)];
-
+            /** @var Availabilities $availability */
             $availability =
-                $availabilities[$plumberIndex][$day->format('Y-m-d')] ?? null;
+                $availableSlots[array_rand($availableSlots)];
 
-            $start = clone $availability->getStart();
-
-            $end = (clone $start)->modify(
-                '+' . random_int(60, 180) . ' minutes'
+            $duration = random_int(
+                60,
+                min(
+                    180,
+                    $this->getRemainingAvailabilityMinutes(
+                        $availability
+                    )
+                )
             );
 
             /*
@@ -648,95 +666,50 @@ class AppFixtures extends Fixture
                 ? Status::FINISHED
                 : Status::CANCELED;
 
-            $intervention =
-                $this->newIntervention(
-                    $faker,
-                    $clients,
-                    $start,
-                    $end,
-                    $status
-                );
-
-            /*
-             * Ici, volontairement uniquement $plumbers.
-             * Aucun admin n'est sélectionné.
-             */
-            $intervention->setFkEmployee(
-                $plumbers[$plumberIndex]
+            $interventions[] = $this->scheduleIntervention(
+                $manager,
+                $faker,
+                $clients,
+                $availability,
+                $duration,
+                $status
             );
-
-            $intervention->setFkAvailability(
-                $availability
-            );
-
-            $manager->persist($intervention);
-
-            $interventions[] = $intervention;
         }
 
         /*
          * =========================================================
-         * 2. INTERVENTIONS EN COURS
+         * 2. INTERVENTIONS DU JOUR
          *
-         * Toujours entre 1 et 3.
-         *
-         * On ne dépasse toutefois pas le nombre de plombiers
-         * travaillant aujourd'hui afin d'éviter qu'un même
-         * plombier ait plusieurs interventions simultanées.
+         * Leur statut dépend de l'heure réelle : PLANNED, ONGOING
+         * ou FINISHED. 
          * =========================================================
          */
-        $todayWorkingIndexes =
-            $this->getWorkingPlumberIndexes(
-                $now,
-                $workDays
+        foreach ($availabilities as $byDate) {
+            $availability =
+                $byDate[$today->format('Y-m-d')] ?? null;
+
+            if ($availability === null) {
+                continue;
+            }
+
+            $duration = random_int(60, 180);
+            $start = clone $availability->getStart();
+            $end = (clone $start)->modify(
+                "+{$duration} minutes"
             );
 
-        shuffle($todayWorkingIndexes);
-
-        $ongoingCount = random_int(
-            1,
-            min(
-                3,
-                count($todayWorkingIndexes)
-            )
-        );
-
-        for ($i = 0; $i < $ongoingCount; $i++) {
-            $plumberIndex =
-                $todayWorkingIndexes[$i];
-
-            /*
-             * L'intervention a commencé avant maintenant
-             * et se termine après maintenant.
-             */
-            $start = (clone $now)->modify(
-                '-' . random_int(15, 75) . ' minutes'
-            );
-
-            $end = (clone $now)->modify(
-                '+' . random_int(45, 150) . ' minutes'
-            );
-
-            $intervention =
-                $this->newIntervention(
-                    $faker,
-                    $clients,
+            $interventions[] = $this->scheduleIntervention(
+                $manager,
+                $faker,
+                $clients,
+                $availability,
+                $duration,
+                $this->getScheduledStatus(
                     $start,
                     $end,
-                    Status::ONGOING
-                );
-
-            $intervention->setFkEmployee(
-                $plumbers[$plumberIndex]
+                    $now
+                )
             );
-
-            $intervention->setFkAvailability(
-                $availabilities[$plumberIndex][$now->format('Y-m-d')] ?? null
-            );
-
-            $manager->persist($intervention);
-
-            $interventions[] = $intervention;
         }
 
         /*
@@ -752,8 +725,7 @@ class AppFixtures extends Fixture
         $futureSlots = [];
 
         foreach (
-            $availabilities as
-            $plumberIndex => $byDate
+            $availabilities as $byDate
         ) {
             foreach (
                 $byDate as
@@ -764,30 +736,11 @@ class AppFixtures extends Fixture
                     $now->getTimezone()
                 );
 
-                /*
-                 * On ignore aujourd'hui et le passé.
-                 */
-                if (
-                    $date <=
-                    (clone $now)->setTime(
-                        23,
-                        59,
-                        59
-                    )
-                ) {
+                if ($date <= $today) {
                     continue;
                 }
 
-                $futureSlots[] = [
-                    'plumberIndex' =>
-                    $plumberIndex,
-
-                    'availability' =>
-                    $availability,
-
-                    'date' =>
-                    $date,
-                ];
+                $futureSlots[] = $availability;
             }
         }
 
@@ -798,40 +751,16 @@ class AppFixtures extends Fixture
          */
         foreach (
             array_slice($futureSlots, 0, 10)
-            as $slot
+            as $availability
         ) {
-            /** @var DateTime $day */
-            $day = $slot['date'];
-
-            $start = (clone $day)->setTime(
-                random_int(8, 14),
-                random_int(0, 1) * 30
+            $interventions[] = $this->scheduleIntervention(
+                $manager,
+                $faker,
+                $clients,
+                $availability,
+                random_int(60, 180),
+                Status::PLANNED
             );
-
-            $end = (clone $start)->modify(
-                '+' . random_int(60, 180) . ' minutes'
-            );
-
-            $intervention =
-                $this->newIntervention(
-                    $faker,
-                    $clients,
-                    $start,
-                    $end,
-                    Status::PLANNED
-                );
-
-            $intervention->setFkEmployee(
-                $plumbers[$slot['plumberIndex']]
-            );
-
-            $intervention->setFkAvailability(
-                $slot['availability']
-            );
-
-            $manager->persist($intervention);
-
-            $interventions[] = $intervention;
         }
 
         /*
@@ -876,6 +805,83 @@ class AppFixtures extends Fixture
         }
 
         return $interventions;
+    }
+
+    /**
+     * Reproduit la logique métier de l'attribution d'une intervention :
+     *
+     * - l'intervention commence au début de la disponibilité ;
+     * - sa fin est calculée à partir de sa durée ;
+     * - le début de la disponibilité est déplacé à la fin de
+     *   l'intervention.
+     */
+    private function scheduleIntervention(
+        ObjectManager $manager,
+        Generator $faker,
+        array $clients,
+        Availabilities $availability,
+        int $duration,
+        Status $status
+    ): Interventions {
+        $start = clone $availability->getStart();
+        $end = (clone $start)->modify(
+            "+{$duration} minutes"
+        );
+
+        if ($end > $availability->getEnd()) {
+            throw new \LogicException(
+                'La durée de l\'intervention dépasse la disponibilité.'
+            );
+        }
+
+        $intervention = $this->newIntervention(
+            $faker,
+            $clients,
+            $start,
+            $end,
+            $status
+        );
+
+        $intervention->setFkEmployee(
+            $availability->getFkEmployee()
+        );
+        $intervention->setFkAvailability($availability);
+
+        $availability->setStart($end);
+
+        $manager->persist($intervention);
+
+        return $intervention;
+    }
+
+    private function getRemainingAvailabilityMinutes(
+        Availabilities $availability
+    ): int {
+        return max(
+            0,
+            (int) floor(
+                (
+                    $availability->getEnd()->getTimestamp()
+                    - $availability->getStart()->getTimestamp()
+                ) / 60
+            )
+        );
+    }
+
+    private function getScheduledStatus(
+        DateTime $start,
+        DateTime $end,
+        DateTime $now
+    ): Status {
+        if ($end <= $now) {
+            return Status::FINISHED;
+        }
+
+        if ($start <= $now) {
+            return Status::ONGOING;
+        }
+
+        return Status::PLANNED;
     }
 
     /**
@@ -1167,39 +1173,6 @@ class AppFixtures extends Fixture
                 );
             }
         }
-    }
-
-    /**
-     * Retourne uniquement les index des plombiers
-     * censés travailler à cette date.
-     *
-     * @return int[]
-     */
-    private function getWorkingPlumberIndexes(
-        DateTime $date,
-        array $workDays
-    ): array {
-        $isoDay =
-            (int) $date->format('N');
-
-        $indexes = [];
-
-        foreach (
-            $workDays as
-            $index => $days
-        ) {
-            if (
-                in_array(
-                    $isoDay,
-                    $days,
-                    true
-                )
-            ) {
-                $indexes[] = $index;
-            }
-        }
-
-        return $indexes;
     }
 
     /**
